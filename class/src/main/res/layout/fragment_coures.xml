@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_10_bottom"
+        tools:context=".fragment.CouresFragment">
+
+
+        <TextView
+            android:id="@+id/tvWeek2"
+            android:layout_width="165dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="46dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:text="星期一"
+            android:textColor="#ffffff"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/tvWeek"
+            app:layout_constraintTop_toTopOf="@+id/tvWeek" />
+
+        <TextView
+            android:id="@+id/tvWeek3"
+            android:layout_width="165dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="46dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="星期三"
+            android:textColor="#ffffffff"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/tvWeek4"
+            app:layout_constraintTop_toTopOf="@+id/tvWeek" />
+
+        <TextView
+            android:id="@+id/tvWeek5"
+            android:layout_width="165dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="46dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="星期四"
+            android:textColor="#ffffffff"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/tvWeek3"
+            app:layout_constraintTop_toTopOf="@+id/tvWeek" />
+
+        <TextView
+            android:id="@+id/tvWeek6"
+            android:layout_width="165dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="46dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="星期五"
+            android:textColor="#ffffffff"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/tvWeek5"
+            app:layout_constraintTop_toTopOf="@+id/tvWeek" />
+
+        <TextView
+            android:id="@+id/tvWeek7"
+            android:layout_width="165dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="46dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="星期日"
+            android:textColor="#ffffffff"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/tvWeek8"
+            app:layout_constraintTop_toTopOf="@+id/tvWeek"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvWeek8"
+            android:layout_width="165dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="46dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="星期六"
+            android:textColor="#ffffffff"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/tvWeek6"
+            app:layout_constraintTop_toTopOf="@+id/tvWeek"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvWeek4"
+            android:layout_width="165dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="46dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="星期二"
+            android:textColor="#ffffffff"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWeek"
+            app:layout_constraintStart_toEndOf="@+id/tvWeek2"
+            app:layout_constraintTop_toTopOf="@+id/tvWeek" />
+
+        <TextView
+            android:id="@+id/tvWeek"
+            android:layout_width="165dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="76dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="第8周"
+            android:textColor="#ffffffff"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/weekItem"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeek" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/monDay"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tvWeek2"
+            app:layout_constraintStart_toStartOf="@+id/tvWeek2"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeek2" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tuesDay"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tvWeek4"
+            app:layout_constraintStart_toStartOf="@+id/tvWeek4"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeek4" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/wednesDay"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tvWeek3"
+            app:layout_constraintStart_toStartOf="@+id/tvWeek3"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeek3" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/thursDay"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tvWeek5"
+            app:layout_constraintStart_toStartOf="@+id/tvWeek5"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeek5" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/friDay"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tvWeek6"
+            app:layout_constraintStart_toStartOf="@+id/tvWeek6"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeek6" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/saturDay"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tvWeek8"
+            app:layout_constraintStart_toStartOf="@+id/tvWeek8"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeek8" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/sunDay"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/tvWeek7"
+            app:layout_constraintStart_toStartOf="@+id/tvWeek7"
+            app:layout_constraintTop_toBottomOf="@+id/tvWeek7" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

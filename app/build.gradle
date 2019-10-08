@@ -1,0 +1,135 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        packagingOptions {
+            exclude 'META-INF/proguard/androidx-annotations.pro'
+        }
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 5
+        versionName "1.0.0.5"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        multiDexKeepProguard file('multiDexKeep.pro')
+        ndk {
+            //设置支持的SO库架构
+            abiFilters "armeabi"
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    configurations {
+        all {
+            exclude module: 'httpclient'
+            exclude module: 'commons-logging'
+            exclude module: 'opengl-api'
+            exclude module: 'xpp3'
+            exclude module: 'xmlParserAPIs'
+            exclude module: 'android'
+        }
+    }
+
+    signingConfigs {
+        //签名信息 可以自定义很多
+        config {
+            storeFile file("$project.rootDir/key.store.jks")
+            storePassword "123456"
+            keyAlias "key"
+            keyPassword "123456"
+            v2SigningEnabled false
+        }
+    }
+
+    flavorDimensions 'main'
+    publishNonDefault true
+    productFlavors {
+        mulan {
+            dimension = 'main'
+            buildConfigField "String", "GUARD_PACKAGE", '"mulan"'
+            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/mulan/Logs"'
+        }
+        henghongda {
+            dimension = 'main'
+            buildConfigField "String", "GUARD_PACKAGE", '"henghongda"'
+            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/henghongda/Logs"'
+        }
+    }
+
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.config
+            debuggable true
+            testCoverageEnabled false
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.config
+
+            android.applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def fileName = "electornclass_${defaultConfig.versionName}_${name}.apk"
+                    def des = variant.getPackageApplicationProvider().get().outputDirectory.toPath().relativize(rootDir.toPath()).toFile()
+                    outputFileName = new File("$des/app/build/outputs/apk/release", fileName)
+                }
+            }
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+    implementation project(':common')
+    implementation project(':mvp')
+    implementation project(':home')
+    implementation project(':application')
+    implementation project(':attendance')
+    implementation project(':class')
+
+}

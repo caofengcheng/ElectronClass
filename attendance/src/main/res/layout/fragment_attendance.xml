@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clAttendance"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".AttendanceFragment">
+
+        <LinearLayout
+            android:id="@+id/llDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="84dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="82dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_8_left"
+                android:gravity="center"
+                android:text="2019"
+                android:textColor="#ffffffff"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:background="#E6E6E6"
+                android:gravity="center"
+                android:text="年"
+                android:textColor="#ff8e8e8e"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/month"
+                android:layout_width="61dp"
+                android:layout_height="40dp"
+                android:background="#36C2CF"
+                android:gravity="center"
+                android:text="7"
+                android:textColor="#ffffffff"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:background="#E6E6E6"
+                android:gravity="center"
+                android:text="月"
+                android:textColor="#ff8e8e8e"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/day"
+                android:layout_width="61dp"
+                android:layout_height="40dp"
+                android:background="#36C2CF"
+                android:gravity="center"
+                android:text="7"
+                android:textColor="#ffffffff"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_8_right"
+                android:gravity="center"
+                android:text="日"
+                android:textColor="#ff8e8e8e"
+                android:textSize="26sp" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/search"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="46dp"
+            android:background="@drawable/shape_8_attendance"
+            android:text="历史查询"
+            android:textColor="#ffffff"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="@+id/llDate"
+            app:layout_constraintStart_toEndOf="@+id/llDate"
+            app:layout_constraintTop_toTopOf="@+id/llDate" />
+
+        <TextView
+            android:id="@+id/turnOutForWork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="83dp"
+            android:layout_marginBottom="8dp"
+            android:text="出勤率：97%"
+            android:textColor="#ff767676"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="@+id/search"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/search" />
+
+        <TextView
+            android:id="@+id/actualArrival"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="21dp"
+            android:text="实到：39人"
+            android:textColor="#ff767676"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toStartOf="@+id/turnOutForWork"
+            app:layout_constraintTop_toTopOf="@+id/turnOutForWork" />
+
+        <TextView
+            android:id="@+id/shouldBeTo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:text="应到：40人"
+            android:textColor="#ff767676"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="@+id/actualArrival"
+            app:layout_constraintEnd_toStartOf="@+id/actualArrival"
+            app:layout_constraintTop_toTopOf="@+id/actualArrival" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="55dp"
+            android:text="未到"
+            android:textColor="#ff767676"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="@+id/shouldBeTo"
+            app:layout_constraintEnd_toStartOf="@+id/shouldBeTo"
+            app:layout_constraintTop_toTopOf="@+id/shouldBeTo" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/shape_50_red"
+            app:layout_constraintBottom_toBottomOf="@+id/textView8"
+            app:layout_constraintEnd_toStartOf="@+id/textView8"
+            app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="迟到"
+            android:textColor="#ff767676"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView8"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/shape_50_yellow"
+            app:layout_constraintBottom_toBottomOf="@+id/textView9"
+            app:layout_constraintEnd_toStartOf="@+id/textView9"
+            app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="正常"
+            android:textColor="#ff767676"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView9"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/shape_50_white"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintEnd_toStartOf="@+id/textView10"
+            app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginBottom="82dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

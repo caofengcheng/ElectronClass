@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".HomeFragment">
+
+        <RelativeLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="1180dp"
+            android:layout_height="554dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="99dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <com.electronclass.common.util.RoundImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg" />
+
+            <com.sivin.Banner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+            </com.sivin.Banner>
+
+            <com.electronclass.common.util.VerticalTextView
+                android:id="@+id/tvClassInform"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="76dp"
+                android:layout_marginLeft="64dp"
+                android:layout_marginRight="64dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="1800dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="34dp"
+            android:background="@drawable/tvbj"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+
+            <com.electronclass.common.util.VerticalTextView
+                android:id="@+id/tvInform"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="238dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/pageNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="172dp"
+                android:layout_marginTop="24dp"
+                android:textColor="#ffffffff"
+                android:textSize="26sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="2" />
+
+            <TextView
+                android:id="@+id/page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="196dp"
+                android:layout_marginBottom="40dp"
+                android:textColor="#ffffffff"
+                android:textSize="26sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="20" />
+        </android.support.constraint.ConstraintLayout>
+
+
+        <com.electronclass.common.util.RoundImageView
+            android:id="@+id/ivClassName"
+            android:layout_width="579dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="41dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="33dp"
+            android:background="@drawable/bg"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="61dp"
+            android:layout_marginTop="26dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bjtz" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1044dp"
+            android:layout_marginTop="26dp"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bjfc" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/classMien"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="41dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="63dp"
+            android:layout_marginBottom="17dp"
+            app:layout_constraintBottom_toTopOf="@+id/className"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+        <TextView
+            android:id="@+id/className"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="初一（5）班"
+            android:textColor="#ff404040"
+            android:textSize="38sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivClassName"
+            app:layout_constraintEnd_toEndOf="@+id/ivClassName"
+            app:layout_constraintStart_toStartOf="@+id/ivClassName"
+            app:layout_constraintTop_toTopOf="@+id/ivClassName" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

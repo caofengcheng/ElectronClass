@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.electronclass.home">
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application>
+        <activity android:name=".activity.ImageActivity"></activity>
+        <activity android:name=".activity.VideoActivity" />
+    </application>
+
+</manifest>

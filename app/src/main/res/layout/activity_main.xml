@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bgimg"
+        tools:context=".activity.MainActivity"
+        android:id="@+id/main">
+
+        <com.electronclass.electronclass.UI.TopBar
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="120dp"
+            android:layout_marginBottom="120dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="16dp">
+
+            <com.electronclass.common.layout.InclusiveRadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RadioButton
+                        android:id="@+id/rbHome"
+                        android:layout_width="420dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/main_radiobutton1"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawableLeft="@drawable/home"
+                        android:drawablePadding="18dp"
+                        android:paddingLeft="122dp"
+                        android:text="主页"
+                        android:textColor="#ffffffff"
+                        android:textSize="40sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/rbApp" />
+
+                    <RadioButton
+                        android:id="@+id/rbApp"
+                        android:layout_width="420dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="336dp"
+                        android:background="@drawable/main_radiobutton2"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/application"
+                        android:drawablePadding="18dp"
+                        android:paddingLeft="88dp"
+                        android:text="应用中心"
+                        android:textColor="#ffffffff"
+                        android:textSize="40sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/rbHome"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <RadioButton
+                        android:id="@+id/rbClass"
+                        android:layout_width="420dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="324dp"
+                        android:background="@drawable/main_radiobutton2"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/electronclass"
+                        android:drawablePadding="18dp"
+                        android:paddingLeft="80dp"
+                        android:text="班级信息"
+                        android:textColor="#ffffffff"
+                        android:textSize="40sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/rbApp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <RadioButton
+                        android:id="@+id/rbAttendance"
+                        android:layout_width="420dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="336dp"
+                        android:background="@drawable/main_radiobutton2"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/attendance"
+                        android:drawablePadding="18dp"
+                        android:paddingLeft="122dp"
+                        android:text="考勤"
+                        android:textColor="#ffffffff"
+                        android:textSize="40sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/rbClass"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+                </android.support.constraint.ConstraintLayout>
+            </com.electronclass.common.layout.InclusiveRadioGroup>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

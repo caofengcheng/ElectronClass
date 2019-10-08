@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <com.electronclass.common.layout.InclusiveRadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/rbCoures"
+                android:layout_width="280dp"
+                android:layout_height="60dp"
+                android:background="@drawable/class_radiobutton1"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="课程表"
+                android:textColor="#ffffffff"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/radioGroup" />
+
+            <RadioButton
+                android:id="@+id/rbDuty"
+                android:layout_width="280dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/class_radiobutton2"
+                android:button="@null"
+                android:gravity="center"
+                android:text="值日表"
+                android:textColor="#ffffffff"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/radioGroup" />
+
+        </com.electronclass.common.layout.InclusiveRadioGroup>
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+        <TextView
+            android:id="@+id/className"
+            android:layout_width="700dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="60dp"
+            tools:text="初一（5）班"
+            android:textColor="#ffffffff"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@drawable/shape_10_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

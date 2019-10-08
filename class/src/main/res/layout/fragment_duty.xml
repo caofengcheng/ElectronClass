@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_10_bottom"
+        tools:context=".fragment.DutyFragment">
+
+
+        <TextView
+            android:id="@+id/monDay6"
+            android:layout_width="216dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="26dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="周五"
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="@+id/monDay2"
+            app:layout_constraintStart_toEndOf="@+id/monDay5"
+            app:layout_constraintTop_toTopOf="@+id/monDay2"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/sunDay"
+            android:layout_width="216dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="26dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="周日"
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="@+id/monDay2"
+            app:layout_constraintStart_toEndOf="@+id/saturDay"
+            app:layout_constraintTop_toTopOf="@+id/monDay2"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/saturDay"
+            android:layout_width="216dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="26dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="周六"
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="@+id/monDay2"
+            app:layout_constraintStart_toEndOf="@+id/monDay6"
+            app:layout_constraintTop_toTopOf="@+id/monDay2"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/monDay5"
+            android:layout_width="216dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="26dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="周四"
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="@+id/monDay2"
+            app:layout_constraintStart_toEndOf="@+id/monDay4"
+            app:layout_constraintTop_toTopOf="@+id/monDay2"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/monDay4"
+            android:layout_width="216dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="26dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="周三"
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="@+id/monDay2"
+            app:layout_constraintStart_toEndOf="@+id/monDay3"
+            app:layout_constraintTop_toTopOf="@+id/monDay2"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/monDay3"
+            android:layout_width="216dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="26dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="周二"
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="@+id/monDay2"
+            app:layout_constraintStart_toEndOf="@+id/monDay2"
+            app:layout_constraintTop_toTopOf="@+id/monDay2" />
+
+        <TextView
+            android:id="@+id/monDay2"
+            android:layout_width="216dp"
+            android:layout_height="96dp"
+            android:layout_marginStart="66dp"
+            android:layout_marginTop="51dp"
+            android:background="@drawable/shape_8_class"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="3.0"
+            android:text="周一"
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/inMonday"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="@+id/monDay2"
+            app:layout_constraintStart_toStartOf="@+id/monDay2"
+            app:layout_constraintTop_toBottomOf="@+id/monDay2" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/inTuesDay"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="@+id/monDay3"
+            app:layout_constraintStart_toStartOf="@+id/monDay3"
+            app:layout_constraintTop_toBottomOf="@+id/monDay3" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/inWednesDay"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="@+id/monDay4"
+            app:layout_constraintStart_toStartOf="@+id/monDay4"
+            app:layout_constraintTop_toBottomOf="@+id/monDay4" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/inThursDay"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="@+id/monDay5"
+            app:layout_constraintStart_toStartOf="@+id/monDay5"
+            app:layout_constraintTop_toBottomOf="@+id/monDay5" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/inFriDay"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="@+id/monDay6"
+            app:layout_constraintStart_toStartOf="@+id/monDay6"
+            app:layout_constraintTop_toBottomOf="@+id/monDay6" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/inSaturDay"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="@+id/saturDay"
+            app:layout_constraintStart_toStartOf="@+id/saturDay"
+            app:layout_constraintTop_toBottomOf="@+id/saturDay" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/inSunDay"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="@+id/sunDay"
+            app:layout_constraintStart_toStartOf="@+id/sunDay"
+            app:layout_constraintTop_toBottomOf="@+id/sunDay" />
+
+        <ImageView
+            android:id="@+id/addDuty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="69dp"
+            android:layout_marginBottom="45dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/duty_add" />
+    </android.support.constraint.ConstraintLayout>
+</layout>
