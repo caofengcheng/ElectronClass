@@ -41,9 +41,6 @@ public class MainActivity extends BaseActivity<CardContract.Presenter> implement
         getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         binding = DataBindingUtil.setContentView( this, R.layout.activity_main );
         init();
-        initBugly();
-        setFragmentList();
-        setFragment();
     }
 
     @Override
@@ -60,8 +57,9 @@ public class MainActivity extends BaseActivity<CardContract.Presenter> implement
 
     @Override
     protected void initView() {
-
-
+        initBugly();
+        setFragmentList();
+        setFragment();
     }
 
     @Override

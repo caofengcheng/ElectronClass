@@ -35,7 +35,7 @@ public class DutyModel extends BaseModel implements DutyContract.Model {
                             return;
                         }
                         if (result.getData().size() == 0){
-                            mPresenter.onError( "无通知数据" );
+                            mPresenter.onError( "无值日数据" );
                             return;
                         }
                         mPresenter.onDuty(result.getData());
