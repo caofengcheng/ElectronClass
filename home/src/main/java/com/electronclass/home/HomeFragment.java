@@ -138,12 +138,11 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 
     @Override
     public void loadMoreFail() {
-//        classMienAdapter.loadMoreFail();
     }
 
     @Override
     public void loadMoreEnd() {
-        classMienAdapter.loadMoreEnd();
+        classMienAdapter.loadMoreEnd(true);
     }
 
     @Override
