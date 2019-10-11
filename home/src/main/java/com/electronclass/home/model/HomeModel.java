@@ -33,7 +33,7 @@ public class HomeModel extends BaseModel implements HomeContract.Model {
                             return;
                         }
                         if (result.getData().size() == 0){
-                            mPresenter.onError( "无校园通知数据" );
+//                            mPresenter.onError( "无校园通知数据" );
                             return;
                         }
                         mPresenter.onInform(result.getData());

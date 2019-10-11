@@ -11,6 +11,8 @@ import com.electronclass.pda.mvp.entity.Coures;
 import com.electronclass.pda.mvp.entity.ServiceResponse;
 import com.electronclass.pda.mvp.rest.RestManager;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 public class CouresModel extends BaseModel implements CouresContract.Model {
@@ -23,6 +25,10 @@ public class CouresModel extends BaseModel implements CouresContract.Model {
 
     @Override
     public void getCoures() {
+        if (GlobalParam.getClassInfo() == null || StringUtils.isEmpty(  GlobalParam.getClassInfo().getClassId())){
+            mPresenter.onError("未绑定班级");
+            return;
+        }
         String date = DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY);
         RestManager.getRestApi().getCoures( GlobalParam.getEcardNo(),null,GlobalParam.getClassInfo().getClassId(),date,0)
                 .compose(  RxComposer.<ServiceResponse<List<Coures>>>composeSingle() )
@@ -34,7 +40,7 @@ public class CouresModel extends BaseModel implements CouresContract.Model {
                             mPresenter.onError( result.getMsg() );
                             return;
                         }
-                        if (result.getData().size() == 0){
+                        if (result.getData() == null || result.getData().size() == 0){
                             mPresenter.onError( "无课表" );
                             return;
                         }

@@ -10,10 +10,12 @@ import com.electronclass.common.basemvp.contract.ApplicationContract;
 import com.electronclass.common.basemvp.presenter.ApplicationPresenter;
 import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
+import com.electronclass.common.database.GlobalParameter;
 import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.util.DateUtil;
 import com.electronclass.common.util.Tools;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -32,6 +34,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         super.onCreate();
         GlobalParam.setEventTime( "07:50" );
         getBuildConfig();
+        initEcardNo();
         mPresenter.getClassAndSchool();
         stopAlm();
         logger.debug( "当前版本号：" + getVersionCode() + "  版本名称：" + getVersionName() );
@@ -109,6 +112,17 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
 
     }
 
+    /**
+     * 初始化班牌号
+     */
+    private void initEcardNo() {
+        if (StringUtils.isNoneEmpty( GlobalParameter.getMacAddress() )) {
+            GlobalParam.setEcardNo( GlobalParameter.getMacAddress() );
+        } else {
+            Tools.displayToast( "请检查设备是否有正常MAC地址" );
+        }
+
+    }
 
     private void getBuildConfig() {
         GlobalPage.pageConfig = BuildConfig.GUARD_PACKAGE;

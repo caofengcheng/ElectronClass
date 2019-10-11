@@ -34,9 +34,12 @@ public class GlobalParameter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.info( "getMAC:"+ macAddress);
-        ECARDNO = StringUitl.replaceString(macAddress,":"  );
-        logger.info( "getMAC:"+ ECARDNO);
+
+        if (macAddress != null){
+            logger.info( "getMAC:"+ macAddress);
+            ECARDNO = StringUitl.replaceString(macAddress,":"  );
+            logger.info( "getMAC:"+ ECARDNO);
+        }
         return ECARDNO;
     }
 }

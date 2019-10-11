@@ -11,6 +11,8 @@ import com.electronclass.pda.mvp.entity.Coures;
 import com.electronclass.pda.mvp.entity.ServiceResponse;
 import com.electronclass.pda.mvp.rest.RestManager;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 public class AttendanceModel extends BaseModel implements AttendanceContract.Model {
@@ -23,6 +25,10 @@ public class AttendanceModel extends BaseModel implements AttendanceContract.Mod
 
     @Override
     public void getAttendance(String eventDate) {
+        if (GlobalParam.getClassInfo() == null || StringUtils.isEmpty(  GlobalParam.getClassInfo().getClassId())){
+            mPresenter.onError("未绑定班级");
+            return;
+        }
         RestManager.getRestApi().getAttendance( GlobalParam.getEcardNo(),null,GlobalParam.getClassInfo().getClassId(),eventDate)
                 .compose(  RxComposer.<ServiceResponse<Attendance>>composeSingle() )
                 .subscribe(new BaseSingle<ServiceResponse<Attendance>>(compositeDisposable) {
@@ -31,6 +37,10 @@ public class AttendanceModel extends BaseModel implements AttendanceContract.Mod
                         if (!result.getCode().equals( "200" ))
                         {
                             mPresenter.onError( result.getMsg() );
+                            return;
+                        }
+                        if (result.getData() == null){
+                            mPresenter.onError( "无考勤信息" );
                             return;
                         }
                         mPresenter.onAttendance(result.getData());
