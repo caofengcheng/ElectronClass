@@ -1,4 +1,4 @@
-package com.electronclass.application.contract;
+package com.electronclass.application.set.contract;
 
 import com.electronclass.pda.mvp.base.BaseModelInterface;
 import com.electronclass.pda.mvp.base.BasePresenterInterface;
@@ -7,24 +7,15 @@ import com.electronclass.pda.mvp.entity.ClassItem;
 
 import java.util.List;
 
-public interface ApplicationContract {
+public interface SetContract {
     interface Model extends BaseModelInterface {
         void setPresenter(Presenter presenter);
-
-        void sendSms(String phoneNum);
-
-        void login(String phoneNum, String smsCode);
-
         void getClassList(String departId, String userId);
 
         void bound(String departCode);
     }
 
     interface View extends BaseView {
-        void onSms(boolean isSuccess);
-
-        void onlogin(boolean str);
-
         void onClassList(List<ClassItem> classItems);
 
         void onGradeList(List<ClassItem> classItems);
@@ -32,17 +23,10 @@ public interface ApplicationContract {
         void onSchoolList(List<ClassItem> classItems);
 
         void onBound(String msg);
+
     }
 
-    interface Presenter extends BasePresenterInterface<View> {
-        void sendSms(String phoneNum);
-
-        void onSms(boolean isSuccess);
-
-        void login(String phoneNum, String smsCode);
-
-        void onlogin(boolean str);
-
+    interface Presenter extends BasePresenterInterface<SetContract.View> {
         void getClassList(String departId, String userId);
 
         void onClassList(List<ClassItem> classItems);

@@ -1,2 +1,13 @@
-<manifest
-    package="com.electronclass.application" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.electronclass.application">
+
+    <application>
+        <activity android:name=".set.ui.SetActivity"
+            android:theme="@style/dialogStyle"/>
+        <activity
+            android:name=".login.ui.LoginActivity"
+            android:theme="@style/dialogStyle" />
+    </application>
+
+</manifest>

@@ -1,43 +1,23 @@
-package com.electronclass.application.presenter;
+package com.electronclass.application.set.presenter;
 
-import com.electronclass.application.contract.ApplicationContract;
-import com.electronclass.application.model.ApplicationModel;
+import com.electronclass.application.set.contract.SetContract;
+import com.electronclass.application.set.model.SetModel;
 import com.electronclass.pda.mvp.base.BasePresenter;
 import com.electronclass.pda.mvp.entity.ClassItem;
 
 import java.util.List;
 
-public class ApplicationPresenter extends BasePresenter<ApplicationContract.Model, ApplicationContract.View> implements ApplicationContract.Presenter {
-
-    @Override
-    public void onError(String errorMessage) {
-        mView.onError( errorMessage );
-    }
+public class SetPresenter extends BasePresenter<SetContract.Model, SetContract.View> implements SetContract.Presenter {
 
     @Override
     protected void initModel() {
-        mModel = new ApplicationModel();
+        mModel = new SetModel();
         mModel.setPresenter( this );
     }
 
     @Override
-    public void sendSms(String phoneNum) {
-        mModel.sendSms( phoneNum );
-    }
-
-    @Override
-    public void onSms(boolean isSuccess) {
-        mView.onSms( isSuccess );
-    }
-
-    @Override
-    public void login(String phoneNum, String smsCode) {
-        mModel.login( phoneNum, smsCode );
-    }
-
-    @Override
-    public void onlogin(boolean str) {
-        mView.onlogin( str );
+    public void onError(String errorMessage) {
+        mView.onError( errorMessage );
     }
 
     @Override
@@ -70,6 +50,5 @@ public class ApplicationPresenter extends BasePresenter<ApplicationContract.Mode
     public void onBound(String msg) {
         mView.onBound( msg );
     }
-
 
 }

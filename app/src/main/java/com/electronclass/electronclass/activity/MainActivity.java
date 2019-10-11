@@ -4,8 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.Toast;
-
 import com.electronclass.aclass.ClassFragment;
 import com.electronclass.application.ApplicationFragment;
 import com.electronclass.attendance.AttendanceFragment;
