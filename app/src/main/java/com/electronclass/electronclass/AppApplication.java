@@ -10,7 +10,7 @@ import com.electronclass.common.basemvp.contract.ApplicationContract;
 import com.electronclass.common.basemvp.presenter.ApplicationPresenter;
 import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.database.GlobalParameter;
+import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.util.DateUtil;
 import com.electronclass.common.util.Tools;
@@ -116,8 +116,8 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 初始化班牌号
      */
     private void initEcardNo() {
-        if (StringUtils.isNoneEmpty( GlobalParameter.getMacAddress() )) {
-            GlobalParam.setEcardNo( GlobalParameter.getMacAddress() );
+        if (StringUtils.isNoneEmpty( MacAddress.getMacAddress() )) {
+            GlobalParam.setEcardNo( MacAddress.getMacAddress() );
         } else {
             Tools.displayToast( "请检查设备是否有正常MAC地址" );
         }

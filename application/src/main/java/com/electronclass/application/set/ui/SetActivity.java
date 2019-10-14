@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.electronclass.application.R;
 import com.electronclass.application.databinding.ActivitySetBinding;
 import com.electronclass.application.set.contract.SetContract;
@@ -21,19 +22,23 @@ import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
 import com.electronclass.common.base.BaseActivity;
 import com.electronclass.common.base.BaseViewHolder;
 import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.database.GlobalParameter;
+import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.util.Tools;
 import com.electronclass.common.util.wheelview.WheelView;
 import com.electronclass.common.util.wheelview.adapter.NumericWheelAdapter;
 import com.electronclass.pda.mvp.entity.ClassItem;
+
 import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-
+/**
+ * 设置
+ */
 public class SetActivity extends BaseActivity<SetContract.Presenter> implements SetContract.View {
 
     private ActivitySetBinding binding;
@@ -72,7 +77,7 @@ public class SetActivity extends BaseActivity<SetContract.Presenter> implements 
     protected void initView() {
         setOnClick();
         binding.time.setText( GlobalParam.getEventTime() );
-        binding.deviceId.setText( GlobalParameter.getMacAddress() );
+        binding.deviceId.setText( MacAddress.getMacAddress() );
     }
 
     @Override
@@ -200,13 +205,10 @@ public class SetActivity extends BaseActivity<SetContract.Presenter> implements 
             @Override
             public void convert(BaseViewHolder baseViewHolder, final ClassItem item) {
                 baseViewHolder.setText( R.id.itemClass, item.getDepartName() );
-                baseViewHolder.setOnClickListener( R.id.itemClass, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        binding.etOther.setText( item.getDepartName() );
-                        departCode = item.getDepartCode();
-                        popupSetClassWindow.dismiss();
-                    }
+                baseViewHolder.setOnClickListener( R.id.itemClass, v -> {
+                    binding.etOther.setText( item.getDepartName() );
+                    departCode = item.getDepartCode();
+                    popupSetClassWindow.dismiss();
                 } );
             }
         };

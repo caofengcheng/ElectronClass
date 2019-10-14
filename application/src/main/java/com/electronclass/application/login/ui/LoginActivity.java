@@ -16,6 +16,7 @@ import com.electronclass.application.set.ui.SetActivity;
 import com.electronclass.common.base.BaseActivity;
 import com.electronclass.common.util.KeyboardUtils;
 import com.electronclass.common.util.Tools;
+
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -129,7 +130,7 @@ public class LoginActivity extends BaseActivity<LoginContract.Presenter> impleme
 
     @Override
     public void onlogin(boolean str) {
-        if (str){
+        if (str) {
             Intent intent = new Intent( LoginActivity.this, SetActivity.class );
             startActivity( intent );
             finish();

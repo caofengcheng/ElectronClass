@@ -10,8 +10,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 
-public class GlobalParameter {
-    private static  Logger logger = LoggerFactory.getLogger( GlobalParameter.class );
+/**
+ * 获取Mac地址
+ */
+public class MacAddress {
+    private static  Logger logger = LoggerFactory.getLogger( MacAddress.class );
     public static String ECARDNO = null;
 
     /**

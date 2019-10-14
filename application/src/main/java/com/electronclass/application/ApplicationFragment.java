@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * 应用中心
+ * @author caofengcheng
  */
 public class ApplicationFragment extends Fragment {
 
@@ -70,12 +71,7 @@ public class ApplicationFragment extends Fragment {
             public void convert(BaseViewHolder baseViewHolder, final AppItem item) {
                 baseViewHolder.setBackgroundResources( R.id.imageView, item.getImage() );
                 baseViewHolder.setText( R.id.appName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.clAppItem, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        getClick( item.getCode() );
-                    }
-                } );
+                baseViewHolder.setOnClickListener( R.id.clAppItem, v -> getClick( item.getCode() ) );
 
             }
         };

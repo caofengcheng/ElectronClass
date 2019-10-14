@@ -3,6 +3,7 @@ package com.electronclass.common.base;
 
 import android.app.Application;
 
+import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.util.InitUtil;
 import com.electronclass.common.util.Tools;
 import com.electronclass.pda.mvp.GlobalParameter;
@@ -34,7 +35,7 @@ public abstract class BaseApplication<T extends BasePresenterInterface> extends 
         printBootLog();
         InitUtil.init();
         initRest();
-        com.electronclass.common.database.GlobalParameter.getMacAddress();
+        MacAddress.getMacAddress();
         init();
     }
 

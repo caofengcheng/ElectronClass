@@ -9,6 +9,7 @@ import com.electronclass.application.ApplicationFragment;
 import com.electronclass.attendance.AttendanceFragment;
 import com.electronclass.common.base.BaseActivity;
 import com.electronclass.common.database.GlobalPage;
+import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.util.ReadThreadUtil;
 import com.electronclass.common.util.SerialportManager;
 import com.electronclass.common.util.Tools;
@@ -79,7 +80,7 @@ public class MainActivity extends BaseActivity<CardContract.Presenter> implement
      * 全局更新
      */
     private void initBugly() {
-        Bugly.init( getApplicationContext(), "b1896a9375", false );
+        Bugly.init( getApplicationContext(), GlobalParam.UPDATEID, false );
     }
 
 
@@ -138,10 +139,10 @@ public class MainActivity extends BaseActivity<CardContract.Presenter> implement
      * 关闭刷卡
      */
     private void stopCard() {
-        if (BuildConfig.GUARD_PACKAGE == "mulan") {
+        if (BuildConfig.GUARD_PACKAGE == GlobalPage.MULAN) {
             logger.debug( "关闭木兰刷卡" );
             SerialportManager.getInstance().removeListener( this );
-        } else if (BuildConfig.GUARD_PACKAGE == "henghongda") {
+        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HENGHONGDA) {
             logger.debug( "关闭恒宏达刷卡" );
             if (readThreadUtil != null)
                 readThreadUtil.stopReadThread();

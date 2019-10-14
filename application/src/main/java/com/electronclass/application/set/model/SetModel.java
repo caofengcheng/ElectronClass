@@ -2,7 +2,7 @@ package com.electronclass.application.set.model;
 
 
 import com.electronclass.application.set.contract.SetContract;
-import com.electronclass.common.database.GlobalParameter;
+import com.electronclass.common.database.MacAddress;
 import com.electronclass.pda.mvp.base.BaseModel;
 import com.electronclass.pda.mvp.base.BaseSingle;
 import com.electronclass.pda.mvp.base.RxComposer;
@@ -55,7 +55,7 @@ public class SetModel extends BaseModel implements SetContract.Model {
 
     @Override
     public void bound(String departCode) {
-        RestManager.getRestApi().bound( GlobalParameter.getMacAddress(), departCode )
+        RestManager.getRestApi().bound( MacAddress.getMacAddress(), departCode )
                 .compose( RxComposer.<ServiceResponse>composeSingle() )
                 .subscribe( new BaseSingle<ServiceResponse>( compositeDisposable ) {
                     @Override

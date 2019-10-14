@@ -4,29 +4,24 @@ package com.electronclass.home;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.electronclass.common.base.BaseFragment;
 import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.database.GlobalParameter;
+import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.database.InformType;
 import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.util.Tools;
@@ -39,7 +34,6 @@ import com.electronclass.home.imageviewplay.ImageViewPlay;
 import com.electronclass.home.presenter.HomePresenter;
 import com.electronclass.pda.mvp.entity.ClassMienMessage;
 import com.electronclass.pda.mvp.entity.Inform;
-import com.fasterxml.jackson.core.format.MatchStrength;
 import com.sivin.BannerAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -91,7 +85,7 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
     @Override
     protected void initView(View view) {
         setAdapter();
-        logger.info( "getMAC:" + GlobalParameter.ECARDNO == null ? GlobalParameter.getMacAddress() : GlobalParameter.ECARDNO );
+        logger.info( "getMAC:" + MacAddress.ECARDNO == null ? MacAddress.getMacAddress() : MacAddress.ECARDNO );
     }
 
     @Override
@@ -318,10 +312,10 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 //                    }
                     // type通知类型 0 - 班级通知 1校园通知
                     // isAvaliable  0-获取未过期的所有通知 (包含正在生效和未生效)， 1 获取正在生效的通知 即（开始时间小于当前时间，截止时间大于当前时间）
-                    mPresenter.getInform( GlobalParameter.getMacAddress(), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
+                    mPresenter.getInform( MacAddress.getMacAddress(), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
                     if (GlobalParam.getClassInfo() != null) {
-                        mPresenter.getInform( GlobalParameter.getMacAddress(), "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
-                        mPresenter.getClassMien( GlobalParameter.getMacAddress(), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
+                        mPresenter.getInform( MacAddress.getMacAddress(), "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
+                        mPresenter.getClassMien( MacAddress.getMacAddress(), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
                     }
                 }
             }, 0, timeout );

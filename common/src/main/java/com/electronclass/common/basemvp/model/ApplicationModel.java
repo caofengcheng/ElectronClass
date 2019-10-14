@@ -1,14 +1,11 @@
 package com.electronclass.common.basemvp.model;
 
 import com.electronclass.common.basemvp.contract.ApplicationContract;
-import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.database.GlobalParameter;
+import com.electronclass.common.database.MacAddress;
 import com.electronclass.pda.mvp.base.BaseModel;
 import com.electronclass.pda.mvp.base.BaseSingle;
 import com.electronclass.pda.mvp.base.RxComposer;
 import com.electronclass.pda.mvp.entity.ClassMessage;
-import com.electronclass.pda.mvp.entity.Inform;
-import com.electronclass.pda.mvp.entity.SchoolInfo;
 import com.electronclass.pda.mvp.entity.ServiceResponse;
 import com.electronclass.pda.mvp.rest.RestManager;
 
@@ -22,8 +19,8 @@ public class ApplicationModel extends BaseModel implements ApplicationContract.M
 
     @Override
     public void getClassAndSchool() {
-        RestManager.getRestApi().getClassAndSchool( GlobalParameter.ECARDNO == null ? GlobalParameter.getMacAddress() : GlobalParameter.ECARDNO )
-//        RestManager.getRestApi().getClassAndSchool( Integer.parseInt(  GlobalParameter.getMacAddress() ))
+        RestManager.getRestApi().getClassAndSchool( MacAddress.ECARDNO == null ? MacAddress.getMacAddress() : MacAddress.ECARDNO )
+//        RestManager.getRestApi().getClassAndSchool( Integer.parseInt(  MacAddress.getMacAddress() ))
                 .compose( RxComposer.composeSingle())
                 .subscribe(new BaseSingle<ServiceResponse<ClassMessage>>(compositeDisposable) {
                     @Override
