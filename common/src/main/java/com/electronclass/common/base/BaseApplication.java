@@ -35,7 +35,7 @@ public abstract class BaseApplication<T extends BasePresenterInterface> extends 
         printBootLog();
         InitUtil.init();
         initRest();
-        MacAddress.getMacAddress();
+        MacAddress.getMacAddress(this);
         init();
     }
 

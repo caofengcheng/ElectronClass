@@ -85,7 +85,7 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
     @Override
     protected void initView(View view) {
         setAdapter();
-        logger.info( "getMAC:" + MacAddress.ECARDNO == null ? MacAddress.getMacAddress() : MacAddress.ECARDNO );
+        logger.info( "getMAC:" + MacAddress.ECARDNO == null ? MacAddress.getMacAddress(getActivity()) : MacAddress.ECARDNO );
     }
 
     @Override
@@ -312,10 +312,10 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 //                    }
                     // type通知类型 0 - 班级通知 1校园通知
                     // isAvaliable  0-获取未过期的所有通知 (包含正在生效和未生效)， 1 获取正在生效的通知 即（开始时间小于当前时间，截止时间大于当前时间）
-                    mPresenter.getInform( MacAddress.getMacAddress(), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
+                    mPresenter.getInform( MacAddress.getMacAddress(getActivity()), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
                     if (GlobalParam.getClassInfo() != null) {
-                        mPresenter.getInform( MacAddress.getMacAddress(), "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
-                        mPresenter.getClassMien( MacAddress.getMacAddress(), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
+                        mPresenter.getInform( MacAddress.getMacAddress(getActivity()), "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
+                        mPresenter.getClassMien( MacAddress.getMacAddress(getActivity()), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
                     }
                 }
             }, 0, timeout );

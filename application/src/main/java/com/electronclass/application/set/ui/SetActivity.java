@@ -59,7 +59,7 @@ public class SetActivity extends BaseActivity<SetContract.Presenter> implements 
     private CommonRecyclerViewAdapter<ClassItem> gradeAdapter;
     private List<ClassItem>                      classItemList = new ArrayList<>();
     private List<ClassItem>                      gradeItemList = new ArrayList<>();
-    private String                               departCode;
+    private String departId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class SetActivity extends BaseActivity<SetContract.Presenter> implements 
     protected void initView() {
         setOnClick();
         binding.time.setText( GlobalParam.getEventTime() );
-        binding.deviceId.setText( MacAddress.getMacAddress() );
+        binding.deviceId.setText( MacAddress.getMacAddress(this) );
     }
 
     @Override
@@ -108,8 +108,8 @@ public class SetActivity extends BaseActivity<SetContract.Presenter> implements 
          * 确认按钮
          */
         binding.btSure.setOnClickListener( v -> {
-            if (StringUtils.isNoneEmpty( binding.etOther.getText().toString().trim() ) && StringUtils.isNoneEmpty( departCode )) {
-                mPresenter.bound( departCode );
+            if (StringUtils.isNoneEmpty( binding.etOther.getText().toString().trim() ) && StringUtils.isNoneEmpty(departId)) {
+                mPresenter.bound(departId,this);
             }
         } );
 
@@ -207,7 +207,7 @@ public class SetActivity extends BaseActivity<SetContract.Presenter> implements 
                 baseViewHolder.setText( R.id.itemClass, item.getDepartName() );
                 baseViewHolder.setOnClickListener( R.id.itemClass, v -> {
                     binding.etOther.setText( item.getDepartName() );
-                    departCode = item.getDepartCode();
+                    departId = item.getDepartId();
                     popupSetClassWindow.dismiss();
                 } );
             }

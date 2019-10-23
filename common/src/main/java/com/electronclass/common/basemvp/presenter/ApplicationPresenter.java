@@ -1,5 +1,7 @@
 package com.electronclass.common.basemvp.presenter;
 
+import android.content.Context;
+
 import com.electronclass.common.basemvp.contract.ApplicationContract;
 import com.electronclass.common.basemvp.model.ApplicationModel;
 import com.electronclass.common.database.GlobalParam;
@@ -23,8 +25,8 @@ public class ApplicationPresenter extends BasePresenter<ApplicationContract.Mode
     }
 
     @Override
-    public void getClassAndSchool() {
-        mModel.getClassAndSchool();
+    public void getClassAndSchool(Context context) {
+        mModel.getClassAndSchool(context);
     }
 
     @Override
@@ -35,5 +37,14 @@ public class ApplicationPresenter extends BasePresenter<ApplicationContract.Mode
         mView.onClassAndSchool();
     }
 
+    @Override
+    public void getCardAttendance(String studentCardNo) {
+        mModel.getCardAttendance( studentCardNo );
+    }
+
+    @Override
+    public void onCardAttendance(boolean sure) {
+        mView.onCardAttendance( sure );
+    }
 
 }

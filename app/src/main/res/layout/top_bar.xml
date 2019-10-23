@@ -12,15 +12,17 @@
 
     <ImageView
         android:id="@+id/schoolName"
-        android:layout_width="443dp"
-        android:layout_height="82dp"
+        android:layout_width="96dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="26dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/topbar" />
+        />
+
+
 
     <TextView
         android:id="@+id/tvTime"
@@ -61,6 +63,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tvWeek"
         app:layout_constraintStart_toStartOf="@+id/tvTime" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        tools:text="TextView"
+        android:textColor="#ffffff"
+        android:textSize="38sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/schoolName"
+        app:layout_constraintStart_toEndOf="@+id/schoolName"
+        app:layout_constraintTop_toTopOf="@+id/schoolName" />
 
 
 </android.support.constraint.ConstraintLayout>

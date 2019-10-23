@@ -20,6 +20,8 @@ import com.electronclass.aclass.databinding.ActivityUpdateDutyBinding;
 import com.electronclass.common.base.BaseActivity;
 import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
+import com.electronclass.common.event.CardType;
+import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.util.DateUtil;
 import com.electronclass.common.util.KeyboardUtils;
 import com.electronclass.common.util.ReadThreadUtil;
@@ -32,13 +34,16 @@ import com.electronclass.common.util.wheelview.adapter.NumericWheelAdapter;
 import com.electronclass.pda.mvp.entity.Duty;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 
 /**
  * 修改或添加值日
  */
-public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implements UpdateDutyContract.View, SerialportManager.SerialportListener {
+public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implements UpdateDutyContract.View {
 
     private ActivityUpdateDutyBinding binding;
     private String                    type       = null;
@@ -59,8 +64,11 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         binding = DataBindingUtil.setContentView( this, R.layout.activity_update_duty );
+        EventBus.getDefault().register(this);
         init();
-        initSerialPort();
+        GlobalParam.setCardType( GlobalParam.UPDATEACTIVITY );
+        binding.card.setTextColor( Color.parseColor( "#ff273eb0" ) );
+        binding.card.setText( "请刷卡" );
     }
 
     @Override
@@ -100,37 +108,53 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
 
     }
 
-    //刷卡绑定
-    private void initSerialPort() {
-        if (GlobalPage.pageConfig == GlobalPage.MULAN) {
-            logger.debug( "启动木兰刷卡" );
-            SerialportManager.getInstance().init();
-            SerialportManager.getInstance().addListener( this );
-        } else if (GlobalPage.pageConfig == GlobalPage.HENGHONGDA) {
-            logger.debug( "启动恒宏达刷卡" );
-            readThreadUtil = new ReadThreadUtil();
-            readThreadUtil.startReadThread( (type, cardNum) -> {
-                runOnUiThread( () -> {
-                    if (type == 0) {
-                        logger.info( "卡号：" + cardNum );
-                        cardNumber = cardNum;
-                        binding.card.setTextColor( Color.parseColor( "#ff3ab581" ) );
-                        binding.card.setText( "请继续添加" );
-                        isCard = true;
-                    } else {
-                        Tools.displayToast( "读取出错，不兼容的卡" );
-                        binding.card.setTextColor( Color.parseColor( "#ff273eb0" ) );
-                        binding.card.setText( "请刷卡" );
-                        isCard = false;
-                    }
-                } );
-
-            } );
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onCardType(CardType cardType) {
+        logger.info( "update---cardType:" + cardType.number );
+        if (StringUtils.isNoneEmpty( cardType.number )) {
+            cardNumber = cardType.number;
+            binding.card.setTextColor( Color.parseColor( "#ff3ab581" ) );
+            binding.card.setText( "请继续添加" );
+        }else {
+            binding.card.setTextColor( Color.parseColor( "#ff273eb0" ) );
+            binding.card.setText( "请刷卡" );
         }
     }
 
+//    //刷卡绑定
+//    private void initSerialPort() {
+
+//        if (GlobalPage.pageConfig == GlobalPage.MULAN) {
+//            logger.debug( "启动木兰刷卡" );
+//            SerialportManager.getInstance().init();
+//            SerialportManager.getInstance().addListener( this );
+//        } else if (GlobalPage.pageConfig == GlobalPage.HENGHONGDA) {
+//            logger.debug( "启动恒宏达刷卡" );
+//            readThreadUtil = new ReadThreadUtil();
+//            readThreadUtil.startReadThread( (type, cardNum) -> {
+//                runOnUiThread( () -> {
+//                    if (type == 0) {
+//                        logger.info( "卡号：" + cardNum );
+//                        cardNumber = cardNum;
+//                        binding.card.setTextColor( Color.parseColor( "#ff3ab581" ) );
+//                        binding.card.setText( "请继续添加" );
+//                        isCard = true;
+//                    } else {
+//                        Tools.displayToast( "读取出错，不兼容的卡" );
+//                        binding.card.setTextColor( Color.parseColor( "#ff273eb0" ) );
+//                        binding.card.setText( "请刷卡" );
+//                        isCard = false;
+//                    }
+//                } );
+//
+//            } );
+//        }
+//    }
+
     private void setOnClick() {
-        binding.back.setOnClickListener( v -> finish() );
+        binding.back.setOnClickListener( v -> {
+            finish();
+        } );
 
         binding.duty.setOnClickListener( v -> KeyboardUtils.hideKeyboard( binding.duty ) );
 
@@ -173,20 +197,20 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
         Tools.displayToast( errorMessage );
     }
 
-    @Override
-    public void onReceiveData(String cardNo) {
-        logger.info( "卡号：" + cardNo );
-        if (StringUtils.isNoneEmpty( cardNo )) {
-            binding.card.setTextColor( Color.parseColor( "#ff3ab581" ) );
-            binding.card.setText( "请继续添加" );
-            cardNumber = cardNo;
-            isCard = true;
-        } else {
-            binding.card.setTextColor( Color.parseColor( "#ff273eb0" ) );
-            binding.card.setText( "请刷卡" );
-            isCard = false;
-        }
-    }
+//    @Override
+//    public void onReceiveData(String cardNo) {
+//        logger.info( "卡号：" + cardNo );
+//        if (StringUtils.isNoneEmpty( cardNo )) {
+//            binding.card.setTextColor( Color.parseColor( "#ff3ab581" ) );
+//            binding.card.setText( "请继续添加" );
+//            cardNumber = cardNo;
+//            isCard = true;
+//        } else {
+//            binding.card.setTextColor( Color.parseColor( "#ff273eb0" ) );
+//            binding.card.setText( "请刷卡" );
+//            isCard = false;
+//        }
+//    }
 
     private void toPresenter(String id) {
         getCard();
@@ -234,21 +258,22 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
         Tools.displayToast( msg );
         Intent intent = new Intent();
         setResult( RESULT_OK, intent );
+        GlobalParam.setCardType( GlobalParam.MAINACTIVITY );
         finish();
     }
 
-    /**
-     * 关闭刷卡
-     */
-    private void stopCard() {
-        if (GlobalPage.pageConfig == GlobalPage.MULAN) {
-            logger.debug( "关闭木兰刷卡" );
-            SerialportManager.getInstance().removeListener( this );
-        } else if (GlobalPage.pageConfig == GlobalPage.HENGHONGDA) {
-            logger.debug( "关闭恒宏达刷卡" );
-            readThreadUtil.stopReadThread();
-        }
-    }
+//    /**
+//     * 关闭刷卡
+//     */
+//    private void stopCard() {
+//        if (GlobalPage.pageConfig == GlobalPage.MULAN) {
+//            logger.debug( "关闭木兰刷卡" );
+//            SerialportManager.getInstance().removeListener( this );
+//        } else if (GlobalPage.pageConfig == GlobalPage.HENGHONGDA) {
+//            logger.debug( "关闭恒宏达刷卡" );
+//            readThreadUtil.stopReadThread();
+//        }
+//    }
 
 
     /**
@@ -275,26 +300,18 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
         wl_start_day = view.findViewById( R.id.wl_start_day );
         sure = view.findViewById( R.id.sure );
 
-        NumericWheelAdapter numericWheelAdapterStart1 = new NumericWheelAdapter(this, 2000, 2100 );
+        NumericWheelAdapter numericWheelAdapterStart1 = new NumericWheelAdapter( this, 2000, 2100 );
         numericWheelAdapterStart1.setLabel( " " );
         wl_start_year.setViewAdapter( numericWheelAdapterStart1 );
         numericWheelAdapterStart1.setTextColor( R.color.black );
         numericWheelAdapterStart1.setTextSize( 20 );
         wl_start_year.setCyclic( true );//是否可循环滑动
         wl_start_year.addScrollingListener( startScrollListener );
-        wl_start_year.addChangingListener( new OnWheelChangedListener() {
-            @Override
-            public void onChanged(WheelView wheel, int oldValue, int newValue) {
-                curYear = newValue + 2000;
-                initStartDayAdapter();
-            }
+        wl_start_year.addChangingListener( (wheel, oldValue, newValue) -> {
+            curYear = newValue + 2000;
+            initStartDayAdapter();
         } );
-        sure.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        } );
+        sure.setOnClickListener( v -> popupWindow.dismiss() );
 
         NumericWheelAdapter numericWheelAdapterStart2 = new NumericWheelAdapter( this, 1, 12, "%02d" );
         numericWheelAdapterStart2.setLabel( " " );
@@ -327,7 +344,7 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
             int n_year  = wl_start_year.getCurrentItem() + 2000;//年
             int n_month = wl_start_month.getCurrentItem() + 1;//月
             int n_day   = wl_start_day.getCurrentItem() + 1;//日
-            binding.tvTime.setText( n_year+"-"+n_month+"-"+n_day );
+            binding.tvTime.setText( n_year + "-" + n_month + "-" + n_day );
         }
     };
 
@@ -345,7 +362,9 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopCard();
+        logger.info( "onDestroy" );
+        GlobalParam.setCardType( GlobalParam.MAINACTIVITY );
+        EventBus.getDefault().unregister(this);//解除注册
     }
 
 

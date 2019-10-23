@@ -1,5 +1,7 @@
 package com.electronclass.application.set.contract;
 
+import android.content.Context;
+
 import com.electronclass.pda.mvp.base.BaseModelInterface;
 import com.electronclass.pda.mvp.base.BasePresenterInterface;
 import com.electronclass.pda.mvp.base.BaseView;
@@ -12,7 +14,7 @@ public interface SetContract {
         void setPresenter(Presenter presenter);
         void getClassList(String departId, String userId);
 
-        void bound(String departCode);
+        void bound(String departId, Context context);
     }
 
     interface View extends BaseView {
@@ -35,7 +37,7 @@ public interface SetContract {
 
         void onSchoolList(List<ClassItem> classItems);
 
-        void bound(String departCode);
+        void bound(String departId,Context context);
 
         void onBound(String msg);
     }

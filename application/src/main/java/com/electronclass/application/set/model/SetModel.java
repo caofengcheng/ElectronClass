@@ -1,6 +1,8 @@
 package com.electronclass.application.set.model;
 
 
+import android.content.Context;
+
 import com.electronclass.application.set.contract.SetContract;
 import com.electronclass.common.database.MacAddress;
 import com.electronclass.pda.mvp.base.BaseModel;
@@ -54,8 +56,8 @@ public class SetModel extends BaseModel implements SetContract.Model {
     }
 
     @Override
-    public void bound(String departCode) {
-        RestManager.getRestApi().bound( MacAddress.getMacAddress(), departCode )
+    public void bound(String departId, Context context) {
+        RestManager.getRestApi().bound( MacAddress.getMacAddress(context), departId )
                 .compose( RxComposer.<ServiceResponse>composeSingle() )
                 .subscribe( new BaseSingle<ServiceResponse>( compositeDisposable ) {
                     @Override
