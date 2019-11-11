@@ -1,5 +1,7 @@
 package com.electronclass.aclass.activity.presenter;
 
+import android.content.Context;
+
 import com.electronclass.aclass.activity.contract.UpdateDutyContract;
 import com.electronclass.aclass.activity.model.UpdateDutyModel;
 import com.electronclass.pda.mvp.base.BasePresenter;
@@ -19,8 +21,8 @@ public class UpdateDutyPresenter extends BasePresenter<UpdateDutyContract.Model,
     }
 
     @Override
-    public void addOrUpdateDuty(String id, String studentCardNo, String task, String name, String eventDate) {
-        mModel.addOrUpdateDuty( id, studentCardNo, task, name, eventDate );
+    public void addOrUpdateDuty(Context context, String id, String password, String task, String name, String eventDate) {
+        mModel.addOrUpdateDuty(context, id, password, task, name, eventDate );
     }
 
     @Override
@@ -29,8 +31,8 @@ public class UpdateDutyPresenter extends BasePresenter<UpdateDutyContract.Model,
     }
 
     @Override
-    public void deleteDuty(String id) {
-        mModel.deleteDuty( id );
+    public void deleteDuty(Context context,String id, String password) {
+        mModel.deleteDuty( context,id ,password);
     }
 
     @Override

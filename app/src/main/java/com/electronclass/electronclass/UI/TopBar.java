@@ -1,27 +1,18 @@
 package com.electronclass.electronclass.UI;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.xhapimanager.XHApiManager;
-import com.bumptech.glide.Glide;
 import com.electronclass.common.base.BaseViewHolder;
-import com.electronclass.common.database.GlobalPage;
-import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.event.TopEvent;
 import com.electronclass.common.util.DateUtil;
-import com.electronclass.electronclass.AppApplication;
-import com.electronclass.electronclass.BuildConfig;
 import com.electronclass.electronclass.R;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -59,17 +50,17 @@ public class TopBar extends ConstraintLayout {
 //            schoolName.setImageResource( R.drawable.xx );
 //        }
 
-        AppApplication.getInstance().setTopEvent(new TopEvent() {
-            @Override
-            public void Event() {
-                if (GlobalParam.getSchoolInfo() != null) {
-                    Glide.with( TopBar.this)
-                            .load( GlobalParam.getSchoolInfo().getLogo())
-                            .into( schoolName );
-                    name.setText(GlobalParam.getSchoolInfo().getName());
-                }
-            }
-        });
+//        AppApplication.getInstance().setTopEvent(new TopEvent() {
+//            @Override
+//            public void Event() {
+//                if (GlobalParam.getSchoolInfo() != null) {
+//                    Glide.with( TopBar.this)
+//                            .load( GlobalParam.getSchoolInfo().getLogo())
+//                            .into( schoolName );
+//                    name.setText(GlobalParam.getSchoolInfo().getName());
+//                }
+//            }
+//        });
 
 
         handler = new ViewHandler();

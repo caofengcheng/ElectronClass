@@ -2,7 +2,6 @@ package com.electronclass.common.util;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;

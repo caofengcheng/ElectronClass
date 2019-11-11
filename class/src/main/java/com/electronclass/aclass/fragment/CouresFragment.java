@@ -16,7 +16,6 @@ import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
 import com.electronclass.common.base.BaseFragment;
 import com.electronclass.common.base.BaseViewHolder;
 import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.util.DateUtil;
 import com.electronclass.common.util.Tools;
 import com.electronclass.pda.mvp.entity.Coures;
 
@@ -32,7 +31,6 @@ import java.util.List;
 public class CouresFragment extends BaseFragment<CouresContract.Presenter> implements CouresContract.View {
 
     private FragmentCouresBinding             binding;
-    private List<String>                      week    = new ArrayList<>();
     private List<Coures>                      coures1 = new ArrayList<>();
     private List<Coures>                      coures2 = new ArrayList<>();
     private List<Coures>                      coures3 = new ArrayList<>();
@@ -40,7 +38,6 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
     private List<Coures>                      coures5 = new ArrayList<>();
     private List<Coures>                      coures6 = new ArrayList<>();
     private List<Coures>                      coures7 = new ArrayList<>();
-    private CommonRecyclerViewAdapter<String> weekAdapter;
     private CommonRecyclerViewAdapter<Coures> weekAdapter1;
     private CommonRecyclerViewAdapter<Coures> weekAdapter2;
     private CommonRecyclerViewAdapter<Coures> weekAdapter3;
@@ -48,6 +45,7 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
     private CommonRecyclerViewAdapter<Coures> weekAdapter5;
     private CommonRecyclerViewAdapter<Coures> weekAdapter6;
     private CommonRecyclerViewAdapter<Coures> weekAdapter7;
+    private boolean                           isHave  = false;//是否已经获取到数据
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,16 +69,7 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
 
     @Override
     protected void initView(View view) {
-        week.add( "第一节" );
-        week.add( "第二节" );
-        week.add( "第三节" );
-        week.add( "第四节" );
-        week.add( "第五节" );
-        week.add( "第六节" );
-        week.add( "第七节" );
-        week.add( "第八节" );
-        week.add( "第九节" );
-        setWeekAdapter();
+        setBackGroundColor();
         setWeekOne();
         setWeekTwo();
         setWeekThree();
@@ -92,19 +81,12 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
 
     @Override
     protected void initData() {
-        try {
-            logger.debug( "CouresFragment:initData");
-            binding.tvWeek.setText( "第"+ DateUtil.getWeek( ) +"周" );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (GlobalParam.getClassInfo() == null){
-            logger.debug( "CouresFragment:initData null");
-            Tools.displayToast( "请先绑定班牌！" );
-            return;
-        }
-
-        mPresenter.getCoures();
+//        if (GlobalParam.getClassInfo() == null) {
+//            logger.debug( "CouresFragment:initData null" );
+//            Tools.displayToast( "请先绑定班牌班级！" );
+//            return;
+//        }
+//        mPresenter.getCoures();
     }
 
     @Override
@@ -119,7 +101,16 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
 
     @Override
     protected void getData() {
-
+        logger.info( "CouresFragment--getData" );
+        if (GlobalParam.getClassInfo() == null) {
+            logger.debug( "CouresFragment:initData null" );
+            Tools.displayToast( "请先绑定班牌班级！" );
+            return;
+        }
+        if (isHave) {
+            return;
+        }
+        mPresenter.getCoures();
     }
 
     @Override
@@ -170,28 +161,32 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
         weekAdapter5.notifyDataSetChanged();
         weekAdapter6.notifyDataSetChanged();
         weekAdapter7.notifyDataSetChanged();
-
+        isHave = true;
     }
 
 
-    private void setWeekAdapter() {
-        weekAdapter = new CommonRecyclerViewAdapter<String>( R.layout.class_item, false, false ) {
-            @Override
-            public void convert(BaseViewHolder baseViewHolder, String item) {
-                baseViewHolder.setText( R.id.classItem, item );
-            }
-        };
-        weekAdapter.bindRecyclerView( binding.weekItem, new LinearLayoutManager(
-                getActivity(), LinearLayoutManager.VERTICAL, false ) );
-        weekAdapter.setData( week );
-        weekAdapter.notifyDataSetChanged();
+    @Override
+    public void onError(String errorMessage) {
+        super.onError( errorMessage );
+    }
+
+    private void setBackGroundColor() {
+        binding.tvWeek1.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class1 ) );
+        binding.tvWeek2.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class2 ) );
+        binding.tvWeek3.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class3 ) );
+        binding.tvWeek4.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class4 ) );
+        binding.tvWeek5.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class5 ) );
+        binding.tvWeek6.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class6 ) );
+        binding.tvWeek7.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class7 ) );
+
     }
 
     private void setWeekOne() {
         weekAdapter1 = new CommonRecyclerViewAdapter<Coures>( R.layout.class_item, false, false ) {
             @Override
             public void convert(BaseViewHolder baseViewHolder, Coures item) {
-                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty(item.getCourseName()) ? item.getCourseName() : "" );
+                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty( item.getCourseName() ) ? item.getCourseName() : "" );
+                baseViewHolder.setBackgroundResources( R.id.classCl, R.drawable.shape_6_class1 );
             }
         };
         weekAdapter1.bindRecyclerView( binding.monDay, new LinearLayoutManager(
@@ -202,7 +197,8 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
         weekAdapter2 = new CommonRecyclerViewAdapter<Coures>( R.layout.class_item, false, false ) {
             @Override
             public void convert(BaseViewHolder baseViewHolder, Coures item) {
-                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty(item.getCourseName()) ? item.getCourseName() : ""  );
+                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty( item.getCourseName() ) ? item.getCourseName() : "" );
+                baseViewHolder.setBackgroundResources( R.id.classCl, R.drawable.shape_6_class2 );
             }
         };
         weekAdapter2.bindRecyclerView( binding.tuesDay, new LinearLayoutManager(
@@ -213,7 +209,8 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
         weekAdapter3 = new CommonRecyclerViewAdapter<Coures>( R.layout.class_item, false, false ) {
             @Override
             public void convert(BaseViewHolder baseViewHolder, Coures item) {
-                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty(item.getCourseName()) ? item.getCourseName() : ""  );
+                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty( item.getCourseName() ) ? item.getCourseName() : "" );
+                baseViewHolder.setBackgroundResources( R.id.classCl, R.drawable.shape_6_class3 );
             }
         };
         weekAdapter3.bindRecyclerView( binding.wednesDay, new LinearLayoutManager(
@@ -224,7 +221,8 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
         weekAdapter4 = new CommonRecyclerViewAdapter<Coures>( R.layout.class_item, false, false ) {
             @Override
             public void convert(BaseViewHolder baseViewHolder, Coures item) {
-                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty(item.getCourseName()) ? item.getCourseName() : "" );
+                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty( item.getCourseName() ) ? item.getCourseName() : "" );
+                baseViewHolder.setBackgroundResources( R.id.classCl, R.drawable.shape_6_class4 );
             }
         };
         weekAdapter4.bindRecyclerView( binding.thursDay, new LinearLayoutManager(
@@ -235,7 +233,8 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
         weekAdapter5 = new CommonRecyclerViewAdapter<Coures>( R.layout.class_item, false, false ) {
             @Override
             public void convert(BaseViewHolder baseViewHolder, Coures item) {
-                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty(item.getCourseName()) ? item.getCourseName() : ""  );
+                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty( item.getCourseName() ) ? item.getCourseName() : "" );
+                baseViewHolder.setBackgroundResources( R.id.classCl, R.drawable.shape_6_class5 );
             }
         };
         weekAdapter5.bindRecyclerView( binding.friDay, new LinearLayoutManager(
@@ -246,7 +245,8 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
         weekAdapter6 = new CommonRecyclerViewAdapter<Coures>( R.layout.class_item, false, false ) {
             @Override
             public void convert(BaseViewHolder baseViewHolder, Coures item) {
-                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty(item.getCourseName()) ? item.getCourseName() : ""  );
+                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty( item.getCourseName() ) ? item.getCourseName() : "" );
+                baseViewHolder.setBackgroundResources( R.id.classCl, R.drawable.shape_6_class6 );
             }
         };
         weekAdapter6.bindRecyclerView( binding.saturDay, new LinearLayoutManager(
@@ -257,24 +257,19 @@ public class CouresFragment extends BaseFragment<CouresContract.Presenter> imple
         weekAdapter7 = new CommonRecyclerViewAdapter<Coures>( R.layout.class_item, false, false ) {
             @Override
             public void convert(BaseViewHolder baseViewHolder, Coures item) {
-                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty(item.getCourseName()) ? item.getCourseName() : ""  );
+                baseViewHolder.setText( R.id.classItem, StringUtils.isNotEmpty( item.getCourseName() ) ? item.getCourseName() : "" );
+                baseViewHolder.setBackgroundResources( R.id.classCl, R.drawable.shape_6_class7 );
             }
         };
         weekAdapter7.bindRecyclerView( binding.sunDay, new LinearLayoutManager(
                 getActivity(), LinearLayoutManager.VERTICAL, false ) );
     }
 
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged( hidden );
-        if (!hidden){
-            if (GlobalParam.getClassInfo() == null){
-                Tools.displayToast( "请先绑定班牌！" );
-                return;
-            }
-            if (mPresenter != null) {
-                mPresenter.getCoures();
-            }
-        }
+        logger.info( "CouresFragment--onHiddenChanged:" + hidden );
+
     }
 }

@@ -1,40 +1,44 @@
 package com.electronclass.home;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
 import com.electronclass.common.base.BaseFragment;
 import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.database.InformType;
+import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.SettingsEvent;
+import com.electronclass.common.util.DateUtil;
 import com.electronclass.common.util.Tools;
-import com.electronclass.common.util.VerticalTextView;
 import com.electronclass.home.activity.ImageActivity;
 import com.electronclass.home.activity.VideoActivity;
+import com.electronclass.home.activity.ui.ClassMienActivity;
 import com.electronclass.home.contract.HomeContract;
-import com.electronclass.home.databinding.FragmentHomeBinding;
-import com.electronclass.home.imageviewplay.ImageViewPlay;
+import com.electronclass.home.databinding.FragmentNewHomeBinding;
 import com.electronclass.home.presenter.HomePresenter;
 import com.electronclass.pda.mvp.entity.ClassMienMessage;
 import com.electronclass.pda.mvp.entity.Inform;
-import com.sivin.BannerAdapter;
+import com.zhouwei.mzbanner.holder.MZHolderCreator;
+import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -43,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,14 +57,15 @@ import java.util.TimerTask;
  * 主页
  */
 public class HomeFragment extends BaseFragment<HomeContract.Presenter> implements HomeContract.View {
-    private static Logger              logger       = LoggerFactory.getLogger( HomeFragment.class );
-    private        FragmentHomeBinding binding;
-    private        ArrayList<String>   schoolInform = new ArrayList<String>();
-    private        boolean             isGetSetting = false;
-    private        int                 timeout      = 60 * 60 * 1000;
-    private        ClassMienAdapter    classMienAdapter;
-    //    private        boolean             isClassHava  = false; //班级通知是否开始滚动
-    private        boolean             isSchoolHava = false;//校园通知是否开始滚动
+    private static Logger                 logger       = LoggerFactory.getLogger( HomeFragment.class );
+    private        FragmentNewHomeBinding binding;
+    private        boolean                isGetSetting = false;
+    private        int                    timeout      = 60 * 60 * 1000;
+    private        int                    firstType    = 1;
+    private        String                 firstUrl;
+
+
+    private CommonRecyclerViewAdapter<ClassMienMessage> commonClassMienAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +75,7 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate( inflater, R.layout.fragment_home, container, false );
+        binding = DataBindingUtil.inflate( inflater, R.layout.fragment_new_home, container, false );
         View view = binding.getRoot();
         init( view );
         return view;
@@ -84,8 +90,10 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 
     @Override
     protected void initView(View view) {
-        setAdapter();
-        logger.info( "getMAC:" + MacAddress.ECARDNO == null ? MacAddress.getMacAddress(getActivity()) : MacAddress.ECARDNO );
+        logger.info( "getMAC:" + MacAddress.ECARDNO == null ? MacAddress.getMacAddress( getActivity() ) : MacAddress.ECARDNO );
+
+        setCommonClassMienAdapter();
+        getDate();
     }
 
     @Override
@@ -119,41 +127,79 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
             return;
         if (inform.get( 0 ).getType() == 0) {
             setClassInfrom( inform );
-        } else {
-            setSchoolinform( inform );
         }
 
     }
 
     @Override
     public void onClassMien(List<ClassMienMessage> classMienMessages) {
-        classMienAdapter.setNewData( classMienMessages );
+        if (classMienMessages != null && classMienMessages.size() > 0) {
+            RoundedCorners roundedCorners = new RoundedCorners( 10 );
+            //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
+            RequestOptions options = RequestOptions.bitmapTransform( roundedCorners );
+            Glide.with( getActivity() )
+                    .load( GlobalParam.pUrl + classMienMessages
+                            .get( 0 ).getUrl() )
+                    .apply( options )
+                    .into( binding.firstPicture );
+            firstType = classMienMessages.get( 0 ).getType();
+            firstUrl = classMienMessages.get( 0 ).getUrl();
+            if (classMienMessages.size() > 1) {
+                List<ClassMienMessage> classMiens = new ArrayList<>();
+                for (int i = 0; i < classMienMessages.size(); i++) {
+                    if (i == 0) {
+                        continue;
+                    }
+                    classMiens.add( classMienMessages.get( i ) );
+                }
+                commonClassMienAdapter.setData( classMiens );
+                commonClassMienAdapter.notifyDataSetChanged();
+            }
+        }
+
     }
 
-    @Override
-    public void loadMoreFail() {
+    private void setOnClick() {
+        /**
+         * 加载更多
+         */
+        binding.addMOre.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent( getActivity(), ClassMienActivity.class );
+                startActivity( intent );
+            }
+        } );
+        binding.firstPicture.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (firstType == 1) {
+                    showImage( GlobalParam.pUrl + firstUrl );
+                } else {
+                    showVoide( GlobalParam.pUrl + firstUrl );
+                }
+            }
+        } );
     }
 
-    @Override
-    public void loadMoreEnd() {
-        classMienAdapter.loadMoreEnd(true);
+
+    private void getDate() {
+        int      nowDate = DateUtil.startWeek( new Date() );
+        String[] date    = DateUtil.getWeekDay();
+        logger.info( "本周开始时间：" + DateUtil.getWeekDay().toString() );
+
+        binding.weekData1.setText( date[0] );
+        binding.weekData2.setText( date[1] );
+        binding.weekData3.setText( date[2] );
+        binding.weekData4.setText( date[3] );
+        binding.weekData5.setText( date[4] );
+        binding.weekData6.setText( date[5] );
+        binding.weekData7.setText( date[6] );
+        setTime( nowDate );
+
+
     }
 
-    @Override
-    public void EnableLoadMore() {
-        classMienAdapter.setEnableLoadMore( true );
-    }
-
-    @Override
-    public void addSheltermaterials(List<ClassMienMessage> classMienMessages) {
-        classMienAdapter.addData( classMienMessages );
-        classMienAdapter.loadMoreComplete();
-    }
-
-    @Override
-    public void onNoData() {
-        classMienAdapter.setNewData( null );
-    }
 
     /**
      * 设置班级通知
@@ -161,116 +207,15 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
      * @param inform
      */
     private void setClassInfrom(List<Inform> inform) {
-//        switch (inform.get( 0 ).getTextType()) {
-//            case 0:   //文本
-//                setTextBanner( inform );
-//                break;
-//            case 1:   //图片
-        binding.tvClassInform.setVisibility( View.GONE );
         binding.banner.setVisibility( View.VISIBLE );
-        setImageBanner( inform );
-//                break;
-//        }
-
-    }
-
-
-    /**
-     * 设置校园通知
-     *
-     * @param inform
-     */
-    private void setSchoolinform(List<Inform> inform) {
-        setTextBanner( inform );
-    }
-
-    /**
-     * 设置班级通知图片滚动
-     */
-    private void setImageBanner(List<Inform> inform) {
-        BannerAdapter adapter = new BannerAdapter<Inform>( inform ) {
+        binding.banner.setPages( inform, new MZHolderCreator() {
             @Override
-            protected void bindTips(TextView tv, Inform bannerModel) {
-//                if (bannerModel.getTextType() == 0)
-//                tv.setText(bannerModel.getText() );
+            public MZViewHolder createViewHolder() {
+                return new HomeFragment.BannerViewHolder();
             }
-
-            @Override
-            public void bindImage(ImageView imageView, Inform bannerModel) {
-                if (bannerModel.getTextType() == 1) {
-                    Glide.with( getActivity() )
-                            .load( bannerModel
-                                    .getText() )
-                            .into( imageView );
-                } else {
-                    TextView textView = new TextView( getActivity() );
-                    textView.setText( bannerModel.getText() );
-                    textView.setDrawingCacheEnabled( true );
-                    textView.measure( View.MeasureSpec.makeMeasureSpec( 0, View.MeasureSpec.UNSPECIFIED ), View.MeasureSpec.makeMeasureSpec( 0, View.MeasureSpec.UNSPECIFIED ) );
-                    textView.layout( 1, 76, 1000, 519 );
-                    textView.setTextSize( 50 );
-                    textView.setMaxLines( 10 );
-                    textView.setTextColor( Color.parseColor( "#ff272727" ) );
-                    textView.setBackgroundColor( Color.parseColor( "#00000000" ) );
-                    textView.setGravity( Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL );
-                    Bitmap bitmap = Bitmap.createBitmap( textView.getDrawingCache() );
-                    textView.destroyDrawingCache();
-                    Glide.with( getActivity() )
-                            .load( bitmap )
-                            .into( imageView );
-                }
-
-            }
-        };
-        binding.banner.setBannerAdapter( adapter );
-        binding.banner.notifiDataHasChanged();
-    }
-
-
-    /**
-     * 通知文本
-     *
-     * @param inform
-     */
-    private void setTextBanner(List<Inform> inform) {
-        schoolInform.clear();
-        for (Inform text : inform) {
-            schoolInform.add( text.getText() );
-        }
-        if (inform.get( 0 ).getType() == InformType.SCHOOL) {
-//            binding.tvClassInform.setTextList( schoolInform );
-//            if (!isClassHava) {
-//                binding.tvClassInform.setVisibility( View.VISIBLE );
-//                binding.banner.setVisibility( View.GONE );
-//                binding.tvClassInform.setMaxLines( 10 );
-//                binding.tvClassInform.setText( 50, 5, Color.parseColor( "#ff272727" ) );//设置属性
-//                binding.tvClassInform.setTextStillTime( 3000 );//设置停留时长间隔
-//                binding.tvClassInform.setBackground( Color.parseColor( "#00000000" ) );//设置停留时长间隔
-//                binding.tvClassInform.setGravity( Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL );
-//                binding.tvClassInform.setHorizontalAnimTime( 300 );//设置进入和退出的时间间隔
-//            }
-//            binding.tvClassInform.startAutoScroll();
-//            isClassHava = true;
-//        } else {
-            binding.tvInform.setTextList( schoolInform );
-            if (!isSchoolHava) {
-                binding.tvInform.setMaxLines( 1 );
-                binding.tvInform.setText( 38, 5, Color.parseColor( "#ff575757" ) );//设置属性
-                binding.tvInform.setTextStillTime( 3000 );//设置停留时长间隔
-                binding.tvInform.setGravity( Gravity.CENTER | Gravity.LEFT );//设置停留时长间隔
-                binding.tvInform.setVerticalAnimTime( 300 );//设置进入和退出的时间间隔
-            }
-            binding.tvInform.startAutoScroll();
-            binding.page.setText( schoolInform.size() + "" );
-            binding.tvInform.setOnItemRollListener( new VerticalTextView.OnItemRollListener() {
-                @Override
-                public void onItemRoll(int position) {
-                    binding.pageNumber.setText( position + 1 + "" );
-                }
-            } );
-            isSchoolHava = true;
-        }
-
+        } );
+        binding.banner.setDelayedTime( 3000 );
+        binding.banner.start();
     }
 
 
@@ -278,17 +223,14 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
      * 播放图片
      */
     private void showImage(String url) {
-//        String extension   = MimeTypeMap.getFileExtensionFromUrl( url );
-//        String mimeType    = MimeTypeMap.getSingleton().getMimeTypeFromExtension( extension );
-//        Intent mediaIntent = new Intent( Intent.ACTION_VIEW );
-//        mediaIntent.setDataAndType( Uri.parse( url ), mimeType );
-//        startActivity( mediaIntent );
-
         Intent intent = new Intent( getActivity(), ImageActivity.class );
         intent.putExtra( "Image", url );
         startActivity( intent );
     }
 
+    /**
+     * 播放视频
+     */
     private void showVoide(String url) {
         Intent intent = new Intent( getActivity(), VideoActivity.class );
         intent.putExtra( "Video", url );
@@ -304,18 +246,15 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
             new Timer().schedule( new TimerTask() {
                 @Override
                 public void run() {
-                    if (isSchoolHava) {
-                        binding.tvInform.stopAutoScroll();
-                    }
-//                    if (isClassHava) {
-//                        binding.tvClassInform.stopAutoScroll();
+//                    if (isSchoolHava) {
+//                        binding.tvInform.stopAutoScroll();
 //                    }
                     // type通知类型 0 - 班级通知 1校园通知
                     // isAvaliable  0-获取未过期的所有通知 (包含正在生效和未生效)， 1 获取正在生效的通知 即（开始时间小于当前时间，截止时间大于当前时间）
-                    mPresenter.getInform( MacAddress.getMacAddress(getActivity()), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
+//                    mPresenter.getInform( MacAddress.getMacAddress( getActivity() ), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
                     if (GlobalParam.getClassInfo() != null) {
-                        mPresenter.getInform( MacAddress.getMacAddress(getActivity()), "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
-                        mPresenter.getClassMien( MacAddress.getMacAddress(getActivity()), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
+                        mPresenter.getInform( MacAddress.getMacAddress( getActivity() ), "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
+                        mPresenter.getClassMien( MacAddress.getMacAddress( getActivity() ), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
                     }
                 }
             }, 0, timeout );
@@ -329,81 +268,150 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
         }
     }
 
-    private void setAdapter() {
-        classMienAdapter = new ClassMienAdapter();
-        classMienAdapter.setOnLoadMoreListener( new BaseQuickAdapter.RequestLoadMoreListener() {
+    private void setCommonClassMienAdapter() {
+        commonClassMienAdapter = new CommonRecyclerViewAdapter<ClassMienMessage>( R.layout.class_mien ) {
             @Override
-            public void onLoadMoreRequested() {
-                mPresenter.getClassMien( GlobalParam.getEcardNo(), "", GlobalParam.getClassInfo().getClassId(), 2, 9 );//获取班级通知
-            }
-        } );
-        binding.classMien.setLayoutManager( new GridLayoutManager( getActivity(), 3 ) );
-        binding.classMien.setAdapter( classMienAdapter );
+            public void convert(com.electronclass.common.base.BaseViewHolder baseViewHolder, final ClassMienMessage item) {
+                RoundedCorners roundedCorners = new RoundedCorners( 10 );
+                //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
+                RequestOptions options   = RequestOptions.bitmapTransform( roundedCorners );
+                ImageView      imageView = (ImageView) baseViewHolder.getView( R.id.image );
+                Glide.with( getActivity() )
+                        .load( GlobalParam.pUrl + item.getUrl() )
+                        .apply( options )
+                        .into( imageView );
+                imageView.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (item.getType() == 1) {
+                            showImage( GlobalParam.pUrl + item.getUrl() );
+                        } else {
+                            showVoide( GlobalParam.pUrl + item.getUrl() );
+                        }
+                    }
+                } );
 
-        binding.classMien.addOnScrollListener( new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    Glide.with( getActivity() ).resumeRequests();//恢复Glide加载图片
-                } else {
-                    Glide.with( getActivity() ).pauseRequests();//禁止Glide加载图片
-                }
             }
-        } );
+        };
+        commonClassMienAdapter.bindRecyclerView( binding.classRecycler, new GridLayoutManager( getActivity(), 4 ) );
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onSettingsEvent(SettingsEvent event) {
         logger.info( "收到event" );
         isGetSetting = true;
-        binding.className.setText( GlobalParam.getClassInfo() == null ? "" : GlobalParam.getClassInfo().getClassName() );
         getDatas();
+        setOnClick();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged( hidden );
-        logger.info( "onHiddenChanged：" + hidden );
-        if (hidden) {
-            if (isSchoolHava) {
-                binding.tvInform.stopAutoScroll();
-            }
-//            if (isClassHava) {
-//                binding.tvClassInform.stopAutoScroll();
-//            }
-        } else {
-            if (GlobalParam.getClassInfo() == null) {
-                Tools.displayToast( "请先绑定班牌班级" );
-                return;
-            }
-            getDatas();//刷新数据
+        if (GlobalParam.getClassInfo() == null) {
+            Tools.displayToast( "请先绑定班牌班级" );
+            return;
         }
+        getDatas();//刷新数据
+
     }
 
 
-    class ClassMienAdapter extends BaseQuickAdapter<ClassMienMessage, BaseViewHolder> {
+    private void setTime(int nowDate) {
+        switch (nowDate) {
+            case 1:
+                binding.weekTv1.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.weekData1.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.week1.setBackground( getResources().getDrawable( R.drawable.shape_60_yellow ) );
+                break;
+            case 2:
+                binding.weekTv2.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.weekData2.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.week2.setBackground( getResources().getDrawable( R.drawable.shape_60_yellow ) );
+                break;
+            case 3:
+                binding.weekTv3.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.weekData3.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.week3.setBackground( getResources().getDrawable( R.drawable.shape_60_yellow ) );
+                break;
+            case 4:
+                binding.weekTv4.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.weekData4.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.week4.setBackground( getResources().getDrawable( R.drawable.shape_60_yellow ) );
+                break;
+            case 5:
+                binding.weekTv5.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.weekData5.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.week5.setBackground( getResources().getDrawable( R.drawable.shape_60_yellow ) );
+                break;
+            case 6:
+                binding.weekTv6.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.weekData6.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.week6.setBackground( getResources().getDrawable( R.drawable.shape_60_yellow ) );
+                break;
+            case 7:
+                binding.weekTv7.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.weekData7.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                binding.week7.setBackground( getResources().getDrawable( R.drawable.shape_60_yellow ) );
+                break;
+        }
+    }
 
-        ClassMienAdapter() {
-            super( R.layout.classmien_item );
+    public static class BannerViewHolder implements MZViewHolder<Inform> {
+        private ImageView mImageView;
+
+        @Override
+        public View createView(Context context) {
+            // 返回页面布局
+            View view = LayoutInflater.from( context ).inflate( R.layout.banner_item, null );
+            mImageView = view.findViewById( R.id.banner_image );
+            return view;
         }
 
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, final ClassMienMessage item) {
+        public void onBind(Context context, int position, Inform data) {
+            if (data.getTextType() == 1) {
+                Glide.with( context )
+                        .load( data
+                                .getText() )
+                        .into( mImageView );
+            } else {
+                TextView     textView     = new TextView( context );
+                LinearLayout linearLayout = new LinearLayout( context );
+                linearLayout.setDrawingCacheEnabled( true );
+                linearLayout.measure( View.MeasureSpec.makeMeasureSpec( 0, View.MeasureSpec.UNSPECIFIED ), View.MeasureSpec.makeMeasureSpec( 0, View.MeasureSpec.UNSPECIFIED ) );
+                linearLayout.layout( 0, 0, 1020, 380 );
+                linearLayout.setBackground( context.getResources().getDrawable( R.drawable.backgroundback ) );
+                linearLayout.addView( textView );
+                textView.measure( View.MeasureSpec.makeMeasureSpec( 960, View.MeasureSpec.EXACTLY ), View.MeasureSpec.makeMeasureSpec( 360, View.MeasureSpec.EXACTLY ) );
+                textView.layout( 50, 0, 1000, 350 );
+                textView.setDrawingCacheEnabled( true );
+                textView.setText( data.getText() );
+                textView.setTextSize( 30 );
+                textView.setMaxLines( 10 );
+                textView.setTextColor( Color.parseColor( "#FFFFFF" ) );
+                textView.setGravity( Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL );
 
-            ImageViewPlay image = baseViewHolder.getView( R.id.image );
+                Bitmap bitmap = createViewBitmap( linearLayout );
+//                    Bitmap bitmap = Bitmap.createBitmap( linearLayout.getDrawingCache() );
 
-            Glide.with( getActivity() ).load( GlobalParam.pUrl + item.getUrl() ).into( image );
-
-            baseViewHolder.setOnClickListener( R.id.clClassItem, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (item.getType() == 1) {
-                        showImage( GlobalParam.pUrl + item.getUrl() );
-                    } else {
-                        showVoide( GlobalParam.pUrl + item.getUrl() );
-                    }
-                }
-            } );
+                linearLayout.destroyDrawingCache();
+                Glide.with( context )
+                        .load( bitmap )
+                        .into( mImageView );
+            }
         }
+
+
+        public Bitmap createViewBitmap(View v) {
+            Bitmap bitmap = Bitmap.createBitmap( 1020, 370,
+                    Bitmap.Config.ARGB_8888 );
+            Canvas canvas = new Canvas( bitmap );
+            v.draw( canvas );
+            return bitmap;
+        }
+
     }
+
+
 }

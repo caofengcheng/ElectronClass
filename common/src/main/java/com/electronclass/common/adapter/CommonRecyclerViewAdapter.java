@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-
 import com.electronclass.common.R;
 import com.electronclass.common.base.BaseViewHolder;
 

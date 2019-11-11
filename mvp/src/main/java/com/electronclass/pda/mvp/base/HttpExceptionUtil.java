@@ -4,9 +4,9 @@ import android.net.ParseException;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.electronclass.pda.mvp.entity.ErrorMessage;
 import com.electronclass.pda.mvp.rest.ExceptionMessageEnum;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;

@@ -6,7 +6,6 @@ import com.electronclass.common.util.DateUtil;
 import com.electronclass.pda.mvp.base.BaseModel;
 import com.electronclass.pda.mvp.base.BaseSingle;
 import com.electronclass.pda.mvp.base.RxComposer;
-import com.electronclass.pda.mvp.entity.Coures;
 import com.electronclass.pda.mvp.entity.Duty;
 import com.electronclass.pda.mvp.entity.ServiceResponse;
 import com.electronclass.pda.mvp.rest.RestManager;

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="165dp"
+    android:layout_width="138dp"
     android:layout_height="60dp"
-    android:layout_marginTop="10dp"
-    android:background="@drawable/shape_8_class">
+    android:layout_marginBottom="37dp"
+    android:background="@drawable/shape_6_class1"
+    android:id="@+id/classCl">
 
     <TextView
         android:id="@+id/classItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="第二节"
-        android:textColor="#ffffff"
-        android:textSize="26sp"
+        android:text="语文"
+        android:textColor="#FFFFFFFF"
+        android:textSize="24sp"
         android:gravity="center"
       />
 

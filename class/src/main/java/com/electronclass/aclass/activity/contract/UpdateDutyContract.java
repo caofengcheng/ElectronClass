@@ -1,5 +1,7 @@
 package com.electronclass.aclass.activity.contract;
 
+import android.content.Context;
+
 import com.electronclass.pda.mvp.base.BaseModelInterface;
 import com.electronclass.pda.mvp.base.BasePresenterInterface;
 import com.electronclass.pda.mvp.base.BaseView;
@@ -8,8 +10,8 @@ import com.electronclass.pda.mvp.base.BaseView;
 public interface UpdateDutyContract {
     interface Model extends BaseModelInterface {
         void setPresenter(Presenter presenter);
-        void addOrUpdateDuty(String id,String studentCardNo,String task,String name,String eventDate);
-        void deleteDuty(String id);
+        void addOrUpdateDuty(Context context, String id, String password, String task, String name, String eventDate);
+        void deleteDuty(Context context,String id, String password);
     }
 
     interface View extends BaseView {
@@ -21,11 +23,11 @@ public interface UpdateDutyContract {
         @Override
         void setView(View view);
 
-        void addOrUpdateDuty(String id,String studentCardNo,String task,String name,String eventDate);
+        void addOrUpdateDuty(Context context,String id,String password,String task,String name,String eventDate);
 
         void onSuccress(String msg);
 
-        void deleteDuty(String id);
+        void deleteDuty(Context context,String id, String password);
 
         void onDeleteDuty(String msg);
     }

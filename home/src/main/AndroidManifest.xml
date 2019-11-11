@@ -5,7 +5,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application>
-        <activity android:name=".activity.ImageActivity"></activity>
+        <activity android:name=".activity.ui.ClassMienActivity"></activity>
+        <activity android:name=".activity.ImageActivity" />
         <activity android:name=".activity.VideoActivity" />
     </application>
 

@@ -1,7 +1,9 @@
 package com.electronclass.aclass.activity.model;
 
+import android.content.Context;
+
 import com.electronclass.aclass.activity.contract.UpdateDutyContract;
-import com.electronclass.common.database.GlobalParam;
+import com.electronclass.common.database.MacAddress;
 import com.electronclass.pda.mvp.base.BaseModel;
 import com.electronclass.pda.mvp.base.BaseSingle;
 import com.electronclass.pda.mvp.base.RxComposer;
@@ -19,8 +21,8 @@ public class UpdateDutyModel extends BaseModel implements UpdateDutyContract.Mod
     }
 
     @Override
-    public void addOrUpdateDuty(String id, String studentCardNo, String task, String name, String eventDate) {
-        RestManager.getRestApi().addOrUpdateDuty(id, GlobalParam.getEcardNo(),studentCardNo,task,name,eventDate)
+    public void addOrUpdateDuty(Context context,String id, String password, String task, String name, String eventDate) {
+        RestManager.getRestApi().addOrUpdateDuty(id, MacAddress.getMacAddress( context ),password,task,name,eventDate)
                 .compose(  RxComposer.<ServiceResponse>composeSingle() )
                 .subscribe(new BaseSingle<ServiceResponse>(compositeDisposable) {
                     @Override
@@ -41,8 +43,8 @@ public class UpdateDutyModel extends BaseModel implements UpdateDutyContract.Mod
     }
 
     @Override
-    public void deleteDuty(String id) {
-        RestManager.getRestApi().deleteDuty(id, GlobalParam.getEcardNo())
+    public void deleteDuty(Context context,String id, String password) {
+        RestManager.getRestApi().deleteDuty(id, MacAddress.getMacAddress( context ),password)
                 .compose(  RxComposer.<ServiceResponse>composeSingle() )
                 .subscribe(new BaseSingle<ServiceResponse>(compositeDisposable) {
                     @Override

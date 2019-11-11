@@ -1,7 +1,6 @@
 package com.electronclass.common.database;
 
 import com.electronclass.pda.mvp.entity.ClassInfo;
-import com.electronclass.pda.mvp.entity.ClassMessage;
 import com.electronclass.pda.mvp.entity.SchoolInfo;
 import com.electronclass.pda.mvp.entity.TeacherInfo;
 
@@ -12,35 +11,35 @@ public class GlobalParam {
     public static SchoolInfo  schoolInfo;
     public static ClassInfo   classInfo;
     public static TeacherInfo teacherInfo;
-    public static String      ecardNo;
-    public static String      eventTime;
-    public static String      pUrl        = "http://zteng-1258264962.cos.ap-shanghai.myqcloud.com/classBrand/elegant/";//图片地址
+    public static String      ecardNo; //设备号
+    public static String      eventTime;//考勤时间
+    public static String      pUrl = "http://zteng-1258264962.cos.ap-shanghai.myqcloud.com/classBrand/elegant/";//图片地址
 
-    public static String      TO_DUTY     = "TO_DUTY";
-    public static String      ADD_DUTY    = "ADD_DUTY";
-    public static String      UPDATE_DUTY = "UPDATE_DUTY";
-    public static String      UPDATE_DUTY_ITEM = "UPDATE_DUTY_ITEM";
+    public static String TO_DUTY          = "TO_DUTY";
+    public static String ADD_DUTY         = "ADD_DUTY";
+    public static String UPDATE_DUTY      = "UPDATE_DUTY";
+    public static String UPDATE_DUTY_ITEM = "UPDATE_DUTY_ITEM";
 
     /**
      * 全量更新ID
      */
-    public static String      MULAN_UPDATEID = "b1896a9375";
-    public static String      HENGHONGDA_UPDATEID = "6f5867655a";
+    public static String MULAN_UPDATEID      = "b1896a9375";
+    public static String HENGHONGDA_UPDATEID = "6f5867655a";
 
 
     /**
      * 刷卡类型
      */
-    public static String      cardType = "MAINACTIVITY";
+    public static String cardType     = "MAINACTIVITY";
     /**
      * 主页刷卡
      */
-    public static String      MAINACTIVITY = "MAINACTIVITY";
+    public static String MAINACTIVITY = "MAINACTIVITY";
 
     /**
      * 添加值日刷卡
      */
-    public static String      UPDATEACTIVITY = "UPDATEACTIVITY";
+    public static String UPDATEACTIVITY = "UPDATEACTIVITY";
 
     private static String[] HOUR =
             {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18",

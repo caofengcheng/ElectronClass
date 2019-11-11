@@ -14,7 +14,6 @@ import com.electronclass.pda.mvp.entity.ServiceResponse;
 import java.util.List;
 
 import io.reactivex.Single;
-import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -83,7 +82,7 @@ public interface RestApi {
      */
     @POST("/e-card/attendance/student/send")
     Single<ServiceResponse> getCardAttendance(@Query("eCardNo") String eCardNo, @Query("studentCardNo") String studentCardNo,
-                                                               @Query("eventTime") String eventTime, @Query("isLate") int isLate);
+                                              @Query("eventTime") String eventTime, @Query("isLate") int isLate);
 
     /**
      * 获取验证码
@@ -102,21 +101,22 @@ public interface RestApi {
      * 绑定班级和班牌
      */
     @POST("/e-card/card/add/class")
-    Single<ServiceResponse> bound(@Query("eCardNo") String eCardNo, @Query("departCode") String departCode);
+    Single<ServiceResponse> bound(@Query("eCardNo") String eCardNo, @Query("departId") String departId);
+
 
     /**
-     * 绑定班级和班牌
+     * 添加值日信息
      */
     @POST("/e-card/clean/set")
     Single<ServiceResponse> addOrUpdateDuty(@Query("id") String id,@Query("eCardNo") String eCardNo,
-                                            @Query("studentCardNo") String studentCardNo,
+                                            @Query("password") String password,
                                             @Query("task") String task,
                                             @Query("name") String name,
                                             @Query("eventDate") String eventDate);
 
     /**
-     * 绑定班级和班牌
+     * 删除值日
      */
     @POST("/e-card/clean/delete")
-    Single<ServiceResponse> deleteDuty(@Query("id") String id,@Query("eCardNo") String eCardNo);
+    Single<ServiceResponse> deleteDuty(@Query("id") String id,@Query("eCardNo") String eCardNo, @Query("password") String password);
 }

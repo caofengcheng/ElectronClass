@@ -9,9 +9,10 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/clApplication"
-        android:layout_width="match_parent"
+        android:layout_width="1110dp"
         android:layout_height="match_parent"
         tools:context=".ApplicationFragment"
+        android:background="#F7F6FF"
         >
 
         <android.support.v7.widget.RecyclerView
@@ -25,6 +26,17 @@
 
         </android.support.v7.widget.RecyclerView>
 
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/nullview"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
 
     </android.support.constraint.ConstraintLayout>

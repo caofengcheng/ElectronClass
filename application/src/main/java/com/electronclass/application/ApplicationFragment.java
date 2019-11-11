@@ -9,12 +9,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.electronclass.application.databinding.FragmentApplicationBinding;
 import com.electronclass.application.login.ui.LoginActivity;
 import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
 import com.electronclass.common.base.BaseViewHolder;
 import com.electronclass.common.module.AppModule;
 import com.electronclass.pda.mvp.entity.AppItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,18 +49,18 @@ public class ApplicationFragment extends Fragment {
     }
 
     private void init(){
-        AppItem appItem = new AppItem();
-        appItem.setName( "设置" );
-        appItem.setCode( AppModule.SET );
-        appItem.setImage( R.drawable.sz );
-
-        AppItem appItem1 = new AppItem();
-        appItem1.setName( "添加应用" );
-        appItem1.setCode( AppModule.MORE );
-        appItem1.setImage( R.drawable.add );
-        appItems.add( appItem );
-        appItems.add( appItem1 );
-        setAdapter();
+//        AppItem appItem = new AppItem();
+//        appItem.setName( "设置" );
+//        appItem.setCode( AppModule.SET );
+//        appItem.setImage( R.drawable.sz );
+//
+//        AppItem appItem1 = new AppItem();
+//        appItem1.setName( "添加应用" );
+//        appItem1.setCode( AppModule.MORE );
+//        appItem1.setImage( R.drawable.add );
+//        appItems.add( appItem );
+//        appItems.add( appItem1 );
+//        setAdapter();
     }
 
 

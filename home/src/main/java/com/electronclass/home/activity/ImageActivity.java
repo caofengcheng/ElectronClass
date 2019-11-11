@@ -1,13 +1,11 @@
 package com.electronclass.home.activity;
 
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.MediaController;
 
 import com.bumptech.glide.Glide;
-import com.electronclass.common.database.GlobalParam;
 import com.electronclass.home.R;
 import com.electronclass.home.databinding.ActivityImageBinding;
 

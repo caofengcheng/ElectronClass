@@ -41,12 +41,6 @@ public interface HomeContract {
         void onInform(List<Inform> inform);
 
         void onClassMien(List<ClassMienMessage> classMienMessages);
-
-        void loadMoreFail();
-        void loadMoreEnd();
-        void EnableLoadMore();
-        void addSheltermaterials(List<ClassMienMessage> classMienMessages);
-        void onNoData();
     }
 
     interface Presenter extends BasePresenterInterface<View> {
@@ -61,7 +55,5 @@ public interface HomeContract {
                           String classId,int pageStart,int pageSize);
 
         void onClassMien(ClassMien classMien);
-
-        void onNoData();
     }
 }

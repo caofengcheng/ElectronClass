@@ -1,7 +1,7 @@
 package com.electronclass.common.util;
+
 import android.content.Context;
 import android.util.Log;
-
 
 import startest.ys.com.poweronoff.PowerOnOffManager;
 

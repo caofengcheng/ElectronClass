@@ -7,7 +7,6 @@ import com.electronclass.common.basemvp.model.ApplicationModel;
 import com.electronclass.common.database.GlobalParam;
 import com.electronclass.pda.mvp.base.BasePresenter;
 import com.electronclass.pda.mvp.entity.ClassInfo;
-import com.electronclass.pda.mvp.entity.ClassMessage;
 import com.electronclass.pda.mvp.entity.SchoolInfo;
 
 public class ApplicationPresenter extends BasePresenter<ApplicationContract.Model, ApplicationContract.View> implements ApplicationContract.Presenter {

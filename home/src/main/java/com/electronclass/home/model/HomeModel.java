@@ -6,8 +6,8 @@ import com.electronclass.pda.mvp.base.BaseSingle;
 import com.electronclass.pda.mvp.base.RxComposer;
 import com.electronclass.pda.mvp.entity.ClassMien;
 import com.electronclass.pda.mvp.entity.Inform;
-import com.electronclass.pda.mvp.rest.RestManager;
 import com.electronclass.pda.mvp.entity.ServiceResponse;
+import com.electronclass.pda.mvp.rest.RestManager;
 
 import java.util.List;
 

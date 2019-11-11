@@ -1,6 +1,5 @@
 package com.electronclass.aclass.contract;
 
-import com.electronclass.pda.mvp.base.BaseModel;
 import com.electronclass.pda.mvp.base.BaseModelInterface;
 import com.electronclass.pda.mvp.base.BasePresenterInterface;
 import com.electronclass.pda.mvp.base.BaseView;

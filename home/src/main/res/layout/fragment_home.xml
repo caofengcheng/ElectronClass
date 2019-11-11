@@ -28,12 +28,12 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/bg" />
 
-            <com.sivin.Banner
-                android:id="@+id/banner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-            </com.sivin.Banner>
+            <!--<com.sivin.Banner-->
+                <!--android:id="@+id/banner"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:visibility="gone">-->
+            <!--</com.sivin.Banner>-->
 
             <com.electronclass.common.util.VerticalTextView
                 android:id="@+id/tvClassInform"

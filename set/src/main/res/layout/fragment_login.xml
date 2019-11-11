@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/loginView"
+        android:layout_width="1110dp"
+        android:layout_height="match_parent"
+        android:background="#F7F6FF"
+        tools:context=".login.LoginFragment">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/loginWindow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="237dp"
+                android:layout_marginEnd="8dp"
+                android:text="欢迎登录"
+                android:textColor="#FF1C0070"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="8dp"
+                android:text="登录后才有权限继续操作"
+                android:textColor="#FFB1B1B1"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+            <EditText
+                android:id="@+id/phoneNumber"
+                android:layout_width="280dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="65dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_4"
+                android:hint="请输入手机号码"
+                android:paddingLeft="10dp"
+                android:textColor="#FFB0B5CA"
+                android:textColorHint="#FFB0B5CA"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <EditText
+                android:id="@+id/phoneCode"
+                android:layout_width="280dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="31dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_4"
+                android:hint="请输入验证码"
+                android:paddingLeft="10dp"
+                android:textColor="#FFB0B5CA"
+                android:textColorHint="#FFB0B5CA"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
+
+            <TextView
+                android:id="@+id/getCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="获取验证码"
+                android:textColor="#FFB0B5CA"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/phoneCode"
+                app:layout_constraintTop_toBottomOf="@+id/phoneCode" />
+
+            <Button
+                android:id="@+id/login"
+                android:layout_width="280dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="65dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/login"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phoneCode" />
+        </android.support.constraint.ConstraintLayout>
+
+        <include
+            android:id="@+id/setWindow"
+            layout="@layout/activity_set"
+            android:layout_width="1110dp"
+            android:layout_height="match_parent"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

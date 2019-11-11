@@ -1,18 +1,14 @@
 package com.electronclass.application.login.ui;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
-import android.view.View;
 
 import com.electronclass.application.R;
 import com.electronclass.application.databinding.ActivityLoginBinding;
 import com.electronclass.application.login.contract.LoginContract;
 import com.electronclass.application.login.presenter.LoginPresenter;
-import com.electronclass.application.set.ui.SetActivity;
 import com.electronclass.common.base.BaseActivity;
 import com.electronclass.common.util.KeyboardUtils;
 import com.electronclass.common.util.Tools;
@@ -131,9 +127,9 @@ public class LoginActivity extends BaseActivity<LoginContract.Presenter> impleme
     @Override
     public void onlogin(boolean str) {
         if (str) {
-            Intent intent = new Intent( LoginActivity.this, SetActivity.class );
-            startActivity( intent );
-            finish();
+//            Intent intent = new Intent( LoginActivity.this, SetActivity.class );
+//            startActivity( intent );
+//            finish();
         }
     }
 

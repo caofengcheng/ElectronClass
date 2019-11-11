@@ -19,10 +19,8 @@ import com.electronclass.common.base.BaseFragment;
 import com.electronclass.common.base.BaseViewHolder;
 import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.util.Tools;
-import com.electronclass.pda.mvp.entity.Coures;
 import com.electronclass.pda.mvp.entity.Duty;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -41,14 +39,14 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
     private CommonRecyclerViewAdapter<Duty> weekAdapter5;
     private CommonRecyclerViewAdapter<Duty> weekAdapter6;
     private CommonRecyclerViewAdapter<Duty> weekAdapter7;
-    private List<Duty>                      duty1 = new ArrayList<>();
-    private List<Duty>                      duty2 = new ArrayList<>();
-    private List<Duty>                      duty3 = new ArrayList<>();
-    private List<Duty>                      duty4 = new ArrayList<>();
-    private List<Duty>                      duty5 = new ArrayList<>();
-    private List<Duty>                      duty6 = new ArrayList<>();
-    private List<Duty>                      duty7 = new ArrayList<>();
-
+    private List<Duty>                      duty1  = new ArrayList<>();
+    private List<Duty>                      duty2  = new ArrayList<>();
+    private List<Duty>                      duty3  = new ArrayList<>();
+    private List<Duty>                      duty4  = new ArrayList<>();
+    private List<Duty>                      duty5  = new ArrayList<>();
+    private List<Duty>                      duty6  = new ArrayList<>();
+    private List<Duty>                      duty7  = new ArrayList<>();
+    private boolean                         isHave = false;//是否已经获取到数据
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +72,7 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
 
     @Override
     protected void initView(View view) {
+        setBackGroundColor();
         setWeekOne();
         setWeekTwo();
         setWeekThree();
@@ -85,25 +84,16 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
 
     @Override
     protected void initData() {
-        if (GlobalParam.getClassInfo() == null) {
-            logger.debug( "DutyFragment:initData null" );
-            Tools.displayToast( "请先绑定班牌！" );
-            return;
-        }
-        mPresenter.getDuty();
+//        if (GlobalParam.getClassInfo() == null) {
+//            logger.debug( "DutyFragment:initData null" );
+//            Tools.displayToast( "请先绑定班牌班级！" );
+//            return;
+//        }
+//        mPresenter.getDuty();
     }
 
     @Override
     protected void showData() {
-
-        binding.addDuty.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent( getActivity(), UpdateDutyActivity.class );
-                intent.putExtra( GlobalParam.TO_DUTY, GlobalParam.ADD_DUTY );
-                startActivityForResult( intent,2 );
-            }
-        } );
 
     }
 
@@ -114,22 +104,20 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
 
     @Override
     protected void getData() {
-
+        logger.info( "DutyFragment--getData" );
+        if (GlobalParam.getClassInfo() == null) {
+            logger.debug( "DutyFragment:initData null" );
+            Tools.displayToast( "请先绑定班牌班级！" );
+            return;
+        }
+        mPresenter.getDuty();
     }
+
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged( hidden );
-        if (!hidden) {
-            if (GlobalParam.getClassInfo() == null) {
-                logger.debug( "请先绑定班牌！" );
-                Tools.displayToast( "请先绑定班牌！" );
-                return;
-            }
-            if (mPresenter != null) {
-                mPresenter.getDuty();
-            }
-        }
+
     }
 
     @Override
@@ -139,6 +127,8 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
         duty3.clear();
         duty4.clear();
         duty5.clear();
+        duty6.clear();
+        duty7.clear();
 
         for (Duty dutyItem : duties) {
             switch (dutyItem.getWeek()) {
@@ -179,6 +169,23 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
         weekAdapter5.notifyDataSetChanged();
         weekAdapter6.notifyDataSetChanged();
         weekAdapter7.notifyDataSetChanged();
+        isHave = true;
+    }
+
+
+    @Override
+    public void onError(String errorMessage) {
+        super.onError( errorMessage );
+    }
+
+    private void setBackGroundColor() {
+        binding.tvWeek1.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class1 ) );
+        binding.tvWeek2.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class2 ) );
+        binding.tvWeek3.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class3 ) );
+        binding.tvWeek4.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class4 ) );
+        binding.tvWeek5.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class5 ) );
+        binding.tvWeek6.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class6 ) );
+        binding.tvWeek7.setBackgroundDrawable( getResources().getDrawable( R.drawable.shape_6_class7 ) );
     }
 
     private void setWeekOne() {
@@ -187,12 +194,8 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
             public void convert(BaseViewHolder baseViewHolder, final Duty item) {
                 baseViewHolder.setText( R.id.task, item.getTask() );
                 baseViewHolder.setText( R.id.tvSweepName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.cl1, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toUpdate( item );
-                    }
-                } );
+                baseViewHolder.setBackgroundResources( R.id.cl1, R.drawable.shape_6_class1 );
+                baseViewHolder.setOnClickListener( R.id.cl1, v -> toUpdate( item ) );
             }
         };
         weekAdapter1.bindRecyclerView( binding.inMonday, new LinearLayoutManager(
@@ -205,12 +208,8 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
             public void convert(BaseViewHolder baseViewHolder, final Duty item) {
                 baseViewHolder.setText( R.id.task, item.getTask() );
                 baseViewHolder.setText( R.id.tvSweepName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.cl1, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toUpdate( item );
-                    }
-                } );
+                baseViewHolder.setBackgroundResources( R.id.cl1, R.drawable.shape_6_class2 );
+                baseViewHolder.setOnClickListener( R.id.cl1, v -> toUpdate( item ) );
             }
         };
         weekAdapter2.bindRecyclerView( binding.inTuesDay, new LinearLayoutManager(
@@ -223,12 +222,8 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
             public void convert(BaseViewHolder baseViewHolder, final Duty item) {
                 baseViewHolder.setText( R.id.task, item.getTask() );
                 baseViewHolder.setText( R.id.tvSweepName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.cl1, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toUpdate( item );
-                    }
-                } );
+                baseViewHolder.setBackgroundResources( R.id.cl1, R.drawable.shape_6_class3 );
+                baseViewHolder.setOnClickListener( R.id.cl1, v -> toUpdate( item ) );
             }
         };
         weekAdapter3.bindRecyclerView( binding.inWednesDay, new LinearLayoutManager(
@@ -241,12 +236,8 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
             public void convert(BaseViewHolder baseViewHolder, final Duty item) {
                 baseViewHolder.setText( R.id.task, item.getTask() );
                 baseViewHolder.setText( R.id.tvSweepName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.cl1, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toUpdate( item );
-                    }
-                } );
+                baseViewHolder.setBackgroundResources( R.id.cl1, R.drawable.shape_6_class4 );
+                baseViewHolder.setOnClickListener( R.id.cl1, v -> toUpdate( item ) );
             }
         };
         weekAdapter4.bindRecyclerView( binding.inThursDay, new LinearLayoutManager(
@@ -259,12 +250,8 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
             public void convert(BaseViewHolder baseViewHolder, final Duty item) {
                 baseViewHolder.setText( R.id.task, item.getTask() );
                 baseViewHolder.setText( R.id.tvSweepName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.cl1, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toUpdate( item );
-                    }
-                } );
+                baseViewHolder.setBackgroundResources( R.id.cl1, R.drawable.shape_6_class5 );
+                baseViewHolder.setOnClickListener( R.id.cl1, v -> toUpdate( item ) );
             }
         };
         weekAdapter5.bindRecyclerView( binding.inFriDay, new LinearLayoutManager(
@@ -277,12 +264,8 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
             public void convert(BaseViewHolder baseViewHolder, final Duty item) {
                 baseViewHolder.setText( R.id.task, item.getTask() );
                 baseViewHolder.setText( R.id.tvSweepName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.cl1, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toUpdate( item );
-                    }
-                } );
+                baseViewHolder.setBackgroundResources( R.id.cl1, R.drawable.shape_6_class6 );
+                baseViewHolder.setOnClickListener( R.id.cl1, v -> toUpdate( item ) );
             }
         };
         weekAdapter6.bindRecyclerView( binding.inSaturDay, new LinearLayoutManager(
@@ -295,12 +278,8 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
             public void convert(BaseViewHolder baseViewHolder, final Duty item) {
                 baseViewHolder.setText( R.id.task, item.getTask() );
                 baseViewHolder.setText( R.id.tvSweepName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.cl1, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        toUpdate( item );
-                    }
-                } );
+                baseViewHolder.setBackgroundResources( R.id.cl1, R.drawable.shape_6_class7 );
+                baseViewHolder.setOnClickListener( R.id.cl1, v -> toUpdate( item ) );
             }
         };
         weekAdapter7.bindRecyclerView( binding.inSunDay, new LinearLayoutManager(
@@ -311,7 +290,7 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
         Intent intent = new Intent( getActivity(), UpdateDutyActivity.class );
         intent.putExtra( GlobalParam.TO_DUTY, GlobalParam.UPDATE_DUTY );
         intent.putExtra( GlobalParam.UPDATE_DUTY_ITEM, item );
-        startActivityForResult( intent,1 );
+        startActivityForResult( intent, 1 );
     }
 
 

@@ -1,56 +1,52 @@
 package com.electronclass.electronclass.adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.widget.RadioGroup;
 
-import com.electronclass.common.layout.InclusiveRadioGroup;
 import com.electronclass.electronclass.activity.MainActivity;
 
 import java.util.List;
 
-public class FragmentTabAdapter implements InclusiveRadioGroup.OnCheckedChangeListener {
-    private List<Fragment>      fragments; // 一个tab页面对应一个Fragment
-    private InclusiveRadioGroup rgs; // 用于切换tab
-    private Context        fragmentActivity; // Fragment所属的Activity
-    private int                 fragmentContentId; // Activity中所要被替换的区域的id
+public class FragmentTabAdapter implements RadioGroup.OnCheckedChangeListener {
+    private List<Fragment> fragments; // 一个tab页面对应一个Fragment
+    private RadioGroup rgs; // 用于切换tab
+    private MainActivity fragmentActivity; // Fragment所属的Activity
+    private int fragmentContentId; // Activity中所要被替换的区域的id
 
     private int currentTab; // 当前Tab页面索引
 
     private OnRgsExtraCheckedChangedListener onRgsExtraCheckedChangedListener; // 用于让调用者在切换tab时候增加新的功能
 
-    public FragmentTabAdapter(Context fragmentActivity,
-                              List<Fragment> fragments, int fragmentContentId, InclusiveRadioGroup rgs) {
+    public FragmentTabAdapter(MainActivity fragmentActivity,
+                              List<Fragment> fragments, int fragmentContentId, RadioGroup rgs) {
         this.fragments = fragments;
         this.rgs = rgs;
         this.fragmentActivity = fragmentActivity;
         this.fragmentContentId = fragmentContentId;
 
         // 默认显示第一页
-        FragmentTransaction ft = ((MainActivity)fragmentActivity).getSupportFragmentManager()
+        FragmentTransaction ft = fragmentActivity.getSupportFragmentManager()
                 .beginTransaction();
         ft.add(fragmentContentId, fragments.get(0));
         ft.commit();
 
         rgs.setOnCheckedChangeListener(this);
-        Log.i("rgs", "rgs:" + rgs.getAllRadioButton(rgs));
+
     }
 
     @Override
-    public void onCheckedChanged(InclusiveRadioGroup radioGroup, int checkedId) {
-
-        for (int i = 0; i < rgs.getAllRadioButton(rgs).size(); i++) {
-//            if (rgs.getChildAt(i).getId() == checkedId) {
-            if (rgs.getAllRadioButton(rgs).get(i).getId() == checkedId) {
+    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+        for (int i = 0; i < rgs.getChildCount(); i++) {
+            if (rgs.getChildAt(i).getId() == checkedId) {
                 // 如果设置了切换tab额外功能功能接口
                 if (null != onRgsExtraCheckedChangedListener) {
                     onRgsExtraCheckedChangedListener.OnRgsExtraCheckedChanged(
                             radioGroup, checkedId, i);
                 }
 
-                Fragment            fragment = fragments.get(i);
-                FragmentTransaction ft       = obtainFragmentTransaction(i);
+                Fragment fragment = fragments.get(i);
+                FragmentTransaction ft = obtainFragmentTransaction(i);
 
                 getCurrentFragment().onPause(); // 暂停当前tab
                 // getCurrentFragment().onStop(); // 暂停当前tab
@@ -76,8 +72,8 @@ public class FragmentTabAdapter implements InclusiveRadioGroup.OnCheckedChangeLi
      */
     public void showTab(int idx) {
         for (int i = 0; i < fragments.size(); i++) {
-            Fragment            fragment = fragments.get(i);
-            FragmentTransaction ft       = obtainFragmentTransaction(idx);
+            Fragment fragment = fragments.get(i);
+            FragmentTransaction ft = obtainFragmentTransaction(idx);
 
             if (idx == i) {
                 ft.show(fragment);
@@ -96,7 +92,7 @@ public class FragmentTabAdapter implements InclusiveRadioGroup.OnCheckedChangeLi
      * @return
      */
     private FragmentTransaction obtainFragmentTransaction(int index) {
-        FragmentTransaction ft = ((MainActivity)fragmentActivity).getSupportFragmentManager()
+        FragmentTransaction ft = fragmentActivity.getSupportFragmentManager()
                 .beginTransaction();
         // 设置切换动画
         // if (index > currentTab) {
@@ -130,13 +126,11 @@ public class FragmentTabAdapter implements InclusiveRadioGroup.OnCheckedChangeLi
      * 切换tab额外功能功能接口
      */
     public static class OnRgsExtraCheckedChangedListener {
-        public void OnRgsExtraCheckedChanged(InclusiveRadioGroup radioGroup,
+        public void OnRgsExtraCheckedChanged(RadioGroup radioGroup,
                                              int checkedId, int index) {
 
         }
     }
-
-
 
 }
 
