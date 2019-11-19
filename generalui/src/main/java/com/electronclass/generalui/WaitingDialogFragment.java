@@ -4,6 +4,7 @@ package com.electronclass.generalui;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -14,11 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.electronclass.common.util.Tools;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.io.IOException;
-
-import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifImageView;
 
 
 /**
@@ -40,15 +40,16 @@ public class WaitingDialogFragment extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         View view = LayoutInflater.from(context).inflate(R.layout.layout_waiting, null);
-        try {
-            GifDrawable gifDrawable = new GifDrawable( getResources(),R.drawable.loading );
-            GifImageView gifImageView = view.findViewById( R.id.sdvLoading );
-            gifImageView.setImageDrawable(gifDrawable);
-            builder.setView(view);
-            setCancelable(false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SimpleDraweeView sdvLoading = view.findViewById( R.id.sdvLoading);
+        Uri uri = Uri.parse("res:///" + R.drawable.loading);
+        DraweeController draweeController =
+                Fresco.newDraweeControllerBuilder()
+                        .setUri(uri)
+                        .setAutoPlayAnimations(true) // 设置加载图片完成后是否直接进行播放
+                        .build();
+        sdvLoading.setController(draweeController);
+        builder.setView(view);
+        setCancelable(false);
         return builder.create();
     }
 
@@ -64,8 +65,6 @@ public class WaitingDialogFragment extends DialogFragment {
             dialog.getWindow().setGravity(Gravity.CENTER);
         }
     }
-
-
 
     @Override
     public void onDismiss(DialogInterface dialog) {

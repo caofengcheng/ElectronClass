@@ -20,6 +20,9 @@ public class GlobalParam {
     public static String UPDATE_DUTY      = "UPDATE_DUTY";
     public static String UPDATE_DUTY_ITEM = "UPDATE_DUTY_ITEM";
 
+    public static String APPURL = "APPURL";
+    public static String FoodAppUrl = "http://jjez.yksmart2.com:8388/catering/";
+
     /**
      * 全量更新ID
      */
@@ -35,6 +38,16 @@ public class GlobalParam {
      * 主页刷卡
      */
     public static String MAINACTIVITY = "MAINACTIVITY";
+
+    /**
+     * 食堂刷卡
+     */
+    public static String FOODACTIVITY = "FOODACTIVITY";
+
+    /**
+     * 其他刷卡
+     */
+    public static String OTHER = "OTHER";
 
     /**
      * 添加值日刷卡

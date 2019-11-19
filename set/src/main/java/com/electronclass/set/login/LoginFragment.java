@@ -22,6 +22,7 @@ import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.event.EventTime;
 import com.electronclass.common.util.KeyboardUtils;
 import com.electronclass.common.util.Tools;
+import com.electronclass.generalui.WaitingDialogUtil;
 import com.electronclass.pda.mvp.entity.ClassItem;
 import com.electronclass.pda.mvp.entity.TeacherInfo;
 import com.electronclass.set.R;
@@ -155,6 +156,10 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
                     if (timer != null) {
                         timer.cancel();
                     }
+                    if (GlobalParam.getSchoolInfo() == null) {
+                        Tools.displayToast( "请先绑定学校" );
+                        return;
+                    }
                     mPresenter.login( phoneNum, codeNum );
                 } else {
                     Tools.displayToast( "电话号码或验证码不能为空" );
@@ -163,8 +168,8 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
         } );
 
         /**
-         //         * 设置时间
-         //         */
+         * 设置时间
+         */
         binding.setWindow.attendanceTime.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,10 +211,6 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
             setClassAdapter();
             setGradeAdapter();
             setSchoolAdapter();
-            if (GlobalParam.getSchoolInfo() == null) {
-                Tools.displayToast( "请先绑定学校" );
-                return;
-            }
             mPresenter.getClassList( GlobalParam.getSchoolInfo().getSchoolId(), teacherInfo.getUserId() );
         }
     }

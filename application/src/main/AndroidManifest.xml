@@ -3,11 +3,7 @@
     package="com.electronclass.application">
 
     <application>
-        <activity android:name=".set.ui.SetActivity"
-            android:theme="@style/dialogStyle"/>
-        <activity
-            android:name=".login.ui.LoginActivity"
-            android:theme="@style/dialogStyle" />
+        <activity android:name=".web.WebActivity"></activity>
     </application>
 
 </manifest>

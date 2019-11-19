@@ -2,6 +2,7 @@ package com.electronclass.electronclass;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Looper;
 
 import com.android.xhapimanager.XHApiManager;
 import com.blankj.utilcode.util.NetworkUtils;
@@ -13,14 +14,17 @@ import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.Bulb;
 import com.electronclass.common.event.CardType;
+import com.electronclass.common.event.FoodCard;
 import com.electronclass.common.event.SchoolInfo;
 import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.event.TopEvent;
 import com.electronclass.common.util.DateUtil;
+import com.electronclass.common.util.GlideCacheUtil;
 import com.electronclass.common.util.PowerOnOffManagerUtil;
 import com.electronclass.common.util.ReadThreadUtil;
 import com.electronclass.common.util.SerialportManager;
 import com.electronclass.common.util.Tools;
+import com.squareup.leakcanary.LeakCanary;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -59,12 +63,14 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     @Override
     public void onCreate() {
         super.onCreate();
+        LeakCanary.install( this );
         eventTime();
         getBuildConfig();
         initEcardNo();
         stopAlm();
         initSerialPort();
         getDates();
+        GlideCacheUtil.getInstance().clearImageAllCache( this );
         logger.debug( "当前版本号：" + getVersionCode() + "  版本名称：" + getVersionName() );
     }
 
@@ -164,7 +170,6 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
             e.printStackTrace();
         }
         return "";
-
     }
 
     /**
@@ -192,19 +197,12 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
             readThreadUtil = new ReadThreadUtil();
             readThreadUtil.startReadThread( (type, cardNum) -> {
                 if (type == 0) {
-                    logger.info( "卡号：" + cardNum );
-                    if (GlobalParam.getCardType() == GlobalParam.MAINACTIVITY) {
-                        bulb.b(true);
-                        mPresenter.getCardAttendance( cardNum );
-                    } else {
-                        EventBus.getDefault().postSticky( new CardType( cardNum ) );
-                    }
+                    sendCardNumber(cardNum);
                 } else {
                     Tools.displayToast( "读取出错，不兼容的卡" );
                 }
             } );
         }
-
     }
 
     /**
@@ -227,12 +225,18 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
 
     @Override
     public void onReceiveData(String cardNo) {
+        sendCardNumber(cardNo);
+    }
+
+    private void sendCardNumber(String cardNo){
         logger.info( "卡号：" + cardNo );
         if (GlobalParam.getCardType() == GlobalParam.MAINACTIVITY) {
-            bulb.b(true);
+            bulb.b( true );
             mPresenter.getCardAttendance( cardNo );
-        } else {
+        } else if (GlobalParam.getCardType() == GlobalParam.UPDATEACTIVITY) {
             EventBus.getDefault().postSticky( new CardType( cardNo ) );
+        } else if (GlobalParam.getCardType() == GlobalParam.FOODACTIVITY) {
+            EventBus.getDefault().postSticky( new FoodCard( cardNo ) );
         }
     }
 
@@ -251,12 +255,14 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+                Looper.prepare();
                 if (NetworkUtils.isAvailableByPing()) {
                     mPresenter.getClassAndSchool( getApplicationContext() );
                 } else {
                     Tools.displayToast( "当前网络不可用，请检查网络！" );
                 }
                 logger.info( "持续获取数据中。。。" );
+                Looper.loop();
             }
         };
         netTimer.schedule( timerTask, netTimeOut );

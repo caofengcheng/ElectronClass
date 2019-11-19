@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -40,12 +43,14 @@ import com.electronclass.pda.mvp.entity.Inform;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,14 +61,13 @@ import java.util.TimerTask;
 /**
  * 主页
  */
-public class HomeFragment extends BaseFragment<HomeContract.Presenter> implements HomeContract.View {
+public class HomeFragment extends BaseFragment<HomePresenter> implements HomeContract.View {
     private static Logger                 logger       = LoggerFactory.getLogger( HomeFragment.class );
     private        FragmentNewHomeBinding binding;
     private        boolean                isGetSetting = false;
     private        int                    timeout      = 60 * 60 * 1000;
     private        int                    firstType    = 1;
     private        String                 firstUrl;
-
 
     private CommonRecyclerViewAdapter<ClassMienMessage> commonClassMienAdapter;
 
@@ -84,14 +88,13 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 
     @NotNull
     @Override
-    protected HomeContract.Presenter getPresenter() {
+    protected HomePresenter getPresenter() {
         return new HomePresenter();
     }
 
     @Override
     protected void initView(View view) {
-        logger.info( "getMAC:" + MacAddress.ECARDNO == null ? MacAddress.getMacAddress( getActivity() ) : MacAddress.ECARDNO );
-
+        logger.info( "getMAC:" + MacAddress.getMacAddress( getActivity() ) );
         setCommonClassMienAdapter();
         getDate();
     }
@@ -246,13 +249,9 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
             new Timer().schedule( new TimerTask() {
                 @Override
                 public void run() {
-//                    if (isSchoolHava) {
-//                        binding.tvInform.stopAutoScroll();
-//                    }
                     // type通知类型 0 - 班级通知 1校园通知
-                    // isAvaliable  0-获取未过期的所有通知 (包含正在生效和未生效)， 1 获取正在生效的通知 即（开始时间小于当前时间，截止时间大于当前时间）
-//                    mPresenter.getInform( MacAddress.getMacAddress( getActivity() ), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
-                    if (GlobalParam.getClassInfo() != null) {
+                    if (GlobalParam.getClassInfo() != null && mPresenter != null && StringUtils.isNoneEmpty( MacAddress.getMacAddress( getActivity() ) )) {
+                        logger.info( "班级信息不为空" );
                         mPresenter.getInform( MacAddress.getMacAddress( getActivity() ), "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
                         mPresenter.getClassMien( MacAddress.getMacAddress( getActivity() ), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
                     }
@@ -359,11 +358,12 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 
     public static class BannerViewHolder implements MZViewHolder<Inform> {
         private ImageView mImageView;
+        private Bitmap    bitmap = null;
 
         @Override
         public View createView(Context context) {
-            // 返回页面布局
             View view = LayoutInflater.from( context ).inflate( R.layout.banner_item, null );
+            notBitmap();
             mImageView = view.findViewById( R.id.banner_image );
             return view;
         }
@@ -376,6 +376,7 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
                                 .getText() )
                         .into( mImageView );
             } else {
+                logger.info( "创建文字banner" );
                 TextView     textView     = new TextView( context );
                 LinearLayout linearLayout = new LinearLayout( context );
                 linearLayout.setDrawingCacheEnabled( true );
@@ -385,30 +386,56 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
                 linearLayout.addView( textView );
                 textView.measure( View.MeasureSpec.makeMeasureSpec( 960, View.MeasureSpec.EXACTLY ), View.MeasureSpec.makeMeasureSpec( 360, View.MeasureSpec.EXACTLY ) );
                 textView.layout( 50, 0, 1000, 350 );
-                textView.setDrawingCacheEnabled( true );
                 textView.setText( data.getText() );
                 textView.setTextSize( 30 );
                 textView.setMaxLines( 10 );
                 textView.setTextColor( Color.parseColor( "#FFFFFF" ) );
                 textView.setGravity( Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL );
-
-                Bitmap bitmap = createViewBitmap( linearLayout );
-//                    Bitmap bitmap = Bitmap.createBitmap( linearLayout.getDrawingCache() );
-
+                bitmap = view2Bitmap( linearLayout );
                 linearLayout.destroyDrawingCache();
-                Glide.with( context )
-                        .load( bitmap )
-                        .into( mImageView );
+                if (bitmap != null) {
+                    Glide.with( context )
+                            .load( bitmap )
+                            .into( mImageView );
+                }else {
+                    logger.info( "bitmap--OOM" );
+                }
             }
         }
 
 
-        public Bitmap createViewBitmap(View v) {
-            Bitmap bitmap = Bitmap.createBitmap( 1020, 370,
-                    Bitmap.Config.ARGB_8888 );
-            Canvas canvas = new Canvas( bitmap );
-            v.draw( canvas );
-            return bitmap;
+        /**
+         * View to bitmap.
+         *
+         * @param view The view.
+         * @return bitmap
+         */
+        private static Bitmap view2Bitmap(final View view) {
+            Bitmap ret = null;
+            if (view == null) return null;
+            try {
+                ret = Bitmap.createBitmap( 1020, 370, Bitmap.Config.RGB_565 );
+            } catch (OutOfMemoryError e) {
+                return null;
+            }
+
+            Canvas   canvas     = new Canvas( ret );
+            Drawable bgDrawable = view.getBackground();
+            if (bgDrawable != null) {
+                bgDrawable.draw( canvas );
+            } else {
+                canvas.drawColor( Color.WHITE );
+            }
+            view.draw( canvas );
+            return ret;
+        }
+
+        private void notBitmap() {
+            if (bitmap != null && !bitmap.isRecycled()) {
+                // 回收并且置为null
+                bitmap.recycle();
+                bitmap = null;
+            }
         }
 
     }

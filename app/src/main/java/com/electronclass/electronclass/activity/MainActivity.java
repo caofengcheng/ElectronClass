@@ -81,6 +81,9 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
     @Override
     protected void initData() {
 
+        /**
+         * 展示学校信息
+         */
         AppApplication.getInstance().setSchoolInfo( () -> {
             logger.info( "收到SchoolInfo" );
             isGetSetting = true;
@@ -91,6 +94,9 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
             getDatas();
         } );
 
+        /**
+         * 刷卡动画
+         */
         AppApplication.getInstance().setBulb( b -> {
             runOnUiThread( () -> {
                 if (b) {
@@ -102,6 +108,10 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         } );
     }
 
+    /**
+     * 是否展示校园通知栏
+     * @param eventRight
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventRight(EventRight eventRight) {
         if (eventRight.isVisit()){
@@ -111,6 +121,10 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         }
     }
 
+    /**
+     * 考勤时间修改
+     * @param eventTime
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventTime(EventTime eventTime) {
         binding.attendanceTime.setText( GlobalParam.getEventTime() );
@@ -184,6 +198,9 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         }
     }
 
+    /**
+     * 设置时间
+     */
     private void setTime() {
         binding.attendanceTime.setText( GlobalParam.getEventTime() );
         binding.ecardNo.setText( MacAddress.getMacAddress( MainActivity.this ) );
@@ -205,6 +222,9 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         fragmentTabAdapter = new FragmentTabAdapter( this, fragmentList, R.id.frameLayout, binding.radio );
     }
 
+    /**
+     * 设置模块列表
+     */
     private void setFragmentList() {
         fragmentList.add( new HomeFragment() );
         fragmentList.add( new ApplicationFragment() );
@@ -214,6 +234,9 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
     }
 
 
+    /**
+     * 设置班级名称
+     */
     private void setClassName() {
         AppApplication.getInstance().setTopEvent( () -> {
             if (GlobalParam.getClassInfo() != null) {

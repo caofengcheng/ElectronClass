@@ -5,9 +5,9 @@ package com.electronclass.common.module;
  */
 public class AppModule {
     /**
-     * 设置
+     * 订餐
      */
-    public static final int SET = 1;
+    public static final int FOOD = 1;
     /**
      * 更多
      */
