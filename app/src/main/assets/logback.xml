@@ -8,7 +8,8 @@
 <configuration debug="true" scan="true" scanPeriod="60 seconds">
     <!-- 日志最大的历史 30天 -->
     <property name="maxHistory" value="7" />
-
+    <!-- 定义日志文件 输入位置 -->
+    <property name="log_dir" value="/mnt/sdcard/ElectronClass/Logs" />
     <!-- ConsoleAppender 控制台输出日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 对日志进行格式化 -->
@@ -19,12 +20,18 @@
 
     <!--声明一个RollingFileAppender-->
     <appender name="ElectronClass" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log_dir}/PoliceTerminus-log.log</file>
+        <file>${log_dir}/ElectronClass-log.log</file>
         <append>true</append>
         <encoder>
             <pattern>%date %-5relative [%thread] %-5level %logger{36} [%file:%M:%line] - %msg%n
             </pattern>
         </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_dir}/ElectronClass-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!--最大保存7天的日志-->
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
 
         <!--文件大于10mb,切换文件-->
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
@@ -37,6 +44,6 @@
         <!-- 控制台输出 -->
         <appender-ref ref="STDOUT" />
         <appender-ref ref="LOG_CAT" />
-        <appender-ref ref="PoliceTerminus" />
+        <appender-ref ref="ElectronClass" />
     </root>
 </configuration>
