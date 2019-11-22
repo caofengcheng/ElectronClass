@@ -2,8 +2,6 @@ package com.electronclass.electronclass;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Looper;
-
 import com.android.xhapimanager.XHApiManager;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.electronclass.common.base.BaseApplication;
@@ -25,15 +23,12 @@ import com.electronclass.common.util.ReadThreadUtil;
 import com.electronclass.common.util.SerialportManager;
 import com.electronclass.common.util.Tools;
 import com.squareup.leakcanary.LeakCanary;
-
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class AppApplication extends BaseApplication<ApplicationContract.Presenter> implements ApplicationContract.View, SerialportManager.SerialportListener {
     protected Logger         logger     = LoggerFactory.getLogger( getClass() );
@@ -41,8 +36,6 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     private   SchoolInfo     schoolInfo;
     private   Bulb           bulb;
     private   ReadThreadUtil readThreadUtil;
-    private   int            netTimeOut = 10 * 1000;
-    private   Timer          netTimer;
 
     public void setTopEvent(TopEvent topEvent) {
         this.topEvent = topEvent;
@@ -86,8 +79,6 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         EventBus.getDefault().postSticky( new SettingsEvent() );
         schoolInfo.info();
         topEvent.Event();
-        stopTimer();
-
     }
 
     @Override
@@ -197,7 +188,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
             readThreadUtil = new ReadThreadUtil();
             readThreadUtil.startReadThread( (type, cardNum) -> {
                 if (type == 0) {
-                    sendCardNumber(cardNum);
+                    sendCardNumber( cardNum );
                 } else {
                     Tools.displayToast( "读取出错，不兼容的卡" );
                 }
@@ -225,10 +216,10 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
 
     @Override
     public void onReceiveData(String cardNo) {
-        sendCardNumber(cardNo);
+        sendCardNumber( cardNo );
     }
 
-    private void sendCardNumber(String cardNo){
+    private void sendCardNumber(String cardNo) {
         logger.info( "卡号：" + cardNo );
         if (GlobalParam.getCardType() == GlobalParam.MAINACTIVITY) {
             bulb.b( true );
@@ -248,33 +239,17 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
 
 
     /**
-     * 持续获取数据
+     * 断网重连
      */
-    private void getDates() {
-        netTimer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                if (NetworkUtils.isAvailableByPing()) {
-                    mPresenter.getClassAndSchool( getApplicationContext() );
-                } else {
-                    Tools.displayToast( "当前网络不可用，请检查网络！" );
-                }
-                logger.info( "持续获取数据中。。。" );
-                Looper.loop();
-            }
-        };
-        netTimer.schedule( timerTask, netTimeOut );
+    public void getDates() {
+        if (NetworkUtils.isConnected()) {
+            if (GlobalParam.getSchoolInfo() == null)
+                mPresenter.getClassAndSchool( getApplicationContext() );
+        } else {
+            Tools.displayToast( "当前网络不可用，请检查网络！" );
+        }
     }
 
-    /**
-     * 关闭持续获取数据
-     */
-    private void stopTimer() {
-        if (netTimer != null)
-            netTimer.cancel();
-    }
 
 
 }

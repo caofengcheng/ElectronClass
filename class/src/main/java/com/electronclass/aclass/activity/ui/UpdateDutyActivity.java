@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.TimeUtils;
 import com.cncoderx.wheelview.OnWheelChangedListener;
 import com.cncoderx.wheelview.WheelView;
 import com.electronclass.aclass.R;
@@ -21,6 +22,7 @@ import com.electronclass.aclass.activity.contract.UpdateDutyContract;
 import com.electronclass.aclass.activity.presenter.UpdateDutyPresenter;
 import com.electronclass.aclass.databinding.ActivityUpdateDutyBinding;
 import com.electronclass.common.base.BaseActivity;
+import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.event.CardType;
 import com.electronclass.common.util.DateUtil;
@@ -35,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -72,6 +75,20 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
     @Override
     protected void initView() {
         setOnClick();
+
+        //上次确认时间是否小于10分钟，如果小于10分钟或者第一次进入则需要输入密码
+        if (GlobalPage.updateDutyTime == 0) {
+            binding.pwEt.setText( "" );
+        } else {
+            logger.info( "时间：" + (TimeUtils.getNowMills() - GlobalPage.updateDutyTime) );
+            if (TimeUtils.getNowMills() - GlobalPage.updateDutyTime >= 60 * 10 * 1000) {
+                binding.pwEt.setText( "" );
+                GlobalPage.updateDutyTime = 0;
+            } else {
+                binding.pwEt.setText( GlobalPage.updateDutyPsw );
+            }
+        }
+
         type = getIntent().getStringExtra( GlobalParam.TO_DUTY );
         if (type.equals( GlobalParam.ADD_DUTY )) {
             binding.tvTime.setText( DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) );
@@ -150,7 +167,9 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
         /**
          * 保存值日
          */
-        binding.save.setOnClickListener( v -> toPresenter( "" ) );
+        binding.save.setOnClickListener( v -> {
+            toPresenter( "" );
+        } );
 
         /**
          * 修改值日
@@ -200,13 +219,16 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
             Tools.displayToast( "请输入密码" );
             return;
         }
+
+
         String psw  = MD5Util.Md5( binding.pwEt.getText().toString().trim() );
         String type = binding.tvType.getText().toString().trim();
         String name = binding.tvName.getText().toString().trim();
         String time = binding.tvTime.getText().toString().trim();
+        GlobalPage.updateDutyTime = TimeUtils.getNowMills();
+        GlobalPage.updateDutyPsw = binding.pwEt.getText().toString().trim();
         mPresenter.addOrUpdateDuty( this, id, psw, type, name, time );
     }
-
 
 
     /**

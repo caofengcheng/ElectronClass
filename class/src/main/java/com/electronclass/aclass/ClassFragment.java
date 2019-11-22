@@ -120,7 +120,6 @@ public class ClassFragment extends BaseFragment {
                         binding.inclusiveRadioGroup.check(R.id.dutyItem);
                         binding.setDuty.setVisibility( View.VISIBLE );
                         break;
-
                     default:
                         break;
                 }
@@ -139,13 +138,10 @@ public class ClassFragment extends BaseFragment {
 
         binding.dutyItem.setOnClickListener( v -> binding.viewPager.setCurrentItem(1,true) );
 
-        binding.setDuty.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent( getActivity(), UpdateDutyActivity.class );
-                intent.putExtra( GlobalParam.TO_DUTY, GlobalParam.ADD_DUTY );
-                startActivityForResult( intent,2 );
-            }
+        binding.setDuty.setOnClickListener( v -> {
+            Intent intent = new Intent( getActivity(), UpdateDutyActivity.class );
+            intent.putExtra( GlobalParam.TO_DUTY, GlobalParam.ADD_DUTY );
+            startActivityForResult( intent,2 );
         } );
     }
 

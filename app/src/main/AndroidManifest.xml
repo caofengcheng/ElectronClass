@@ -67,6 +67,13 @@
             </intent-filter>
         </activity>
 
+        <receiver
+            android:name=".broadcase.ConnectionChangeReceiver"
+            android:label="NetworkConnection">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

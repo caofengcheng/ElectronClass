@@ -40,6 +40,9 @@ import com.electronclass.home.databinding.FragmentNewHomeBinding;
 import com.electronclass.home.presenter.HomePresenter;
 import com.electronclass.pda.mvp.entity.ClassMienMessage;
 import com.electronclass.pda.mvp.entity.Inform;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.loader.ImageLoader;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
@@ -211,13 +214,11 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
      */
     private void setClassInfrom(List<Inform> inform) {
         binding.banner.setVisibility( View.VISIBLE );
-        binding.banner.setPages( inform, new MZHolderCreator() {
-            @Override
-            public MZViewHolder createViewHolder() {
-                return new HomeFragment.BannerViewHolder();
-            }
-        } );
-        binding.banner.setDelayedTime( 3000 );
+        binding.banner.setImageLoader(new GlideImageLoader());
+        binding.banner.setImages(inform);
+        binding.banner.isAutoPlay(true);
+        binding.banner.setDelayTime(3000);
+        binding.banner.setIndicatorGravity( BannerConfig.CENTER);
         binding.banner.start();
     }
 
@@ -311,7 +312,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
             Tools.displayToast( "请先绑定班牌班级" );
             return;
         }
-        getDatas();//刷新数据
+        if (!hidden) {
+            getDatas();//刷新数据
+        }
 
     }
 
@@ -356,89 +359,51 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         }
     }
 
-    public static class BannerViewHolder implements MZViewHolder<Inform> {
-        private ImageView mImageView;
-        private Bitmap    bitmap = null;
+    public class GlideImageLoader extends ImageLoader {
 
         @Override
-        public View createView(Context context) {
-            View view = LayoutInflater.from( context ).inflate( R.layout.banner_item, null );
-            notBitmap();
-            mImageView = view.findViewById( R.id.banner_image );
-            return view;
-        }
-
-        @Override
-        public void onBind(Context context, int position, Inform data) {
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Inform data = (Inform) path;
             if (data.getTextType() == 1) {
                 Glide.with( context )
                         .load( data
                                 .getText() )
-                        .into( mImageView );
+                        .into( imageView );
             } else {
-                logger.info( "创建文字banner" );
-                TextView     textView     = new TextView( context );
-                LinearLayout linearLayout = new LinearLayout( context );
-                linearLayout.setDrawingCacheEnabled( true );
-                linearLayout.measure( View.MeasureSpec.makeMeasureSpec( 0, View.MeasureSpec.UNSPECIFIED ), View.MeasureSpec.makeMeasureSpec( 0, View.MeasureSpec.UNSPECIFIED ) );
-                linearLayout.layout( 0, 0, 1020, 380 );
-                linearLayout.setBackground( context.getResources().getDrawable( R.drawable.backgroundback ) );
-                linearLayout.addView( textView );
-                textView.measure( View.MeasureSpec.makeMeasureSpec( 960, View.MeasureSpec.EXACTLY ), View.MeasureSpec.makeMeasureSpec( 360, View.MeasureSpec.EXACTLY ) );
-                textView.layout( 50, 0, 1000, 350 );
-                textView.setText( data.getText() );
-                textView.setTextSize( 30 );
-                textView.setMaxLines( 10 );
-                textView.setTextColor( Color.parseColor( "#FFFFFF" ) );
-                textView.setGravity( Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL );
-                bitmap = view2Bitmap( linearLayout );
-                linearLayout.destroyDrawingCache();
+                logger.info( "GlideImageLoader创建文字banner" );
+                Bitmap bitmap = getViewBitmap(data.getText());
                 if (bitmap != null) {
                     Glide.with( context )
                             .load( bitmap )
-                            .into( mImageView );
+                            .into( imageView );
                 }else {
                     logger.info( "bitmap--OOM" );
                 }
             }
         }
 
+        @Override
+        public ImageView createImageView(Context context) {
+            SimpleDraweeView simpleDraweeView=new SimpleDraweeView(context);
+            return simpleDraweeView;
+        }
 
         /**
-         * View to bitmap.
-         *
-         * @param view The view.
-         * @return bitmap
-         */
-        private static Bitmap view2Bitmap(final View view) {
-            Bitmap ret = null;
-            if (view == null) return null;
-            try {
-                ret = Bitmap.createBitmap( 1020, 370, Bitmap.Config.RGB_565 );
-            } catch (OutOfMemoryError e) {
-                return null;
-            }
-
-            Canvas   canvas     = new Canvas( ret );
-            Drawable bgDrawable = view.getBackground();
-            if (bgDrawable != null) {
-                bgDrawable.draw( canvas );
-            } else {
-                canvas.drawColor( Color.WHITE );
-            }
-            view.draw( canvas );
-            return ret;
+         * 把一个view转化成bitmap对象
+         * */
+        public  Bitmap getViewBitmap(String data) {
+            View view =  getLayoutInflater().inflate(R.layout.class_message_item, null);
+            TextView textView = view.findViewById( R.id.msg );
+            textView.setText( data );
+            view.setDrawingCacheEnabled( true );
+            int me = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            view.measure(me,me);
+            view.layout(0 ,0, view.getMeasuredWidth(), view.getMeasuredHeight());
+            view.buildDrawingCache();
+            textView.setGravity( Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL );
+            Bitmap b = view.getDrawingCache();
+            return b;
         }
-
-        private void notBitmap() {
-            if (bitmap != null && !bitmap.isRecycled()) {
-                // 回收并且置为null
-                bitmap.recycle();
-                bitmap = null;
-            }
-        }
-
     }
-
 
 }

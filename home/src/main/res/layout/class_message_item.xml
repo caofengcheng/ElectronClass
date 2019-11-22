@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="990dp"
+    android:layout_height="360dp"
+    android:background="@drawable/backgroundback"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="980dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="义可学写格验连增转在导着去要华铁置风究了七万入值带精带位象约集设今老成价题光造除应飞中包少角细始进动局极清四治热而民到各连。"
+        android:textColor="#FFFFFF"
+        android:textSize="50sp"
+        android:maxLines="10"/>
+</LinearLayout>

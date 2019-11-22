@@ -44,20 +44,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView">
 
-            <com.zhouwei.mzbanner.MZBannerView
+            <!--<com.zhouwei.mzbanner.MZBannerView-->
+                <!--android:id="@+id/banner"-->
+                <!--android:layout_width="990dp"-->
+                <!--android:layout_height="360dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--app:open_mz_mode="false"-->
+                <!--app:canLoop="true"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:indicatorAlign="center"-->
+                <!--app:layout_constraintTop_toTopOf="parent"></com.zhouwei.mzbanner.MZBannerView>-->
+
+            <com.youth.banner.Banner
                 android:id="@+id/banner"
                 android:layout_width="990dp"
                 android:layout_height="360dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                app:open_mz_mode="false"
-                app:canLoop="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:indicatorAlign="center"
-                app:layout_constraintTop_toTopOf="parent"></com.zhouwei.mzbanner.MZBannerView>
-
+                app:indicator_width="@dimen/dp_10"
+                app:indicator_height="@dimen/dp_10"
+                app:layout_constraintTop_toTopOf="parent">
+            </com.youth.banner.Banner>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
