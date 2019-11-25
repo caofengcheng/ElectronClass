@@ -10,12 +10,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.TimeUtils;
-import com.cncoderx.wheelview.OnWheelChangedListener;
 import com.cncoderx.wheelview.WheelView;
 import com.electronclass.aclass.R;
 import com.electronclass.aclass.activity.contract.UpdateDutyContract;
@@ -24,7 +22,6 @@ import com.electronclass.aclass.databinding.ActivityUpdateDutyBinding;
 import com.electronclass.common.base.BaseActivity;
 import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.event.CardType;
 import com.electronclass.common.util.DateUtil;
 import com.electronclass.common.util.KeyboardUtils;
 import com.electronclass.common.util.MD5Util;
@@ -32,12 +29,8 @@ import com.electronclass.common.util.Tools;
 import com.electronclass.pda.mvp.entity.Duty;
 
 import org.apache.commons.lang3.StringUtils;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**

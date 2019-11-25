@@ -56,7 +56,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     @Override
     public void onCreate() {
         super.onCreate();
-        LeakCanary.install( this );
+//        LeakCanary.install( this );
         eventTime();
         getBuildConfig();
         initEcardNo();

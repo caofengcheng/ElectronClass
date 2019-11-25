@@ -71,12 +71,7 @@ public class WebActivity extends AppCompatActivity {
     public void onFoodCard(FoodCard cardType) {
         if (cardType != null) {
             logger.info( "访问h5接口+卡号：" + cardType.number );
-            binding.webView.evaluateJavascript( "javascript:thirdLogin(" + cardType.number + ")", new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
-                    logger.info( "访问h5接口返回：" + value );
-                }
-            } );
+            binding.webView.evaluateJavascript( "javascript:thirdLogin(" + cardType.number + ")", value -> logger.info( "访问h5接口返回：" + value ) );
 
         }
     }

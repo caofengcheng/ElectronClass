@@ -114,11 +114,11 @@ public class ClassFragment extends BaseFragment {
                 switch (i) {
                     case 0:
                         binding.inclusiveRadioGroup.check(R.id.classItem);
-                        binding.setDuty.setVisibility( View.GONE );
+//                        binding.setDuty.setVisibility( View.GONE );
                         break;
                     case 1:
                         binding.inclusiveRadioGroup.check(R.id.dutyItem);
-                        binding.setDuty.setVisibility( View.VISIBLE );
+//                        binding.setDuty.setVisibility( View.VISIBLE );
                         break;
                     default:
                         break;
