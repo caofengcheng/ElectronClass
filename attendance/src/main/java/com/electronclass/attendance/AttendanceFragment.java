@@ -79,6 +79,9 @@ public class AttendanceFragment extends BaseFragment<AttendanceContract.Presente
     protected void initView(View view) {
         binding.today.setText( DateUtil.getNowYear() + "年" + DateUtil.getNowMonth() + "月" + DateUtil.getNowDay() + "日考勤" );
         binding.data.setText( DateUtil.getNowYear() + "年" + DateUtil.getNowMonth() + "月" + DateUtil.getNowDay() + "日" );
+        year = String.valueOf( DateUtil.getNowYear() );
+        month = String.valueOf( DateUtil.getNowMonth() );
+        day = String.valueOf( DateUtil.getNowDay() );
         setAdapter();
     }
 
