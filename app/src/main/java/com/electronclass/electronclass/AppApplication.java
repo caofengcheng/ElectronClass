@@ -1,7 +1,9 @@
 package com.electronclass.electronclass;
 
+import android.annotation.SuppressLint;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+
 import com.android.xhapimanager.XHApiManager;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.electronclass.common.base.BaseApplication;
@@ -9,6 +11,7 @@ import com.electronclass.common.basemvp.contract.ApplicationContract;
 import com.electronclass.common.basemvp.presenter.ApplicationPresenter;
 import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
+import com.electronclass.common.database.InformType;
 import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.Bulb;
 import com.electronclass.common.event.CardType;
@@ -22,16 +25,23 @@ import com.electronclass.common.util.PowerOnOffManagerUtil;
 import com.electronclass.common.util.ReadThreadUtil;
 import com.electronclass.common.util.SerialportManager;
 import com.electronclass.common.util.Tools;
+import com.electronclass.electronclass.activity.MainActivity;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipeline;
 import com.squareup.leakcanary.LeakCanary;
+
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class AppApplication extends BaseApplication<ApplicationContract.Presenter> implements ApplicationContract.View, SerialportManager.SerialportListener {
-    protected Logger         logger     = LoggerFactory.getLogger( getClass() );
+    protected Logger         logger = LoggerFactory.getLogger( getClass() );
     private   TopEvent       topEvent;
     private   SchoolInfo     schoolInfo;
     private   Bulb           bulb;
@@ -64,7 +74,16 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         initSerialPort();
         getDates();
         GlideCacheUtil.getInstance().clearImageAllCache( this );
+        ImagePipeline imagePipeline = Fresco.getImagePipeline();
+        imagePipeline.clearCaches();
         logger.debug( "当前版本号：" + getVersionCode() + "  版本名称：" + getVersionName() );
+
+        new Timer().schedule( new TimerTask() {
+            @Override
+            public void run() {
+                getDates();
+            }
+        }, 0, 60 * 60 * 1000 );
     }
 
     @NotNull
@@ -95,7 +114,6 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     public void onError(String errorMessage) {
         Tools.displayToast( errorMessage );
         logger.debug( errorMessage );
-        bulb.b( false );
     }
 
     /**
@@ -114,15 +132,15 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     private void stopAlm() {
         if (BuildConfig.GUARD_PACKAGE == GlobalPage.MULAN) {
             XHApiManager xhApiManager = new XHApiManager();
-            xhApiManager.XHSetPowerOffOnTime( DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-16-30", DateUtil.tomorrow() + "-7-30", true );
-            logger.info( "木兰定时开关机已开启--offTime：" + DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-16-30" + "   onTime:" + DateUtil.tomorrow() + "-7-30" );
+            xhApiManager.XHSetPowerOffOnTime( DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00", DateUtil.tomorrow() + "-5-30", true );
+            logger.info( "木兰定时开关机已开启--offTime：" + DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00" + "   onTime:" + DateUtil.tomorrow() + "-5-30" );
         } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HENGHONGDA) {
             PowerOnOffManagerUtil powerOnOffManagerUtil = new PowerOnOffManagerUtil();
-            String[]              startTime             = {"7", "30"};
-            String[]              endTime               = {"16", "30"};
+            String[]              startTime             = {"5", "30"};
+            String[]              endTime               = {"21", "00"};
             int[]                 weekdays              = {1, 1, 1, 1, 1, 1, 1};
             powerOnOffManagerUtil.setOffOrOn( this, startTime, endTime, weekdays );
-            logger.info( "恒鸿达定时开关机已开启--offTime：" + DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-16-30" + "   onTime:" + DateUtil.tomorrow() + "-7-30" );
+            logger.info( "恒鸿达定时开关机已开启--offTime：" + endTime + "   onTime:" + startTime );
         }
     }
 
@@ -242,14 +260,13 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 断网重连
      */
     public void getDates() {
-        if (NetworkUtils.isConnected()) {
-            if (GlobalParam.getSchoolInfo() == null)
-                mPresenter.getClassAndSchool( getApplicationContext() );
+        if (GlobalParam.getSchoolInfo() == null) {
+            mPresenter.getClassAndSchool( getApplicationContext() );
         } else {
-            Tools.displayToast( "当前网络不可用，请检查网络！" );
+            schoolInfo.info();
+            topEvent.Event();
         }
     }
-
 
 
 }

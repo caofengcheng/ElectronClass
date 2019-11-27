@@ -2,6 +2,8 @@ package com.electronclass.home.activity.ui;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +26,11 @@ import com.electronclass.home.activity.contract.ClassMienContract;
 import com.electronclass.home.activity.presenter.ClassMienPresenter;
 import com.electronclass.home.databinding.ActivityClassMienBinding;
 import com.electronclass.pda.mvp.entity.ClassMienMessage;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.List;
 
@@ -56,7 +63,7 @@ public class ClassMienActivity extends BaseActivity<ClassMienContract.Presenter>
     protected void initData() {
         if (GlobalParam.getClassInfo() != null) {
             mPresenter.getClassMien( MacAddress.getMacAddress( this ), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
-        }else {
+        } else {
             Tools.displayToast( "为获取到班级信息，请稍后再试" );
         }
     }
@@ -137,12 +144,20 @@ public class ClassMienActivity extends BaseActivity<ClassMienContract.Presenter>
         @Override
         protected void convert(BaseViewHolder baseViewHolder, final ClassMienMessage item) {
 
-            ImageView      image          = baseViewHolder.getView( R.id.image );
-            RoundedCorners roundedCorners = new RoundedCorners( 6);
-            //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
-            RequestOptions options = RequestOptions.bitmapTransform( roundedCorners );
+            SimpleDraweeView image = baseViewHolder.getView( R.id.image );
+            image.setImageURI( GlobalParam.pUrl + item.getUrl() );
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource( Uri.parse( GlobalParam.pUrl + item.getUrl() ) )
+                    .setResizeOptions( new ResizeOptions( Tools.dp2px( 192 ), Tools.dp2px( 256 ) ) )
+                    .build();
+            image.setController( Fresco.newDraweeControllerBuilder()
+                    .setOldController( image.getController() )
+                    .setImageRequest( request )
+                    .build() );
+//            RoundedCorners   roundedCorners = new RoundedCorners( 6 );
+//            //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
+//            RequestOptions options = RequestOptions.bitmapTransform( roundedCorners );
 
-            Glide.with(ClassMienActivity.this ).load( GlobalParam.pUrl + item.getUrl() ).apply( options ).into( image );
+//            Glide.with( ClassMienActivity.this ).load( GlobalParam.pUrl + item.getUrl() ).apply( options ).into( image );
             image.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -168,16 +183,19 @@ public class ClassMienActivity extends BaseActivity<ClassMienContract.Presenter>
         binding.recycler.setLayoutManager( new GridLayoutManager( ClassMienActivity.this, 3 ) );
         binding.recycler.setAdapter( classMienAdapter );
 
-        binding.recycler.addOnScrollListener( new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    Glide.with( ClassMienActivity.this ).resumeRequests();//恢复Glide加载图片
-                } else {
-                    Glide.with( ClassMienActivity.this ).pauseRequests();//禁止Glide加载图片
-                }
-            }
-        } );
+//        binding.recycler.addOnScrollListener( new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && !ClassMienActivity.this.isDestroyed()) {
+//                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                        Glide.with( ClassMienActivity.this ).resumeRequests();//恢复Glide加载图片
+//                    } else {
+//                        Glide.with( ClassMienActivity.this ).pauseRequests();//禁止Glide加载图片
+//                    }
+//                }
+//            }
+//        } );
     }
 }
 
