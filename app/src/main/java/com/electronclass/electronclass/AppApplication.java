@@ -77,13 +77,6 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         ImagePipeline imagePipeline = Fresco.getImagePipeline();
         imagePipeline.clearCaches();
         logger.debug( "当前版本号：" + getVersionCode() + "  版本名称：" + getVersionName() );
-
-        new Timer().schedule( new TimerTask() {
-            @Override
-            public void run() {
-                getDates();
-            }
-        }, 0, 60 * 60 * 1000 );
     }
 
     @NotNull

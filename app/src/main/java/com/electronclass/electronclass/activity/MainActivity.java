@@ -141,12 +141,39 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
     }
 
     @Override
+    protected void onRestart() {
+        logger.info("onRestart");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        logger.info("onResume");
+        super.onResume();
+        if (GlobalParam.getClassInfo() != null)
+            binding.className.setText( GlobalParam.getClassInfo().getClassName() );
+
+        if (GlobalParam.getSchoolInfo() != null)
+            binding.schoolName.setText( GlobalParam.getSchoolInfo() == null ? "" : GlobalParam.getSchoolInfo().getName() );
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        logger.info("onPause");
+        super.onPause();
+    }
+
+    @Override
     protected void onStop() {
+        logger.info("onStop");
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
+        logger.info("onDestroy");
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }

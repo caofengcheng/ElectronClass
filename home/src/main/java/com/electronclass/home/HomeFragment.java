@@ -99,6 +99,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     protected void initView(View view) {
         logger.info( "getMAC:" + MacAddress.getMacAddress( getActivity() ) );
         setCommonClassMienAdapter();
+        setOnClick();
         getDate();
     }
 
@@ -120,6 +121,24 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     @Override
     protected void getData() {
         logger.info( "切换界面刷新" );
+    }
+
+    @Override
+    public void onResume() {
+        logger.info("onResume");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        logger.info("onPause");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        logger.info("onStop");
+        super.onStop();
     }
 
     /**
@@ -302,7 +321,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
         logger.info( "收到event" );
         isGetSetting = true;
         getDatas();
-        setOnClick();
     }
 
     @Override

@@ -46,7 +46,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
 
@@ -55,7 +54,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity" android:launchMode="singleInstance">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN"
@@ -64,8 +63,9 @@
                     android:windowSoftInputMode="adjustPan" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.HOME" />
+
             </intent-filter>
         </activity>
 
