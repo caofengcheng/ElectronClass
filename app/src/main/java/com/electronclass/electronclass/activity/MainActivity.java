@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.electronclass.aclass.ClassFragment;
 import com.electronclass.application.ApplicationFragment;
@@ -200,7 +201,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
                 public void run() {
                     // type通知类型 0 - 班级通知 1校园通知
                     // isAvaliable  0-获取未过期的所有通知 (包含正在生效和未生效)， 1 获取正在生效的通知 即（开始时间小于当前时间，截止时间大于当前时间）
-                    mPresenter.getInform( MacAddress.getMacAddress( MainActivity.this ), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
+                    mPresenter.getInform( StringUtils.isEmpty(GlobalParam.getEcardNo())?MacAddress.getDeviceMacAddrress() : GlobalParam.getEcardNo(), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
 
                 }
             }, 0, timeout );
@@ -230,7 +231,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      */
     private void setTime() {
         binding.attendanceTime.setText( GlobalParam.getEventTime() );
-        binding.ecardNo.setText( MacAddress.getMacAddress( MainActivity.this ) );
+        binding.ecardNo.setText(StringUtils.isEmpty(GlobalParam.getEcardNo())?MacAddress.getDeviceMacAddrress() : GlobalParam.getEcardNo());
         timer = new Timer();
         timer.schedule( new TimerTask() {
             @Override

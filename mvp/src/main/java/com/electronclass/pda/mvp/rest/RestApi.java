@@ -94,7 +94,7 @@ public interface RestApi {
      * 通过验证码登录
      */
     @POST("/e-card/wxLogin/sms/code/check")
-    Single<ServiceResponse<Jurisdiction>> login(@Query("phoneNum") String phoneNum, @Query("smsCode") String smsCode);
+    Single<ServiceResponse<List<Jurisdiction>>> login(@Query("phoneNum") String phoneNum, @Query("smsCode") String smsCode);
 
 
     /**

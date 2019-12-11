@@ -72,6 +72,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         initEcardNo();
         stopAlm();
         initSerialPort();
+        setEcardNo();
         getDates();
         GlideCacheUtil.getInstance().clearImageAllCache( this );
         ImagePipeline imagePipeline = Fresco.getImagePipeline();
@@ -118,6 +119,16 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         }
     }
 
+    /**
+     * 设置班牌号
+     */
+    private void setEcardNo(){
+        if (StringUtils.isEmpty(GlobalParam.getEcardNo())){
+            String macAddress = MacAddress.getMacAddress(this);
+            GlobalParam.setEcardNo(StringUtils.isNotEmpty(macAddress)?macAddress:MacAddress.getDeviceMacAddrress());
+        }
+    }
+
 
     /**
      * 定时开关机
@@ -125,11 +136,11 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     private void stopAlm() {
         if (BuildConfig.GUARD_PACKAGE == GlobalPage.MULAN) {
             XHApiManager xhApiManager = new XHApiManager();
-            xhApiManager.XHSetPowerOffOnTime( DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00", DateUtil.tomorrow() + "-5-30", true );
+            xhApiManager.XHSetPowerOffOnTime( DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00", DateUtil.tomorrow() + "-5-00", true );
             logger.info( "木兰定时开关机已开启--offTime：" + DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00" + "   onTime:" + DateUtil.tomorrow() + "-5-30" );
         } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HENGHONGDA) {
             PowerOnOffManagerUtil powerOnOffManagerUtil = new PowerOnOffManagerUtil();
-            String[]              startTime             = {"5", "30"};
+            String[]              startTime             = {"5", "00"};
             String[]              endTime               = {"21", "00"};
             int[]                 weekdays              = {1, 1, 1, 1, 1, 1, 1};
             powerOnOffManagerUtil.setOffOrOn( this, startTime, endTime, weekdays );

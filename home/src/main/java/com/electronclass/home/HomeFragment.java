@@ -97,7 +97,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     @Override
     protected void initView(View view) {
-        logger.info( "getMAC:" + MacAddress.getMacAddress( getActivity() ) );
+        logger.info( "home----getMAC:" + (StringUtils.isEmpty(GlobalParam.getEcardNo())?MacAddress.getDeviceMacAddrress() : GlobalParam.getEcardNo() ));
         setCommonClassMienAdapter();
         setOnClick();
         getDate();
@@ -272,8 +272,8 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                     // type通知类型 0 - 班级通知 1校园通知
                     if (GlobalParam.getClassInfo() != null && mPresenter != null && StringUtils.isNoneEmpty( MacAddress.getMacAddress( getActivity() ) )) {
                         logger.info( "班级信息不为空" );
-                        mPresenter.getInform( MacAddress.getMacAddress( getActivity() ), "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
-                        mPresenter.getClassMien( MacAddress.getMacAddress( getActivity() ), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
+                        mPresenter.getInform( StringUtils.isEmpty(GlobalParam.getEcardNo())?MacAddress.getDeviceMacAddrress() : GlobalParam.getEcardNo() , "", GlobalParam.getClassInfo().getClassId(), InformType.CLASS, 1 );//获取班级通知
+                        mPresenter.getClassMien(StringUtils.isEmpty(GlobalParam.getEcardNo())?MacAddress.getDeviceMacAddrress() : GlobalParam.getEcardNo(), "", GlobalParam.getClassInfo().getClassId(), 1, 9 );//获取班级风采
                     }
                 }
             }, 0, timeout );
