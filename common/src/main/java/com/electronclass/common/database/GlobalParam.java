@@ -65,6 +65,9 @@ public class GlobalParam {
                     "55", "56", "57", "58", "59"};
 
 
+    public static String toSettingPwd = "!@#TZjt123";
+
+
     public static String getCardType() {
         return cardType;
     }

@@ -114,6 +114,7 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
         exclude 'libpl_droidsonroids_gif.so'
+        exclude 'lib/armeabi-v7a/libserial_port.so'
     }
 }
 
@@ -139,5 +140,6 @@ dependencies {
     implementation project(':attendance')
     implementation project(':class')
     implementation project(':set')
+    implementation project(':eleClassSdk-release')
 
 }

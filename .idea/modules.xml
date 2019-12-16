@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/attendance/attendance.iml" filepath="$PROJECT_DIR$/attendance/attendance.iml" />
       <module fileurl="file://$PROJECT_DIR$/class/class.iml" filepath="$PROJECT_DIR$/class/class.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eleClassSdk-release/eleClassSdk-release.iml" filepath="$PROJECT_DIR$/eleClassSdk-release/eleClassSdk-release.iml" />
       <module fileurl="file://$PROJECT_DIR$/generalui/generalui.iml" filepath="$PROJECT_DIR$/generalui/generalui.iml" />
       <module fileurl="file://$PROJECT_DIR$/home/home.iml" filepath="$PROJECT_DIR$/home/home.iml" />
       <module fileurl="file://$PROJECT_DIR$/mvp/mvp.iml" filepath="$PROJECT_DIR$/mvp/mvp.iml" />
