@@ -1,11 +1,13 @@
 package com.electronclass.electronclass.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,14 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
-import com.cncoderx.wheelview.WheelView;
 import com.electronclass.aclass.ClassFragment;
 import com.electronclass.application.ApplicationFragment;
 import com.electronclass.attendance.AttendanceFragment;
@@ -34,7 +33,6 @@ import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.EventRight;
 import com.electronclass.common.event.EventTime;
 import com.electronclass.common.util.DateUtil;
-import com.electronclass.common.util.StringUitl;
 import com.electronclass.common.util.Tools;
 import com.electronclass.electronclass.AppApplication;
 import com.electronclass.electronclass.BuildConfig;
@@ -46,14 +44,11 @@ import com.electronclass.electronclass.presenter.MainPresenter;
 import com.electronclass.home.HomeFragment;
 import com.electronclass.pda.mvp.entity.Inform;
 import com.electronclass.set.login.LoginFragment;
-import com.hod.eleClassSdk.HodSdkHelper;
 import com.tencent.bugly.Bugly;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -326,7 +321,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 跳转到设置界面
      */
     private void setting() {
-        HodSdkHelper.getInstance().toSettings( this );
+        startActivity(new Intent( Settings.ACTION_SETTINGS));
     }
 
 

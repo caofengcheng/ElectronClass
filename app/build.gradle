@@ -8,8 +8,8 @@ android {
         }
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 15
-        versionName "2.0.0.9"
+        versionCode 16
+        versionName "2.0.0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         multiDexKeepProguard file('multiDexKeep.pro')
@@ -114,7 +114,6 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
         exclude 'libpl_droidsonroids_gif.so'
-        exclude 'lib/armeabi-v7a/libserial_port.so'
     }
 }
 
@@ -140,6 +139,5 @@ dependencies {
     implementation project(':attendance')
     implementation project(':class')
     implementation project(':set')
-    implementation project(':eleClassSdk-release')
 
 }

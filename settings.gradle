@@ -1,1 +1,1 @@
-include ':app', ':common', ':mvp', ':home', ':application', ':class', ':attendance', ':set', ':generalui', ':eleClassSdk-release'
+include ':app', ':common', ':mvp', ':home', ':application', ':class', ':attendance', ':set', ':generalui'
