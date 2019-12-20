@@ -215,7 +215,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         /**
          * 点击校园logo弹出密码框
          */
-        binding.schoolLogo.setOnClickListener( v -> continuousClick() );
+        binding.toSettingView.setOnClickListener( v -> continuousClick() );
     }
 
 

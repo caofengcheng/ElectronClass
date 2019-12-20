@@ -24,6 +24,7 @@ import com.electronclass.common.util.GlideCacheUtil;
 import com.electronclass.common.util.PowerOnOffManagerUtil;
 import com.electronclass.common.util.ReadThreadUtil;
 import com.electronclass.common.util.SerialportManager;
+import com.electronclass.common.util.SharedPreferencesUtil;
 import com.electronclass.common.util.Tools;
 import com.electronclass.electronclass.activity.MainActivity;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -67,6 +68,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     public void onCreate() {
         super.onCreate();
 //        LeakCanary.install( this );
+        SharedPreferencesUtil.getInstance( this,"AppApplication" );
         eventTime();
         getBuildConfig();
         initEcardNo();
@@ -114,18 +116,20 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 设置考勤打开时间
      */
     private void eventTime() {
-        if (StringUtils.isEmpty( GlobalParam.getEventTime() )) {
+        if (StringUtils.isEmpty( (SharedPreferencesUtil.getData( GlobalParam.EVENTTIME, "07:50" )).toString() )) {
             GlobalParam.setEventTime( "07:50" );
+        } else {
+            GlobalParam.setEventTime((SharedPreferencesUtil.getData( GlobalParam.EVENTTIME, "07:50" )).toString());
         }
     }
 
     /**
      * 设置班牌号
      */
-    private void setEcardNo(){
-        if (StringUtils.isEmpty(GlobalParam.getEcardNo())){
-            String macAddress = MacAddress.getMacAddress(this);
-            GlobalParam.setEcardNo(StringUtils.isNotEmpty(macAddress)?macAddress:MacAddress.getDeviceMacAddrress());
+    private void setEcardNo() {
+        if (StringUtils.isEmpty( GlobalParam.getEcardNo() )) {
+            String macAddress = MacAddress.getMacAddress( this );
+            GlobalParam.setEcardNo( StringUtils.isNotEmpty( macAddress ) ? macAddress : MacAddress.getDeviceMacAddrress() );
         }
     }
 

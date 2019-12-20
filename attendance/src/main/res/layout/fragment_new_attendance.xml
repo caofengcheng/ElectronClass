@@ -10,7 +10,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="1110dp"
         android:layout_height="match_parent"
-        android:id="@+id/attendanceView">
+        android:id="@+id/attendanceView"
+        android:background="#f7f6ff">
 
 
         <TextView

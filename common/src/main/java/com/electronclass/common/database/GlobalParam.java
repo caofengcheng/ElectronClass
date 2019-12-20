@@ -20,7 +20,7 @@ public class GlobalParam {
     public static String UPDATE_DUTY      = "UPDATE_DUTY";
     public static String UPDATE_DUTY_ITEM = "UPDATE_DUTY_ITEM";
 
-    public static String APPURL = "APPURL";
+    public static String APPURL     = "APPURL";
     public static String FoodAppUrl = "http://jjez.yksmart2.com:8388/catering/";
 
     /**
@@ -66,6 +66,8 @@ public class GlobalParam {
 
 
     public static String toSettingPwd = "!@#TZjt123";
+
+    public static String EVENTTIME = "EVENTTIME";
 
 
     public static String getCardType() {

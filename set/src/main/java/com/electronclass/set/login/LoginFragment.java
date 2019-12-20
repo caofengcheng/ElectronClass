@@ -21,6 +21,7 @@ import com.electronclass.common.base.BaseViewHolder;
 import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.event.EventTime;
 import com.electronclass.common.util.KeyboardUtils;
+import com.electronclass.common.util.SharedPreferencesUtil;
 import com.electronclass.common.util.Tools;
 import com.electronclass.generalui.WaitingDialogUtil;
 import com.electronclass.pda.mvp.entity.ClassItem;
@@ -236,6 +237,7 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
             public void onClick(View v) {
                 binding.setWindow.attendanceTime.setText( wl_hour.getCurrentItem() + ":" + wl_min.getCurrentItem() );
                 GlobalParam.setEventTime( wl_hour.getCurrentItem() + ":" + wl_min.getCurrentItem() );
+                SharedPreferencesUtil.putData( GlobalParam.EVENTTIME, wl_hour.getCurrentItem() + ":" + wl_min.getCurrentItem() );
                 popupWindow.dismiss();
                 binding.setWindow.constraintLayout.setVisibility( View.VISIBLE );
                 EventBus.getDefault().post( new EventTime() );
