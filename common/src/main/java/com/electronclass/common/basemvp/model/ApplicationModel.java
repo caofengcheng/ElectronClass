@@ -23,33 +23,33 @@ public class ApplicationModel extends BaseModel implements ApplicationContract.M
 
     @Override
     public void getClassAndSchool(Context context) {
-        RestManager.getRestApi().getClassAndSchool( MacAddress.ECARDNO == null ? MacAddress.getMacAddress(context) : MacAddress.ECARDNO )
+        RestManager.getRestApi().getClassAndSchool( MacAddress.ECARDNO == null ? MacAddress.getMacAddress( context ) : MacAddress.ECARDNO )
 //        RestManager.getRestApi().getClassAndSchool( Integer.parseInt(  MacAddress.getMacAddress() ))
-                .compose( RxComposer.composeSingle())
-                .subscribe(new BaseSingle<ServiceResponse<ClassMessage>>(compositeDisposable) {
+                .compose( RxComposer.composeSingle() )
+                .subscribe( new BaseSingle<ServiceResponse<ClassMessage>>( compositeDisposable ) {
                     @Override
                     public void onSuccess(ServiceResponse<ClassMessage> result) {
                         if (result.getCode().equals( "200" )) {
-                            mPresenter.onClassAndSchool( result.getData().getClassInfo(), result.getData().getSchoolInfo(),result.getData().getEcardNo() );
-                        }else {
+                            mPresenter.onClassAndSchool( result.getData().getClassInfo(), result.getData().getSchoolInfo(), result.getData().getEcardNo() );
+                        } else {
                             mPresenter.onError( result.getMsg() );
                         }
                     }
 
                     @Override
                     public void onFailure(Throwable e, String errorMsg) {
-                        mPresenter.onError(errorMsg);
+                        mPresenter.onError( errorMsg );
                     }
-                });
+                } );
 
     }
 
     @Override
     public void getCardAttendance(String studentCardNo) {
         int islate = 0;
-        logger.info( "打卡时间："+ DateUtil.getNowDate(DateUtil.DatePattern.ONLY_HOUR_MINUTE));
-        logger.info( "考勤时间：" + GlobalParam.getEventTime());
-        switch (DateUtil.getNowDate(DateUtil.DatePattern.ONLY_HOUR_MINUTE).compareTo( GlobalParam.getEventTime() )){
+        logger.info( "打卡时间：" + DateUtil.getNowDate( DateUtil.DatePattern.ONLY_HOUR_MINUTE ) );
+        logger.info( "考勤时间：" + GlobalParam.getEventTime() );
+        switch (DateUtil.getNowDate( DateUtil.DatePattern.ONLY_HOUR_MINUTE ).compareTo( GlobalParam.getEventTime() )) {
             case -1:
                 islate = 0;
                 break;
@@ -60,26 +60,19 @@ public class ApplicationModel extends BaseModel implements ApplicationContract.M
                 islate = 1;//迟到
                 break;
         }
-        logger.info( "是否迟到：" + islate);
-        RestManager.getRestApi().getCardAttendance( GlobalParam.getEcardNo(),studentCardNo, DateUtil.getNowDate(DateUtil.DatePattern.ALL_TIME),islate )
-                .compose(  RxComposer.<ServiceResponse>composeSingle() )
-                .subscribe(new BaseSingle<ServiceResponse>(compositeDisposable) {
+        logger.info( "是否迟到：" + islate );
+        RestManager.getRestApi().getCardAttendance( GlobalParam.getEcardNo(), studentCardNo, DateUtil.getNowDate( DateUtil.DatePattern.ALL_TIME ), islate )
+                .compose( RxComposer.<ServiceResponse>composeSingle() )
+                .subscribe( new BaseSingle<ServiceResponse>( compositeDisposable ) {
                     @Override
                     public void onSuccess(ServiceResponse result) {
-                        if (result.getCode().equals( "200" ))
-                        {
-                            mPresenter.onCardAttendance( true );
-                            return;
-                        }else {
-                            mPresenter.onCardAttendance( false );
-                        }
-
+                        mPresenter.onCardAttendance( result.getMsg() );
                     }
 
                     @Override
                     public void onFailure(Throwable e, String errorMsg) {
-                        mPresenter.onError(errorMsg);
+                        mPresenter.onError( errorMsg );
                     }
-                });
+                } );
     }
 }

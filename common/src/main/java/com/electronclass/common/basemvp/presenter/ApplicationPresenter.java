@@ -25,7 +25,7 @@ public class ApplicationPresenter extends BasePresenter<ApplicationContract.Mode
 
     @Override
     public void getClassAndSchool(Context context) {
-        mModel.getClassAndSchool(context);
+        mModel.getClassAndSchool( context );
     }
 
     @Override
@@ -42,8 +42,8 @@ public class ApplicationPresenter extends BasePresenter<ApplicationContract.Mode
     }
 
     @Override
-    public void onCardAttendance(boolean sure) {
-        mView.onCardAttendance( sure );
+    public void onCardAttendance(String msg) {
+        mView.onCardAttendance( msg );
     }
 
 }

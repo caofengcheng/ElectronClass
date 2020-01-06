@@ -51,14 +51,7 @@ public class ApplicationFragment extends Fragment {
         AppItem appItem = new AppItem();
         appItem.setName( "智腾食堂" );
         appItem.setCode( AppModule.FOOD );
-        appItem.setImage( R.drawable.food );
-//
-//        AppItem appItem1 = new AppItem();
-//        appItem1.setName( "添加应用" );
-//        appItem1.setCode( AppModule.MORE );
-//        appItem1.setImage( R.drawable.add );
         appItems.add( appItem );
-//        appItems.add( appItem1 );
         setAdapter();
     }
 

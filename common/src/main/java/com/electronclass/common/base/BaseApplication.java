@@ -2,6 +2,7 @@ package com.electronclass.common.base;
 
 
 import android.app.Application;
+import android.content.Context;
 
 import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.util.InitUtil;
@@ -23,6 +24,7 @@ public abstract class BaseApplication<T extends BasePresenterInterface> extends 
     private static Logger              logger      = LoggerFactory.getLogger( BaseApplication.class );
     protected      CompositeDisposable mDisposable = new CompositeDisposable();
     protected      T                   mPresenter;
+    public static  Context             context;
 
     public static BaseApplication getInstance() {
         return mInstance;
@@ -31,11 +33,12 @@ public abstract class BaseApplication<T extends BasePresenterInterface> extends 
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
         initInstance();
         printBootLog();
         InitUtil.init();
         initRest();
-        MacAddress.getMacAddress(this);
+        MacAddress.getMacAddress( this );
         init();
     }
 

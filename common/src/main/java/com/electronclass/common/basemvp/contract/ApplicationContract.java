@@ -17,7 +17,7 @@ public interface ApplicationContract {
 
     interface View extends BaseView {
         void onClassAndSchool();
-        void onCardAttendance(boolean sure);
+        void onCardAttendance(String msg);
     }
 
     interface Presenter extends BasePresenterInterface<View> {
@@ -25,6 +25,6 @@ public interface ApplicationContract {
         void onClassAndSchool(ClassInfo classMessage, SchoolInfo schoolInfo,String ecardNo);
 
         void getCardAttendance(String studentCardNo);
-        void onCardAttendance(boolean sure);
+        void onCardAttendance(String msg);
     }
 }

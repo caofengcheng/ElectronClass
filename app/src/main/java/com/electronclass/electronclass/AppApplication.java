@@ -97,12 +97,8 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     }
 
     @Override
-    public void onCardAttendance(boolean sure) {
-        if (sure) {
-            Tools.displayToast( "考勤打卡成功" );
-        } else {
-            Tools.displayToast( "考勤打卡失败，请重新刷卡" );
-        }
+    public void onCardAttendance(String msg) {
+        Tools.displayToast( msg);
         bulb.b( false );
     }
 
