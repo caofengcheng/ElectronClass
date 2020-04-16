@@ -8,32 +8,35 @@ import com.electronclass.pda.mvp.entity.TeacherInfo;
  * 存放全局变量
  */
 public class GlobalParam {
-    public static SchoolInfo  schoolInfo;
-    public static ClassInfo   classInfo;
+    public static SchoolInfo schoolInfo;
+    public static ClassInfo classInfo;
     public static TeacherInfo teacherInfo;
-    public static String      ecardNo; //设备号
-    public static String      eventTime;//考勤时间
-    public static String      pUrl = "http://zteng-1258264962.cos.ap-shanghai.myqcloud.com/classBrand/elegant/";//图片地址
+    public static String ecardNo; //设备号
+    public static String eventTime;//考勤时间
+    public static String pUrl = "http://zteng-1258264962.cos.ap-shanghai.myqcloud.com/classBrand/elegant/";//图片地址
 
-    public static String TO_DUTY          = "TO_DUTY";
-    public static String ADD_DUTY         = "ADD_DUTY";
-    public static String UPDATE_DUTY      = "UPDATE_DUTY";
+    public static String TO_DUTY = "TO_DUTY";
+    public static String ADD_DUTY = "ADD_DUTY";
+    public static String UPDATE_DUTY = "UPDATE_DUTY";
     public static String UPDATE_DUTY_ITEM = "UPDATE_DUTY_ITEM";
 
-    public static String APPURL     = "APPURL";
-    public static String FoodAppUrl = "http://jjez.yksmart2.com:8388/catering/";
+    public static String APPURL = "APPURL";
+    public static String FoodAppUrl = "http://jjez.yksmart2.com:8388/catering/";//智腾食堂
+    public static String DYH5 = "http://io.ztengit.com/dyH5/index.html?param=" +
+            "{\"schoolId\":\"" + getSchoolInfo() != null ? schoolInfo.getSchoolId() : "" + "\",\"departId\":\"" + getClassInfo() != null ? classInfo.getClassId() : "" + "\"}";//德育h5
+
 
     /**
      * 全量更新ID
      */
-    public static String MULAN_UPDATEID      = "b1896a9375";
+    public static String MULAN_UPDATEID = "b1896a9375";
     public static String HENGHONGDA_UPDATEID = "6f5867655a";
 
 
     /**
      * 刷卡类型
      */
-    public static String cardType     = "MAINACTIVITY";
+    public static String cardType = "MAINACTIVITY";
     /**
      * 主页刷卡
      */
