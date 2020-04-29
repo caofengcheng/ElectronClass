@@ -59,9 +59,8 @@ import java.util.TimerTask;
 public class MainActivity extends BaseActivity<MainContract.Presenter> implements MainContract.View {
     private ActivityNewMainBinding            binding;
     private List<Fragment>                    fragmentList = new ArrayList<>();
-    private FragmentTabAdapter                fragmentTabAdapter;
     private boolean                           isGetSetting = false;
-    private CommonRecyclerViewAdapter<Inform> schoolInfromAdapter;
+    private CommonRecyclerViewAdapter<Inform> schoolInformAdapter;
     private Timer                             timer;
     private int                               timeout      = 60 * 60 * 1000;
     private int                               COUNTS       = 4;// 点击次数
@@ -108,7 +107,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
                     .load( GlobalParam.getSchoolInfo().getLogo() )
                     .into( binding.schoolLogo );
             binding.schoolName.setText( GlobalParam.getSchoolInfo() == null ? "" : GlobalParam.getSchoolInfo().getName() );
-            getDatas();
+            getDates();
         } );
 
         /**
@@ -173,7 +172,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
             binding.className.setText( GlobalParam.getClassInfo().getClassName() );
 
         if (GlobalParam.getSchoolInfo() != null)
-            binding.schoolName.setText( GlobalParam.getSchoolInfo() == null ? "" : GlobalParam.getSchoolInfo().getName() );
+            binding.schoolName.setText( GlobalParam.getSchoolInfo().getName() );
 
 
     }
@@ -203,8 +202,8 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         if (inform == null)
             return;
         if (inform.get( 0 ).getType() != 0) {
-            schoolInfromAdapter.setData( inform );
-            schoolInfromAdapter.notifyDataSetChanged();
+            schoolInformAdapter.setData( inform );
+            schoolInformAdapter.notifyDataSetChanged();
         }
     }
 
@@ -222,7 +221,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
     /**
      * 调用接口
      */
-    private void getDatas() {
+    private void getDates() {
         if (GlobalParam.getEcardNo() != null && isGetSetting) {
             new Timer().schedule( new TimerTask() {
                 @Override
@@ -275,7 +274,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
 
 
     private void setFragment() {
-        fragmentTabAdapter = new FragmentTabAdapter( this, fragmentList, R.id.frameLayout, binding.radio );
+        FragmentTabAdapter fragmentTabAdapter = new FragmentTabAdapter(this, fragmentList, R.id.frameLayout, binding.radio);
     }
 
     /**
@@ -306,13 +305,13 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 设置校园通知
      */
     private void setSchoolinform() {
-        schoolInfromAdapter = new CommonRecyclerViewAdapter<Inform>( com.electronclass.home.R.layout.school_item ) {
+        schoolInformAdapter = new CommonRecyclerViewAdapter<Inform>( com.electronclass.home.R.layout.school_item ) {
             @Override
             public void convert(com.electronclass.common.base.BaseViewHolder baseViewHolder, Inform item) {
                 baseViewHolder.setText( com.electronclass.home.R.id.schoolText, item.getText() );
             }
         };
-        schoolInfromAdapter.bindRecyclerView( binding.schoolRecycler, new LinearLayoutManager(
+        schoolInformAdapter.bindRecyclerView( binding.schoolRecycler, new LinearLayoutManager(
                 this, LinearLayoutManager.VERTICAL, false ) );
     }
 

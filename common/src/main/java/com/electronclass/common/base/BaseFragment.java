@@ -23,7 +23,7 @@ public abstract class BaseFragment<T extends BasePresenterInterface> extends Fra
     protected Logger              logger      = LoggerFactory.getLogger(getClass());
     protected CompositeDisposable mDisposable = new CompositeDisposable();
     protected T                   mPresenter;
-    protected Activity            aty;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +52,6 @@ public abstract class BaseFragment<T extends BasePresenterInterface> extends Fra
     }
 
     protected void init(View view) {
-        aty=getActivity();
         mPresenter = getPresenter();
         mPresenter.setView(this);
         initView(view);

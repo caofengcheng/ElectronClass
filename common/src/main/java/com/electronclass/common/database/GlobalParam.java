@@ -1,8 +1,10 @@
 package com.electronclass.common.database;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.electronclass.pda.mvp.entity.ClassInfo;
 import com.electronclass.pda.mvp.entity.SchoolInfo;
 import com.electronclass.pda.mvp.entity.TeacherInfo;
+
 
 /**
  * 存放全局变量
@@ -21,7 +23,9 @@ public class GlobalParam {
     public static String UPDATE_DUTY_ITEM = "UPDATE_DUTY_ITEM";
 
     public static String APPURL     = "APPURL";
-    public static String FoodAppUrl = "http://jjez.yksmart2.com:8388/catering/";
+    public static String FoodAppUrl = "http://jjez.yksmart2.com:8388/catering/";//智腾食堂
+    public static String DYH5       = "http://io.ztengit.com/dyH5/index.html?param=";//德育h5
+
 
     /**
      * 全量更新ID
@@ -125,6 +129,5 @@ public class GlobalParam {
     public static String[] getMINUTE() {
         return MINUTE;
     }
-
 
 }
