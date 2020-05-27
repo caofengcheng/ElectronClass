@@ -6,9 +6,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.electronclass.application.databinding.FragmentApplicationBinding;
 import com.electronclass.application.web.WebActivity;
 import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
@@ -16,6 +18,7 @@ import com.electronclass.common.base.BaseViewHolder;
 import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.module.AppModule;
 import com.electronclass.pda.mvp.entity.AppItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,9 +56,9 @@ public class ApplicationFragment extends Fragment {
         appItem.setImage( R.drawable.food );
 
         AppItem appItem1 = new AppItem();
-        appItem1.setName( "德育系统" );
+        appItem1.setName( "树莓校园德育" );
         appItem1.setCode( AppModule.dyH5 );
-        appItem1.setImage( R.drawable.food );
+        appItem1.setImage( R.drawable.shumei );
 
         appItems.add( appItem );
         appItems.add( appItem1 );
@@ -93,6 +96,7 @@ public class ApplicationFragment extends Fragment {
                 String schoolId = GlobalParam.getSchoolInfo() == null ? "" : GlobalParam.getSchoolInfo().getSchoolId();
                 String classId = GlobalParam.getClassInfo() == null ? "" : GlobalParam.getClassInfo().getClassId();
                 String url = GlobalParam.DYH5 + "{\"schoolId\":\"" + schoolId + "\",\"departId\":\"" + classId + "\"}";
+                Log.i( "h5--url:", url );
                 intent.putExtra( GlobalParam.APPURL, url );
                 startActivity( intent );
                 break;

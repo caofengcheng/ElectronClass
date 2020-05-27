@@ -1,17 +1,15 @@
 package com.electronclass.electronclass;
 
-import android.annotation.SuppressLint;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.RemoteException;
 
 import com.android.xhapimanager.XHApiManager;
-import com.blankj.utilcode.util.NetworkUtils;
 import com.electronclass.common.base.BaseApplication;
 import com.electronclass.common.basemvp.contract.ApplicationContract;
 import com.electronclass.common.basemvp.presenter.ApplicationPresenter;
 import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
-import com.electronclass.common.database.InformType;
 import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.Bulb;
 import com.electronclass.common.event.CardType;
@@ -26,10 +24,10 @@ import com.electronclass.common.util.ReadThreadUtil;
 import com.electronclass.common.util.SerialportManager;
 import com.electronclass.common.util.SharedPreferencesUtil;
 import com.electronclass.common.util.Tools;
-import com.electronclass.electronclass.activity.MainActivity;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipeline;
-import com.squareup.leakcanary.LeakCanary;
+import com.hikvision.dmb.SwingCardCallback;
+import com.hikvision.dmb.util.InfoUtilApi;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -37,16 +35,14 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 
 public class AppApplication extends BaseApplication<ApplicationContract.Presenter> implements ApplicationContract.View, SerialportManager.SerialportListener {
-    protected Logger         logger = LoggerFactory.getLogger( getClass() );
-    private   TopEvent       topEvent;
-    private   SchoolInfo     schoolInfo;
-    private   Bulb           bulb;
-    private   ReadThreadUtil readThreadUtil;
+    protected Logger                 logger = LoggerFactory.getLogger( getClass() );
+    private   TopEvent               topEvent;
+    private   SchoolInfo             schoolInfo;
+    private   Bulb                   bulb;
+    private   ReadThreadUtil         readThreadUtil;
+    private   SwingCardCallback.Stub stub;
 
     public void setTopEvent(TopEvent topEvent) {
         this.topEvent = topEvent;
@@ -68,7 +64,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     public void onCreate() {
         super.onCreate();
 //        LeakCanary.install( this );
-        SharedPreferencesUtil.getInstance( this,"AppApplication" );
+        SharedPreferencesUtil.getInstance( this, "AppApplication" );
         eventTime();
         getBuildConfig();
         initEcardNo();
@@ -98,7 +94,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
 
     @Override
     public void onCardAttendance(String msg) {
-        Tools.displayToast( msg);
+        Tools.displayToast( msg );
         bulb.b( false );
     }
 
@@ -115,7 +111,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         if (StringUtils.isEmpty( (SharedPreferencesUtil.getData( GlobalParam.EVENTTIME, "07:50" )).toString() )) {
             GlobalParam.setEventTime( "07:50" );
         } else {
-            GlobalParam.setEventTime((SharedPreferencesUtil.getData( GlobalParam.EVENTTIME, "07:50" )).toString());
+            GlobalParam.setEventTime( (SharedPreferencesUtil.getData( GlobalParam.EVENTTIME, "07:50" )).toString() );
         }
     }
 
@@ -215,6 +211,14 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
                     Tools.displayToast( "读取出错，不兼容的卡" );
                 }
             } );
+        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
+            stub = new SwingCardCallback.Stub() {
+                @Override
+                public void getInfo(String s) {
+                    sendCardNumber( s );
+                }
+            };
+            InfoUtilApi.swingCard( stub );
         }
     }
 
@@ -229,6 +233,10 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
             logger.debug( "关闭恒宏达刷卡" );
             if (readThreadUtil != null)
                 readThreadUtil.stopReadThread();
+        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
+            if (stub != null) {
+                InfoUtilApi.unregisterSwingCard( stub );
+            }
         }
     }
 

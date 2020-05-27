@@ -3,7 +3,9 @@ package com.electronclass.application.web;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -43,17 +45,24 @@ public class WebActivity extends AppCompatActivity {
 
     private void setWeb() {
         String url = getIntent().getStringExtra( GlobalParam.APPURL );
-        binding.webView.loadUrl( url );
+        Log.i( "webActivity--url:", url );
+
         binding.webView.setWebViewClient( new WebViewClient() );
         //得到webview设置
         WebSettings webSettings = binding.webView.getSettings();
         //允许使用javascript
         webSettings.setJavaScriptEnabled( true );
-        binding.webView.getSettings().setSupportZoom( true );
-        binding.webView.getSettings().setBuiltInZoomControls( true );
+        webSettings.setSupportZoom( true );
+        webSettings.setBuiltInZoomControls( true );
+
+        binding.webView.loadUrl( url );
+        binding.webView.setWebChromeClient( new WebChromeClient() {
+
+        } );
         binding.webView.setWebViewClient( new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
+                Log.i( "WebViewClient:", url );
                 view.loadUrl( url );
                 return true;
             }

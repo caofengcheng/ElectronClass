@@ -8,8 +8,8 @@ android {
         }
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 17
-        versionName "2.0.0.11"
+        versionCode 19
+        versionName "2.0.0.13"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         multiDexKeepProguard file('multiDexKeep.pro')
@@ -76,6 +76,11 @@ android {
             buildConfigField "String", "GUARD_PACKAGE", '"henghongda"'
             buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/henghongda/Logs"'
         }
+        haikang {
+            dimension = 'main'
+            buildConfigField "String", "GUARD_PACKAGE", '"haikang"'
+            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/haikang/Logs"'
+        }
     }
 
 
@@ -135,8 +140,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
-    implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+    //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'

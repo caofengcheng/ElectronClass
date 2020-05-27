@@ -12,6 +12,7 @@ public class GlobalPage {
     public static       String pageConfig     = "";
     public static       String MULAN          = "mulan";
     public static       String HENGHONGDA     = "henghongda";
+    public static       String HK     = "haikang";//海康设备
     public static       long   updateDutyTime = 0;
     public static       String updateDutyPsw  = null;
 }

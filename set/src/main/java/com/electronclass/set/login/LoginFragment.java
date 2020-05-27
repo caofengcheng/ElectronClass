@@ -348,6 +348,9 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
 
     @Override
     public void onClassList(List<ClassItem> classItems) {
+        if (!classItemList.isEmpty()) {
+            classItemList.clear();
+        }
         classItemList.addAll( classItems );
         classAdapter.setData( classItemList );
         classAdapter.notifyDataSetChanged();

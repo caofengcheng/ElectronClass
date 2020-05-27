@@ -57,27 +57,32 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
                     @Override
                     public void onSuccess(ServiceResponse<List<Jurisdiction>> result) {
                         if (result.getCode().equals( "200" ) && result.getData() != null) {
-                            switch (result.getData().get(0).getPermission()) {
-                                case 0:
-                                    mPresenter.onlogin( false, null );
-                                    mPresenter.onError( "没有权限!" );
-                                    break;
-                                case 15:
-                                    mPresenter.onlogin( true, result.getData().get(0).getTeacherInfo() );
-                                    mPresenter.onError( "班主任登录!" );
-                                    break;
-                                case 240:
-                                    mPresenter.onlogin( true, result.getData().get(0).getTeacherInfo() );
-                                    mPresenter.onError( "校管理员登录!" );
-                                    break;
-                                case 255:
-                                    mPresenter.onlogin( true, result.getData().get(0).getTeacherInfo() );
-                                    mPresenter.onError( "班主任和管理员登录!" );
-                                    break;
-                            }
-                            GlobalParam.setTeacherInfo( result.getData().get(0).getTeacherInfo() );
+                            for (Jurisdiction j : result.getData()){
+                                //查询当前学校对应的数据
+                                if (j.getTeacherInfo().getSchoolId() == GlobalParam.getSchoolInfo().getSchoolId()){
+                                    switch (j.getPermission()) {
+                                        case 0:
+                                            mPresenter.onlogin( false, null );
+                                            mPresenter.onError( "没有权限!" );
+                                            break;
+                                        case 15:
 
-                            return;
+                                            mPresenter.onlogin( true, j.getTeacherInfo() );
+                                            mPresenter.onError( "班主任登录!" );
+                                            break;
+                                        case 240:
+                                            mPresenter.onlogin( true, j.getTeacherInfo() );
+                                            mPresenter.onError( "校管理员登录!" );
+                                            break;
+                                        case 255:
+                                            mPresenter.onlogin( true, j.getTeacherInfo() );
+                                            mPresenter.onError( "班主任和管理员登录!" );
+                                            break;
+                                    }
+                                    GlobalParam.setTeacherInfo( j.getTeacherInfo() );
+                                    return;
+                                }
+                            }
                         } else {
                             mPresenter.onlogin( false, null );
                             mPresenter.onError( result.getMsg() );
