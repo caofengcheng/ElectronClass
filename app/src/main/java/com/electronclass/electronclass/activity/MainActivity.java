@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.electronclass.aclass.ClassFragment;
@@ -45,10 +46,12 @@ import com.electronclass.home.HomeFragment;
 import com.electronclass.pda.mvp.entity.Inform;
 import com.electronclass.set.login.LoginFragment;
 import com.tencent.bugly.Bugly;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -274,7 +277,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
 
 
     private void setFragment() {
-        FragmentTabAdapter fragmentTabAdapter = new FragmentTabAdapter(this, fragmentList, R.id.frameLayout, binding.radio);
+          new FragmentTabAdapter( this, fragmentList, R.id.frameLayout, binding.radio );
     }
 
     /**
@@ -320,7 +323,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 跳转到设置界面
      */
     private void setting() {
-        startActivity(new Intent( Settings.ACTION_SETTINGS));
+        startActivity( new Intent( Settings.ACTION_SETTINGS ) );
     }
 
 
@@ -348,10 +351,10 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         settingWindow = new PopupWindow( popupWindowView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true );
         settingWindow.setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
         settingWindow.setOutsideTouchable( false );
-        TextView         tv         = popupWindowView.findViewById( R.id.textView12 );
-        EditText         settingPwd = popupWindowView.findViewById( R.id.settingPwd );
-        TextView           sure       = popupWindowView.findViewById( R.id.sure );
-        ConstraintLayout setWindowCl       = popupWindowView.findViewById( R.id.setWindowCl );
+        TextView         tv          = popupWindowView.findViewById( R.id.textView12 );
+        EditText         settingPwd  = popupWindowView.findViewById( R.id.settingPwd );
+        TextView         sure        = popupWindowView.findViewById( R.id.sure );
+        ConstraintLayout setWindowCl = popupWindowView.findViewById( R.id.setWindowCl );
         tv.setVisibility( View.GONE );
 
         sure.setOnClickListener( v -> {
@@ -359,10 +362,10 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
             if (StringUtils.isEmpty( pwd )) {
                 Tools.displayToast( "请输入密码" );
             } else {
-                if (org.apache.commons.lang3.StringUtils.contains( GlobalParam.toSettingPwd,pwd)){
+                if (org.apache.commons.lang3.StringUtils.contains( GlobalParam.toSettingPwd, pwd )) {
                     settingWindow.dismiss();
                     setting();
-                }else {
+                } else {
                     tv.setVisibility( View.VISIBLE );
                 }
             }

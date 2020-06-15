@@ -27,6 +27,7 @@ import com.electronclass.common.util.Tools;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipeline;
 import com.hikvision.dmb.SwingCardCallback;
+import com.hikvision.dmb.time.InfoTimeApi;
 import com.hikvision.dmb.util.InfoUtilApi;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +35,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class AppApplication extends BaseApplication<ApplicationContract.Presenter> implements ApplicationContract.View, SerialportManager.SerialportListener {
@@ -141,7 +146,19 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
             int[]                 weekdays              = {1, 1, 1, 1, 1, 1, 1};
             powerOnOffManagerUtil.setOffOrOn( this, startTime, endTime, weekdays );
             logger.info( "恒鸿达定时开关机已开启--offTime：" + endTime + "   onTime:" + startTime );
+        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
+            setTimeSwitch_HK();
         }
+    }
+
+    /**
+     * 设置海康定时开关机
+     */
+    private void setTimeSwitch_HK() {
+        String dateOffTime = DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00";
+        String dateOnTime  = DateUtil.tomorrow() + "-5-00";
+        logger.info( "海康定时开关机已开启--offTime：" + dateOffTime + "   onTime:" + dateOnTime );
+        InfoTimeApi.setTimeSwitch( Long.parseLong( dateOffTime ), Long.parseLong( dateOnTime ) );
     }
 
 
@@ -212,6 +229,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
                 }
             } );
         } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
+            logger.debug( "启动海康刷卡" );
             stub = new SwingCardCallback.Stub() {
                 @Override
                 public void getInfo(String s) {
@@ -234,6 +252,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
             if (readThreadUtil != null)
                 readThreadUtil.stopReadThread();
         } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
+            logger.debug( "关闭海康刷卡" );
             if (stub != null) {
                 InfoUtilApi.unregisterSwingCard( stub );
             }

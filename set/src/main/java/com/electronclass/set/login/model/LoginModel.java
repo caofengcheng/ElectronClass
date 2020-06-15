@@ -57,9 +57,9 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
                     @Override
                     public void onSuccess(ServiceResponse<List<Jurisdiction>> result) {
                         if (result.getCode().equals( "200" ) && result.getData() != null) {
-                            for (Jurisdiction j : result.getData()){
+                            for (Jurisdiction j : result.getData()) {
                                 //查询当前学校对应的数据
-                                if (j.getTeacherInfo().getSchoolId() == GlobalParam.getSchoolInfo().getSchoolId()){
+                                if (j.getTeacherInfo().getSchoolId().equals( GlobalParam.getSchoolInfo().getSchoolId() )) {
                                     switch (j.getPermission()) {
                                         case 0:
                                             mPresenter.onlogin( false, null );
@@ -77,6 +77,8 @@ public class LoginModel extends BaseModel implements LoginContract.Model {
                                         case 255:
                                             mPresenter.onlogin( true, j.getTeacherInfo() );
                                             mPresenter.onError( "班主任和管理员登录!" );
+                                            break;
+                                        default:
                                             break;
                                     }
                                     GlobalParam.setTeacherInfo( j.getTeacherInfo() );
