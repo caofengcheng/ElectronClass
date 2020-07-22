@@ -246,10 +246,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 全局更新
      */
     private void initBugly() {
-        if (BuildConfig.GUARD_PACKAGE == GlobalPage.MULAN) {
+        if (BuildConfig.GUARD_PACKAGE.equals(GlobalPage.MULAN)) {
             Bugly.init( getApplicationContext(), GlobalParam.MULAN_UPDATEID, false );
-        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HENGHONGDA) {
+        } else if (BuildConfig.GUARD_PACKAGE.equals(GlobalPage.HENGHONGDA)) {
             Bugly.init( getApplicationContext(), GlobalParam.HENGHONGDA_UPDATEID, false );
+        }else if(BuildConfig.GUARD_PACKAGE.equals(GlobalPage.HK)){
+            Bugly.init( getApplicationContext(), GlobalParam.HK_UPDATEID, false );
         }
     }
 

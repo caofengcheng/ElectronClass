@@ -32,6 +32,7 @@ public class GlobalParam {
      */
     public static String MULAN_UPDATEID      = "b1896a9375";
     public static String HENGHONGDA_UPDATEID = "6f5867655a";
+    public static String HK_UPDATEID = "c024855929";
 
 
     /**
