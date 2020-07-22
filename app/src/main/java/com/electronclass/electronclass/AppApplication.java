@@ -23,10 +23,12 @@ import com.electronclass.common.util.PowerOnOffManagerUtil;
 import com.electronclass.common.util.ReadThreadUtil;
 import com.electronclass.common.util.SerialportManager;
 import com.electronclass.common.util.SharedPreferencesUtil;
+import com.electronclass.common.util.StringUitl;
 import com.electronclass.common.util.Tools;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipeline;
 import com.hikvision.dmb.SwingCardCallback;
+import com.hikvision.dmb.time.InfoTimeApi;
 import com.hikvision.dmb.util.InfoUtilApi;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +36,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 
 public class AppApplication extends BaseApplication<ApplicationContract.Presenter> implements ApplicationContract.View, SerialportManager.SerialportListener {
@@ -141,6 +145,11 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
             int[]                 weekdays              = {1, 1, 1, 1, 1, 1, 1};
             powerOnOffManagerUtil.setOffOrOn( this, startTime, endTime, weekdays );
             logger.info( "恒鸿达定时开关机已开启--offTime：" + endTime + "   onTime:" + startTime );
+        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
+            Date dateOffTime = StringUitl.stringToDate(DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00");
+            Date dateOnTime = StringUitl.stringToDate(DateUtil.tomorrow() + "-5-00");
+            logger.info( "海康定时开关机已开启--dateOnTime：" + dateOnTime + "   dateOnTime:" + dateOnTime );
+            InfoTimeApi.setTimeSwitch (dateOffTime.getTime(),dateOnTime.getTime());
         }
     }
 
