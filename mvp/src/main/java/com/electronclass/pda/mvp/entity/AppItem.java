@@ -8,6 +8,12 @@ public class AppItem {
     private int code;
     private int image;
 
+    public AppItem(String name, int code, int image) {
+        this.name = name;
+        this.code = code;
+        this.image = image;
+    }
+
     public String getName() {
         return name;
     }

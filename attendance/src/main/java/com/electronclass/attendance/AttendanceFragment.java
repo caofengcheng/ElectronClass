@@ -78,7 +78,7 @@ public class AttendanceFragment extends BaseFragment<AttendanceContract.Presente
     @Override
     protected void initView(View view) {
         binding.today.setText( DateUtil.getNowYear() + "年" + DateUtil.getNowMonth() + "月" + DateUtil.getNowDay() + "日考勤" );
-        binding.data.setText( DateUtil.getNowYear() + "年" + DateUtil.getNowMonth() + "月" + DateUtil.getNowDay() + "日" );
+//        binding.data.setText( DateUtil.getNowYear() + "年" + DateUtil.getNowMonth() + "月" + DateUtil.getNowDay() + "日" );
         year = String.valueOf( DateUtil.getNowYear() );
         month = String.valueOf( DateUtil.getNowMonth() );
         day = String.valueOf( DateUtil.getNowDay() );
@@ -96,22 +96,22 @@ public class AttendanceFragment extends BaseFragment<AttendanceContract.Presente
 
     @Override
     protected void showData() {
-        binding.data.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimePop();
-            }
-        } );
+//        binding.data.setOnClickListener( new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                showTimePop();
+//            }
+//        } );
 
-        binding.search.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.getAttendance( year
-                        + "-" + month
-                        + "-" + day
-                        + "  00:00:00" );
-            }
-        } );
+//        binding.search.setOnClickListener( new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mPresenter.getAttendance( year
+//                        + "-" + month
+//                        + "-" + day
+//                        + "  00:00:00" );
+//            }
+//        } );
     }
 
     @Override
@@ -168,7 +168,7 @@ public class AttendanceFragment extends BaseFragment<AttendanceContract.Presente
                 year = wl_start_year.getCurrentItem();
                 month = wl_start_month.getCurrentItem();
                 day = wl_start_day.getCurrentItem();
-                binding.data.setText( year + "年" + month + "月" + day + "日" );
+//                binding.data.setText( year + "年" + month + "月" + day + "日" );
                 popupWindow.dismiss();
             }
         } );

@@ -51,7 +51,6 @@ android {
             exclude module: 'android'
         }
     }
-
     signingConfigs {
         //签名信息 可以自定义很多
         config {
@@ -63,26 +62,25 @@ android {
         }
     }
 
-    flavorDimensions 'main'
-    publishNonDefault true
-    productFlavors {
-        mulan {
-            dimension = 'main'
-            buildConfigField "String", "GUARD_PACKAGE", '"mulan"'
-            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/mulan/Logs"'
-        }
-        henghongda {
-            dimension = 'main'
-            buildConfigField "String", "GUARD_PACKAGE", '"henghongda"'
-            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/henghongda/Logs"'
-        }
-        haikang {
-            dimension = 'main'
-            buildConfigField "String", "GUARD_PACKAGE", '"haikang"'
-            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/haikang/Logs"'
-        }
-    }
-
+//    flavorDimensions 'main'
+//    publishNonDefault true
+//    productFlavors {
+//        mulan {
+//            dimension = 'main'
+//            buildConfigField "String", "GUARD_PACKAGE", '"mulan"'
+//            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/mulan/Logs"'
+//        }
+//        henghongda {
+//            dimension = 'main'
+//            buildConfigField "String", "GUARD_PACKAGE", '"henghongda"'
+//            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/henghongda/Logs"'
+//        }
+//        haikang {
+//            dimension = 'main'
+//            buildConfigField "String", "GUARD_PACKAGE", '"haikang"'
+//            buildConfigField "String", "DELETE_PATH2", '"/sdcard/electronclass/haikang/Logs"'
+//        }
+//    }
 
     buildTypes {
         debug {
@@ -99,7 +97,7 @@ android {
 
             android.applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    def fileName = "electornclass_${defaultConfig.versionName}_${name}.apk"
+                    def fileName = "electornclass_${defaultConfig.versionName}.apk"
                     def des = variant.getPackageApplicationProvider().get().outputDirectory.toPath().relativize(rootDir.toPath()).toFile()
                     outputFileName = new File("$des/app/build/outputs/apk/release", fileName)
                 }
@@ -150,6 +148,7 @@ dependencies {
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     api 'me.jessyan:autosize:1.1.2'//今日头条屏幕适配
     api 'com.blankj:utilcode:1.25.2'
+    implementation'com.superluo:textbannerview:1.0.4'//文字图片轮播
     implementation project(':common')
     implementation project(':mvp')
     implementation project(':home')

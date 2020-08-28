@@ -13,6 +13,10 @@ public class AppModule {
      */
     public static final int dyH5 = 2;
     /**
+     * 教室监控
+     */
+    public static final int VIDEO = 3;
+    /**
      * 更多
      */
     public static final int MORE = -1;

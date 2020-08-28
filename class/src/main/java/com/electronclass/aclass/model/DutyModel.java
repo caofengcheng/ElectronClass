@@ -24,24 +24,23 @@ public class DutyModel extends BaseModel implements DutyContract.Model {
 
     @Override
     public void getDuty() {
-        if (GlobalParam.getClassInfo() == null || StringUtils.isEmpty(  GlobalParam.getClassInfo().getClassId())){
+        if (GlobalParam.getClassInfo() == null || StringUtils.isEmpty(GlobalParam.getClassInfo().getClassId())) {
             mPresenter.onError("未绑定班级");
             return;
         }
 
         String date = DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY);
-        RestManager.getRestApi().getDuty( GlobalParam.getEcardNo(),null,GlobalParam.getClassInfo().getClassId(),date,1)
-                .compose(  RxComposer.<ServiceResponse<List<Duty>>>composeSingle() )
+        RestManager.getRestApi().getDuty(GlobalParam.getClassInfo().getClassId())
+                .compose(RxComposer.<ServiceResponse<List<Duty>>>composeSingle())
                 .subscribe(new BaseSingle<ServiceResponse<List<Duty>>>(compositeDisposable) {
                     @Override
                     public void onSuccess(ServiceResponse<List<Duty>> result) {
-                        if (!result.getCode().equals( "200" ))
-                        {
-                            mPresenter.onError( result.getMsg() );
+                        if (!result.getCode().equals("200")) {
+                            mPresenter.onError(result.getMsg());
                             return;
                         }
-                        if (result.getData() == null || result.getData().size() == 0){
-                            mPresenter.onError( "无值日数据" );
+                        if (result.getData() == null || result.getData().size() == 0) {
+                            mPresenter.onError("无值日数据");
                             return;
                         }
                         mPresenter.onDuty(result.getData());
@@ -52,5 +51,28 @@ public class DutyModel extends BaseModel implements DutyContract.Model {
                         mPresenter.onError(errorMsg);
                     }
                 });
+
+//        RestManager.getRestApi().getDuty( GlobalParam.getEcardNo(),null,GlobalParam.getClassInfo().getClassId(),date,1)
+//                .compose(  RxComposer.<ServiceResponse<List<Duty>>>composeSingle() )
+//                .subscribe(new BaseSingle<ServiceResponse<List<Duty>>>(compositeDisposable) {
+//                    @Override
+//                    public void onSuccess(ServiceResponse<List<Duty>> result) {
+//                        if (!result.getCode().equals( "200" ))
+//                        {
+//                            mPresenter.onError( result.getMsg() );
+//                            return;
+//                        }
+//                        if (result.getData() == null || result.getData().size() == 0){
+//                            mPresenter.onError( "无值日数据" );
+//                            return;
+//                        }
+//                        mPresenter.onDuty(result.getData());
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Throwable e, String errorMsg) {
+//                        mPresenter.onError(errorMsg);
+//                    }
+//                });
     }
 }

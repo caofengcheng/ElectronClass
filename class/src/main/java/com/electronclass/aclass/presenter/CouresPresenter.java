@@ -4,6 +4,7 @@ import com.electronclass.aclass.contract.CouresContract;
 import com.electronclass.aclass.model.CouresModel;
 import com.electronclass.pda.mvp.base.BasePresenter;
 import com.electronclass.pda.mvp.entity.Coures;
+import com.electronclass.pda.mvp.entity.CouresNode;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class CouresPresenter extends BasePresenter<CouresContract.Model, CouresC
     }
 
     @Override
-    public void onCoures(List<Coures> coures) {
+    public void onCoures(List<CouresNode> coures) {
          mView.onCoures( coures );
     }
 }

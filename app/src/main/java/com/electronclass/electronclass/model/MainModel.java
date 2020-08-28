@@ -1,11 +1,13 @@
 package com.electronclass.electronclass.model;
 
+import com.electronclass.common.database.GlobalParam;
 import com.electronclass.electronclass.contract.MainContract;
 import com.electronclass.electronclass.presenter.MainPresenter;
 import com.electronclass.pda.mvp.base.BaseModel;
 import com.electronclass.pda.mvp.base.BaseSingle;
 import com.electronclass.pda.mvp.base.RxComposer;
 import com.electronclass.pda.mvp.entity.Inform;
+import com.electronclass.pda.mvp.entity.InformPage;
 import com.electronclass.pda.mvp.entity.ServiceResponse;
 import com.electronclass.pda.mvp.rest.RestManager;
 
@@ -23,21 +25,21 @@ public class MainModel  extends BaseModel implements MainContract.Model {
     }
 
     @Override
-    public void getInform(String eCardNo, String userId, String departId, int type, int isAvaliable) {
-        RestManager.getRestApi().getInform(eCardNo,userId,departId,type,isAvaliable)
-                .compose(  RxComposer.<ServiceResponse<List<Inform>>>composeSingle() )
-                .subscribe(new BaseSingle<ServiceResponse<List<Inform>>>(compositeDisposable) {
+    public void getInform(String pageNo, String pageSize, int type) {
+        RestManager.getRestApi().getInform(GlobalParam.getClassInfo().getClassId(), pageNo, pageSize, type)
+                .compose(RxComposer.<ServiceResponse<InformPage>>composeSingle())
+                .subscribe(new BaseSingle<ServiceResponse<InformPage>>(compositeDisposable) {
                     @Override
-                    public void onSuccess(ServiceResponse<List<Inform>> result) {
-                        if (!result.getCode().equals( "200" ))
-                        {
-                            mPresenter.onError( result.getMsg() );
+                    public void onSuccess(ServiceResponse<InformPage> result) {
+                        if (!result.getCode().equals("200")) {
+                            mPresenter.onError(result.getMsg());
                             return;
                         }
-                        if (result.getData().size() == 0){
+                        if (result.getData().getRecords().size() == 0) {
+//                            mPresenter.onError( "无校园通知数据" );
                             return;
                         }
-                        mPresenter.onInform(result.getData());
+                        mPresenter.onInform(result.getData().getRecords());
                     }
 
                     @Override

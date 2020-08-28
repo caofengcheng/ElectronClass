@@ -4,6 +4,10 @@ import com.electronclass.home.activity.contract.ClassMienContract;
 import com.electronclass.home.activity.model.ClassMienModel;
 import com.electronclass.pda.mvp.base.BasePresenter;
 import com.electronclass.pda.mvp.entity.ClassMien;
+import com.electronclass.pda.mvp.entity.ClassMienMessage;
+import com.electronclass.pda.mvp.entity.ClassMienPage;
+
+import java.util.List;
 
 public class ClassMienPresenter extends BasePresenter<ClassMienContract.Model, ClassMienContract.View> implements ClassMienContract.Presenter {
     private int pageNum = 0;
@@ -36,12 +40,12 @@ public class ClassMienPresenter extends BasePresenter<ClassMienContract.Model, C
     }
 
     @Override
-    public void onClassMien(ClassMien classMien) {
+    public void onClassMien(ClassMienPage classMien) {
         this.pages = classMien.getTotal()/9;
         if (pageNum > 1) {
-            mView.addSheltermaterials(classMien.getData());
+            mView.addSheltermaterials(classMien.getRecords());
         } else {
-            mView.onClassMien(classMien.getData());
+            mView.onClassMien(classMien.getRecords());
         }
         if (pageNum >= pages) {
             mView.loadMoreEnd();

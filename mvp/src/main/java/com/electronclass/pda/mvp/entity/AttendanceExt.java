@@ -4,12 +4,12 @@ package com.electronclass.pda.mvp.entity;
  * 考勤扩展信息
  */
 public class AttendanceExt {
-    int id;
-    String classId;
-    String eventDate;//查询日期
-    int personNum;//应到人数
-    int attendanceNum;//实到人数（包含迟到打卡）
-    int lateNum; //迟到人数
+    private int id;
+    private String classId;
+    private  String eventDate;//查询日期
+    private  int personNum;//应到人数
+    private  int attendanceNum;//实到人数（包含迟到打卡）
+    private int lateNum; //迟到人数
 
     public int getId() {
         return id;

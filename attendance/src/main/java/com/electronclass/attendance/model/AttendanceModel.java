@@ -29,7 +29,7 @@ public class AttendanceModel extends BaseModel implements AttendanceContract.Mod
             mPresenter.onError("未绑定班级");
             return;
         }
-        RestManager.getRestApi().getAttendance( GlobalParam.getEcardNo(),null,GlobalParam.getClassInfo().getClassId(),eventDate)
+        RestManager.getRestApi().getAttendance( GlobalParam.getClassInfo().getClassId())
                 .compose(  RxComposer.<ServiceResponse<Attendance>>composeSingle() )
                 .subscribe(new BaseSingle<ServiceResponse<Attendance>>(compositeDisposable) {
                     @Override

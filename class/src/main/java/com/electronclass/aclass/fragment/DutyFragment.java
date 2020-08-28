@@ -23,6 +23,7 @@ import com.electronclass.pda.mvp.entity.Duty;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -289,7 +290,7 @@ public class DutyFragment extends BaseFragment<DutyContract.Presenter> implement
     private void toUpdate(Duty item) {
         Intent intent = new Intent( getActivity(), UpdateDutyActivity.class );
         intent.putExtra( GlobalParam.TO_DUTY, GlobalParam.UPDATE_DUTY );
-        intent.putExtra( GlobalParam.UPDATE_DUTY_ITEM, item );
+        intent.putExtra( GlobalParam.UPDATE_DUTY_ITEM, (Serializable) item);
         startActivityForResult( intent, 1 );
     }
 

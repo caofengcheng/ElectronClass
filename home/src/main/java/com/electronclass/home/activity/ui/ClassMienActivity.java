@@ -145,8 +145,8 @@ public class ClassMienActivity extends BaseActivity<ClassMienContract.Presenter>
         protected void convert(BaseViewHolder baseViewHolder, final ClassMienMessage item) {
 
             SimpleDraweeView image = baseViewHolder.getView( R.id.image );
-            image.setImageURI( GlobalParam.pUrl + item.getUrl() );
-            ImageRequest request = ImageRequestBuilder.newBuilderWithSource( Uri.parse( GlobalParam.pUrl + item.getUrl() ) )
+            image.setImageURI( GlobalParam.pUrl + item.getPicUrl() );
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource( Uri.parse( GlobalParam.pUrl + item.getPicUrl() ) )
                     .setResizeOptions( new ResizeOptions( Tools.dp2px( 192 ), Tools.dp2px( 256 ) ) )
                     .build();
             image.setController( Fresco.newDraweeControllerBuilder()
@@ -161,11 +161,11 @@ public class ClassMienActivity extends BaseActivity<ClassMienContract.Presenter>
             image.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (item.getType() == 1) {
-                        showImage( GlobalParam.pUrl + item.getUrl() );
-                    } else {
-                        showVoide( GlobalParam.pUrl + item.getUrl() );
-                    }
+//                    if (item.getType() == 1) {
+                        showImage( GlobalParam.pUrl + item.getPicUrl() );
+//                    } else {
+//                        showVoide( GlobalParam.pUrl + item.getUrl() );
+//                    }
                 }
             } );
 

@@ -1,6 +1,7 @@
 package com.electronclass.common.base;
 
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 

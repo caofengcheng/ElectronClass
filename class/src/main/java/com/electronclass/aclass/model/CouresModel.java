@@ -7,6 +7,7 @@ import com.electronclass.pda.mvp.base.BaseModel;
 import com.electronclass.pda.mvp.base.BaseSingle;
 import com.electronclass.pda.mvp.base.RxComposer;
 import com.electronclass.pda.mvp.entity.Coures;
+import com.electronclass.pda.mvp.entity.CouresNode;
 import com.electronclass.pda.mvp.entity.ServiceResponse;
 import com.electronclass.pda.mvp.rest.RestManager;
 
@@ -28,12 +29,36 @@ public class CouresModel extends BaseModel implements CouresContract.Model {
             mPresenter.onError("未绑定班级");
             return;
         }
+//        String date = DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY);
+//        RestManager.getRestApi().getCoures( GlobalParam.getEcardNo(),null,GlobalParam.getClassInfo().getClassId(),date,0)
+//                .compose(  RxComposer.<ServiceResponse<List<Coures>>>composeSingle() )
+//                .subscribe(new BaseSingle<ServiceResponse<List<Coures>>>(compositeDisposable) {
+//                    @Override
+//                    public void onSuccess(ServiceResponse<List<Coures>> result) {
+//                        if (!result.getCode().equals( "200" ))
+//                        {
+//                            mPresenter.onError( result.getMsg() );
+//                            return;
+//                        }
+//                        if (result.getData() == null || result.getData().size() == 0){
+//                            mPresenter.onError( "无课表" );
+//                            return;
+//                        }
+//                        mPresenter.onCoures(result.getData());
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Throwable e, String errorMsg) {
+//                        mPresenter.onError(errorMsg);
+//                    }
+//                });
+
         String date = DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY);
-        RestManager.getRestApi().getCoures( GlobalParam.getEcardNo(),null,GlobalParam.getClassInfo().getClassId(),date,0)
-                .compose(  RxComposer.<ServiceResponse<List<Coures>>>composeSingle() )
-                .subscribe(new BaseSingle<ServiceResponse<List<Coures>>>(compositeDisposable) {
+        RestManager.getRestApi().getCoures( GlobalParam.getClassInfo().getClassId())
+                .compose(  RxComposer.<ServiceResponse<List<CouresNode>>>composeSingle() )
+                .subscribe(new BaseSingle<ServiceResponse<List<CouresNode>>>(compositeDisposable) {
                     @Override
-                    public void onSuccess(ServiceResponse<List<Coures>> result) {
+                    public void onSuccess(ServiceResponse<List<CouresNode>> result) {
                         if (!result.getCode().equals( "200" ))
                         {
                             mPresenter.onError( result.getMsg() );

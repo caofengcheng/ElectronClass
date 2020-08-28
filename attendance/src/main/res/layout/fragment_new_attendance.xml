@@ -23,36 +23,37 @@
             android:text="2019年10月30日考勤"
             android:textColor="#ff1c0070"
             android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/search"
-            android:layout_width="123dp"
-            android:layout_height="@dimen/dp_40"
-            android:layout_marginEnd="63dp"
-            android:background="@drawable/shape_8_88a3db"
-            android:gravity="center"
-            android:text="历史查询"
-            android:textColor="#ff88a3db"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/today"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/today" />
+<!--        <TextView-->
+<!--            android:id="@+id/search"-->
+<!--            android:layout_width="123dp"-->
+<!--            android:layout_height="@dimen/dp_40"-->
+<!--            android:layout_marginEnd="63dp"-->
+<!--            android:background="@drawable/shape_8_88a3db"-->
+<!--            android:gravity="center"-->
+<!--            android:text="历史查询"-->
+<!--            android:textColor="#ff88a3db"-->
+<!--            android:textSize="24sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/today"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/today" />-->
 
-        <TextView
-            android:id="@+id/data"
-            android:layout_width="206dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="47dp"
-            android:text="2019年10月30日"
-            android:textColor="#ff919191"
-            android:textSize="24sp"
-            android:background="@drawable/shape_8_979797"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="@+id/search"
-            app:layout_constraintEnd_toStartOf="@+id/search"
-            app:layout_constraintTop_toTopOf="@+id/search" />
+<!--        <TextView-->
+<!--            android:id="@+id/data"-->
+<!--            android:layout_width="206dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_marginEnd="47dp"-->
+<!--            android:text="2019年10月30日"-->
+<!--            android:textColor="#ff919191"-->
+<!--            android:textSize="24sp"-->
+<!--            android:background="@drawable/shape_8_979797"-->
+<!--            android:gravity="center"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/search"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/search"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/search" />-->
 
         <ImageView
             android:id="@+id/imageView4"
@@ -126,11 +127,12 @@
             android:id="@+id/turnOutForWork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="63dp"
             android:text="出勤率：90%"
             android:textColor="#ff1c0070"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-            app:layout_constraintEnd_toEndOf="@+id/search"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
         <android.support.v7.widget.RecyclerView

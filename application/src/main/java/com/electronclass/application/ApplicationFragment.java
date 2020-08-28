@@ -10,13 +10,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.electronclass.application.databinding.FragmentApplicationBinding;
 import com.electronclass.application.web.WebActivity;
 import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
 import com.electronclass.common.base.BaseViewHolder;
+import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.module.AppModule;
+import com.electronclass.common.util.EcardType;
 import com.electronclass.pda.mvp.entity.AppItem;
 
 import java.util.ArrayList;
@@ -31,74 +35,82 @@ import java.util.List;
 public class ApplicationFragment extends Fragment {
 
     private FragmentApplicationBinding binding;
-    private List<AppItem>              appItems = new ArrayList<>();
+    private List<AppItem> appItems = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate( inflater, R.layout.fragment_application, container, false );
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_application, container, false);
         View view = binding.getRoot();
         init();
         return view;
     }
 
     private void init() {
-        AppItem appItem = new AppItem();
+        AppItem appItem1 = new AppItem("智腾食堂", AppModule.FOOD, R.drawable.food);
+        appItems.add(appItem1);
 
-        appItem.setName( "智腾食堂" );
-        appItem.setCode( AppModule.FOOD );
-        appItem.setImage( R.drawable.food );
 
-        AppItem appItem1 = new AppItem();
-        appItem1.setName( "树莓校园德育" );
-        appItem1.setCode( AppModule.dyH5 );
-        appItem1.setImage( R.drawable.shumei );
+        AppItem appItem2 = new AppItem("树莓校园德育", AppModule.dyH5, R.drawable.shumei);
+        appItems.add(appItem2);
 
-        appItems.add( appItem );
-        appItems.add( appItem1 );
+        if (EcardType.type == EcardType.HK) {
+            AppItem appItem3 = new AppItem("教室监控", AppModule.VIDEO, R.drawable.class_video);
+            appItems.add(appItem3);
+        }
+
 
         setAdapter();
     }
 
 
     private void setAdapter() {
-        CommonRecyclerViewAdapter<AppItem> commonRecyclerViewAdapter = new CommonRecyclerViewAdapter<AppItem>( R.layout.app_item, false, false ) {
+        CommonRecyclerViewAdapter<AppItem> commonRecyclerViewAdapter = new CommonRecyclerViewAdapter<AppItem>(R.layout.app_item, false, false) {
             @Override
             public void convert(BaseViewHolder baseViewHolder, final AppItem item) {
-                baseViewHolder.setBackgroundResources( R.id.imageView, item.getImage() );
-                baseViewHolder.setText( R.id.appName, item.getName() );
-                baseViewHolder.setOnClickListener( R.id.clAppItem, v -> getClick( item.getCode() ) );
+                baseViewHolder.setBackgroundResources(R.id.imageView, item.getImage());
+                baseViewHolder.setText(R.id.appName, item.getName());
+                baseViewHolder.setOnClickListener(R.id.clAppItem, v -> getClick(item.getCode()));
 
             }
         };
-        commonRecyclerViewAdapter.setData( appItems );
+        commonRecyclerViewAdapter.setData(appItems);
         commonRecyclerViewAdapter.notifyDataSetChanged();
-        binding.recyclerView.setLayoutManager( new GridLayoutManager( getActivity(), 5 ) );
-        binding.recyclerView.setAdapter( commonRecyclerViewAdapter );
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 5));
+        binding.recyclerView.setAdapter(commonRecyclerViewAdapter);
     }
 
 
     private void getClick(int code) {
-        Intent intent = new Intent( getActivity(), WebActivity.class );
+        Intent intent = new Intent(getActivity(), WebActivity.class);
         switch (code) {
             case AppModule.FOOD:
-
-                intent.putExtra( GlobalParam.APPURL, GlobalParam.FoodAppUrl );
-                startActivity( intent );
+                intent.putExtra(GlobalParam.APPURL, GlobalParam.FoodAppUrl);
+                startActivity(intent);
                 break;
             case AppModule.dyH5:
                 String schoolId = GlobalParam.getSchoolInfo() == null ? "" : GlobalParam.getSchoolInfo().getSchoolId();
                 String classId = GlobalParam.getClassInfo() == null ? "" : GlobalParam.getClassInfo().getClassId();
                 String url = GlobalParam.DYH5 + "{\"schoolId\":\"" + schoolId + "\",\"departId\":\"" + classId + "\"}";
-                Log.i( "h5--url:", url );
-                intent.putExtra( GlobalParam.APPURL, url );
-                startActivity( intent );
+                Log.i("h5--url:", url);
+                intent.putExtra(GlobalParam.APPURL, url);
+                startActivity(intent);
+                break;
+            case AppModule.VIDEO:
+                if (StringUtils.isEmpty(GlobalParam.getJKIP())) {
+                    Toast.makeText(getActivity(), "该设备未绑定监控", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String ip = GlobalParam.getJKIP();
+                Log.i("监控ip:", ip);
+                intent.putExtra(GlobalParam.APPURL, ip);
+                startActivity(intent);
                 break;
             default:
                 break;

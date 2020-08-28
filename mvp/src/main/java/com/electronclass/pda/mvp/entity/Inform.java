@@ -4,18 +4,35 @@ package com.electronclass.pda.mvp.entity;
  * 通知信息
  */
 public class Inform {
-    private int    id;
+    private int id;
     private String userId;
     private String userName;
     private String classId;
     private String schoolId;
-    private int    type;
-    private int    level;
+    private int type;
+    private int level;
     private String startTime;
     private String endTime;
     private String text;
-    private int    textType;
+    private String title;
+    private int textType;
+    private String picUrl;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
+    }
 
     public void setId(int id) {
         this.id = id;

@@ -4,6 +4,7 @@ import com.electronclass.home.contract.HomeContract;
 import com.electronclass.home.model.HomeModel;
 import com.electronclass.pda.mvp.base.BasePresenter;
 import com.electronclass.pda.mvp.entity.ClassMien;
+import com.electronclass.pda.mvp.entity.ClassMienPage;
 import com.electronclass.pda.mvp.entity.Inform;
 
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.List;
 public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContract.View> implements HomeContract.Presenter {
 
     @Override
-    public void getInform(String eCardNo, String userId, String departId, int type, int isAvaliable) {
-        mModel.getInform(eCardNo, userId, departId, type, isAvaliable);
+    public void getInform(String pageNo, String pageSize, int type) {
+        mModel.getInform(pageNo, pageSize, type);
     }
 
     @Override
@@ -22,12 +23,12 @@ public class HomePresenter extends BasePresenter<HomeContract.Model, HomeContrac
 
     @Override
     public void getClassMien(String eCardNo, String userId, String classId, int pageStart, int pageSize) {
-        mModel.getClassMien( eCardNo,userId,classId,1,9 );
+        mModel.getClassMien(eCardNo, userId, classId, 1, 9);
     }
 
     @Override
-    public void onClassMien(ClassMien classMien) {
-        mView.onClassMien(classMien.getData());
+    public void onClassMien(ClassMienPage classMien) {
+        mView.onClassMien(classMien.getRecords());
     }
 
 

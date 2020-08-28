@@ -17,10 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.electronclass.aclass.ClassFragment;
 import com.electronclass.application.ApplicationFragment;
 import com.electronclass.attendance.AttendanceFragment;
@@ -33,22 +37,29 @@ import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.EventRight;
 import com.electronclass.common.event.EventTime;
 import com.electronclass.common.util.DateUtil;
+import com.electronclass.common.util.EcardType;
 import com.electronclass.common.util.Tools;
+import com.electronclass.common.util.VerticalTextView;
 import com.electronclass.electronclass.AppApplication;
 import com.electronclass.electronclass.BuildConfig;
 import com.electronclass.electronclass.R;
 import com.electronclass.electronclass.adapter.FragmentTabAdapter;
 import com.electronclass.electronclass.contract.MainContract;
+import com.electronclass.electronclass.databinding.ActivityNew2MainBinding;
 import com.electronclass.electronclass.databinding.ActivityNewMainBinding;
 import com.electronclass.electronclass.presenter.MainPresenter;
 import com.electronclass.home.HomeFragment;
 import com.electronclass.pda.mvp.entity.Inform;
 import com.electronclass.set.login.LoginFragment;
 import com.tencent.bugly.Bugly;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.loader.ImageLoaderInterface;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,23 +68,24 @@ import java.util.TimerTask;
 
 
 public class MainActivity extends BaseActivity<MainContract.Presenter> implements MainContract.View {
-    private ActivityNewMainBinding            binding;
-    private List<Fragment>                    fragmentList = new ArrayList<>();
-    private boolean                           isGetSetting = false;
+    private ActivityNew2MainBinding binding;
+    private List<Fragment> fragmentList = new ArrayList<>();
+    private boolean isGetSetting = false;
     private CommonRecyclerViewAdapter<Inform> schoolInformAdapter;
-    private Timer                             timer;
-    private int                               timeout      = 60 * 60 * 1000;
-    private int                               COUNTS       = 4;// 点击次数
-    private long                              DURATION     = 1000;// 规定有效时间
-    private long[]                            mHits        = new long[COUNTS];
-    private PopupWindow                       settingWindow;
+    private Timer timer;
+    private int timeout = 60 * 60 * 1000;
+    private int COUNTS = 4;// 点击次数
+    private long DURATION = 1000;// 规定有效时间
+    private long[] mHits = new long[COUNTS];
+    private PopupWindow settingWindow;
+    private RequestOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate( savedInstanceState );
-        getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN );
-        binding = DataBindingUtil.setContentView( this, R.layout.activity_new_main );
-        EventBus.getDefault().register( this );
+        super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_new2_main);
+        EventBus.getDefault().register(this);
         init();
     }
 
@@ -85,7 +97,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
 
     @Override
     protected void initView() {
-        setSchoolinform();
+        initPicUtil();
         initBugly();
         setFragmentList();
         setFragment();
@@ -100,28 +112,28 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         /**
          * 展示学校信息
          */
-        AppApplication.getInstance().setSchoolInfo( () -> {
-            logger.info( "收到SchoolInfo" );
+        AppApplication.getInstance().setSchoolInfo(() -> {
+            logger.info("收到SchoolInfo");
             isGetSetting = true;
-            Glide.with( MainActivity.this )
-                    .load( GlobalParam.getSchoolInfo().getLogo() )
-                    .into( binding.schoolLogo );
-            binding.schoolName.setText( GlobalParam.getSchoolInfo() == null ? "" : GlobalParam.getSchoolInfo().getName() );
+            Glide.with(MainActivity.this)
+                    .load(GlobalParam.getSchoolInfo().getLogo())
+                    .into(binding.schoolLogo);
+            binding.schoolName.setText(GlobalParam.getSchoolInfo() == null ? "" : GlobalParam.getSchoolInfo().getName());
             getDates();
-        } );
+        });
 
         /**
          * 刷卡动画
          */
-        AppApplication.getInstance().setBulb( b -> {
-            runOnUiThread( () -> {
+        AppApplication.getInstance().setBulb(b -> {
+            runOnUiThread(() -> {
                 if (b) {
-                    binding.bulb.setImageResource( R.drawable.bulb_true );
+                    binding.bulb.setImageResource(R.drawable.bulb_true);
                 } else {
-                    binding.bulb.setImageResource( R.drawable.bulb_false );
+                    binding.bulb.setImageResource(R.drawable.bulb_false);
                 }
-            } );
-        } );
+            });
+        });
     }
 
     /**
@@ -132,9 +144,9 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventRight(EventRight eventRight) {
         if (eventRight.isVisit()) {
-            binding.constraintLayout3.setVisibility( View.VISIBLE );
+            binding.constraintLayout3.setVisibility(View.VISIBLE);
         } else {
-            binding.constraintLayout3.setVisibility( View.GONE );
+            binding.constraintLayout3.setVisibility(View.GONE);
         }
     }
 
@@ -145,7 +157,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventTime(EventTime eventTime) {
-        binding.attendanceTime.setText( GlobalParam.getEventTime() );
+        binding.attendanceTime.setText(GlobalParam.getEventTime());
     }
 
     @Override
@@ -160,40 +172,40 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
 
     @Override
     protected void onRestart() {
-        logger.info( "onRestart" );
+        logger.info("onRestart");
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
-        logger.info( "onResume" );
+        logger.info("onResume");
         super.onResume();
         if (GlobalParam.getClassInfo() != null)
-            binding.className.setText( GlobalParam.getClassInfo().getClassName() );
+            binding.className.setText(GlobalParam.getClassInfo().getClassName());
 
         if (GlobalParam.getSchoolInfo() != null)
-            binding.schoolName.setText( GlobalParam.getSchoolInfo().getName() );
+            binding.schoolName.setText(GlobalParam.getSchoolInfo().getName());
 
 
     }
 
     @Override
     protected void onPause() {
-        logger.info( "onPause" );
+        logger.info("onPause");
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        logger.info( "onStop" );
+        logger.info("onStop");
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-        logger.info( "onDestroy" );
+        logger.info("onDestroy");
         super.onDestroy();
-        EventBus.getDefault().unregister( this );
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -201,10 +213,54 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
     public void onInform(List<Inform> inform) {
         if (inform == null)
             return;
-        if (inform.get( 0 ).getType() != 0) {
-            schoolInformAdapter.setData( inform );
-            schoolInformAdapter.notifyDataSetChanged();
+        setSchoolInfo(inform);
+    }
+    /**
+     * 设置学校通知
+     * @param inform
+     */
+    private void setSchoolInfo(List<Inform> inform) {
+        binding.banner.setVisibility(View.VISIBLE);
+        binding.banner.setImageLoader(new GlideImageLoader());
+        binding.banner.setImages(inform);
+        binding.banner.isAutoPlay(true);
+        binding.banner.setDelayTime(3000);
+        binding.banner.setIndicatorGravity(BannerConfig.RIGHT);
+        binding.banner.start();
+    }
+
+    public class GlideImageLoader implements ImageLoaderInterface<View> {
+
+        @Override
+        public void displayImage(Context context, Object path, View imageView) {
+            TextView  tv = imageView.findViewById(R.id.tv_school_info);
+            ImageView image = imageView.findViewById(R.id.iv_school_info);
+
+            Inform data = (Inform) path;
+            tv.setText(data.getText());
+            if (org.apache.commons.lang3.StringUtils.isEmpty(data.getPicUrl())){
+                Glide.with(context).load(getResources().getDrawable(R.drawable.soccer)).apply(options).into(image);
+            }else {
+                Glide.with(context).load(GlobalParam.pUrl + data.getPicUrl()).apply(options).into(image);
+            }
+
         }
+
+        @Override
+        public View createImageView(Context context) {
+            return getLayoutInflater().inflate(R.layout.school_info, null);
+        }
+
+    }
+
+
+    /**
+     * 初始化校园通知控件
+     */
+    private void initPicUtil(){
+        RoundedCorners roundedCorners = new RoundedCorners(20);
+        //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
+        options = RequestOptions.bitmapTransform(roundedCorners);
     }
 
     /**
@@ -214,7 +270,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         /**
          * 点击校园logo弹出密码框
          */
-        binding.toSettingView.setOnClickListener( v -> continuousClick() );
+        binding.toSettingView.setOnClickListener(v -> continuousClick());
     }
 
 
@@ -223,21 +279,21 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      */
     private void getDates() {
         if (GlobalParam.getEcardNo() != null && isGetSetting) {
-            new Timer().schedule( new TimerTask() {
+            new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     // type通知类型 0 - 班级通知 1校园通知
                     // isAvaliable  0-获取未过期的所有通知 (包含正在生效和未生效)， 1 获取正在生效的通知 即（开始时间小于当前时间，截止时间大于当前时间）
-                    mPresenter.getInform( StringUtils.isEmpty( GlobalParam.getEcardNo() ) ? MacAddress.getDeviceMacAddrress() : GlobalParam.getEcardNo(), "", GlobalParam.getSchoolInfo().getSchoolId(), InformType.SCHOOL, 1 );//获取学校通知
+                    mPresenter.getInform("1", "10", InformType.SCHOOL);//获取学校通知
 
                 }
-            }, 0, timeout );
+            }, 0, timeout);
         } else {
             if (GlobalParam.getEcardNo() == null) {
-                logger.debug( "界面初始化未完成" );
+                logger.debug("界面初始化未完成");
             }
             if (!isGetSetting) {
-                logger.debug( "设置未获得" );
+                logger.debug("设置未获得");
             }
         }
     }
@@ -246,12 +302,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 全局更新
      */
     private void initBugly() {
-        if (BuildConfig.GUARD_PACKAGE.equals(GlobalPage.MULAN)) {
-            Bugly.init( getApplicationContext(), GlobalParam.MULAN_UPDATEID, false );
-        } else if (BuildConfig.GUARD_PACKAGE.equals(GlobalPage.HENGHONGDA)) {
-            Bugly.init( getApplicationContext(), GlobalParam.HENGHONGDA_UPDATEID, false );
-        }else if(BuildConfig.GUARD_PACKAGE.equals(GlobalPage.HK)){
-            Bugly.init( getApplicationContext(), GlobalParam.HK_UPDATEID, false );
+        if (EcardType.getType() == EcardType.ML) {
+            Bugly.init(getApplicationContext(), GlobalParam.MULAN_UPDATEID, false);
+        } else if (EcardType.getType() == EcardType.HHD) {
+            Bugly.init(getApplicationContext(), GlobalParam.HENGHONGDA_UPDATEID, false);
+        } else if (EcardType.getType() == EcardType.HK) {
+            Bugly.init(getApplicationContext(), GlobalParam.HK_UPDATEID, false);
         }
     }
 
@@ -259,19 +315,19 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 设置时间
      */
     private void setTime() {
-        binding.attendanceTime.setText( GlobalParam.getEventTime() );
-        binding.ecardNo.setText( StringUtils.isEmpty( GlobalParam.getEcardNo() ) ? MacAddress.getDeviceMacAddrress() : GlobalParam.getEcardNo() );
+        binding.attendanceTime.setText(GlobalParam.getEventTime());
+        binding.ecardNo.setText(StringUtils.isEmpty(GlobalParam.getEcardNo()) ? MacAddress.getDeviceMacAddrress() : GlobalParam.getEcardNo());
         timer = new Timer();
-        timer.schedule( new TimerTask() {
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread( () -> {
+                runOnUiThread(() -> {
                     Date date = DateUtil.getNowDate();
-                    binding.tvTime.setText( DateUtil.dateToString( date, "HH:mm:ss" ) );
-                } );
+                    binding.tvTime.setText(DateUtil.dateToString(date, "HH:mm:ss"));
+                });
 
             }
-        }, 0, 1000 );
+        }, 0, 1000);
     }
 
 
@@ -283,11 +339,11 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 设置模块列表
      */
     private void setFragmentList() {
-        fragmentList.add( new HomeFragment() );
-        fragmentList.add( new ApplicationFragment() );
-        fragmentList.add( new ClassFragment() );
-        fragmentList.add( new AttendanceFragment() );
-        fragmentList.add( new LoginFragment() );
+        fragmentList.add(new HomeFragment());
+        fragmentList.add(new ApplicationFragment());
+        fragmentList.add(new ClassFragment());
+        fragmentList.add(new AttendanceFragment());
+//        fragmentList.add( new LoginFragment() );
     }
 
 
@@ -295,34 +351,21 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 设置班级名称
      */
     private void setClassName() {
-        AppApplication.getInstance().setTopEvent( () -> {
+        AppApplication.getInstance().setTopEvent(() -> {
             if (GlobalParam.getClassInfo() != null) {
-                binding.className.setText( GlobalParam.getClassInfo().getClassName() );
+                binding.className.setText(GlobalParam.getClassInfo().getClassName());
             }
-        } );
+        });
     }
 
 
-    /**
-     * 设置校园通知
-     */
-    private void setSchoolinform() {
-        schoolInformAdapter = new CommonRecyclerViewAdapter<Inform>( com.electronclass.home.R.layout.school_item ) {
-            @Override
-            public void convert(com.electronclass.common.base.BaseViewHolder baseViewHolder, Inform item) {
-                baseViewHolder.setText( com.electronclass.home.R.id.schoolText, item.getText() );
-            }
-        };
-        schoolInformAdapter.bindRecyclerView( binding.schoolRecycler, new LinearLayoutManager(
-                this, LinearLayoutManager.VERTICAL, false ) );
-    }
 
 
     /**
      * 跳转到设置界面
      */
     private void setting() {
-        startActivity(new Intent( Settings.ACTION_SETTINGS));
+        startActivity(new Intent(Settings.ACTION_SETTINGS));
     }
 
 
@@ -331,7 +374,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      */
     private void continuousClick() {
         //每次点击时，数组向前移动一位
-        System.arraycopy( mHits, 1, mHits, 0, mHits.length - 1 );
+        System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
         //为数组最后一位赋值
         mHits[mHits.length - 1] = SystemClock.uptimeMillis();
         if (mHits[0] >= (SystemClock.uptimeMillis() - DURATION)) {
@@ -345,33 +388,32 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 展示进入设置界面的密码框
      */
     private void showSettingPwd() {
-        LayoutInflater inflater        = (LayoutInflater) MainActivity.this.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        View           popupWindowView = inflater.inflate( R.layout.setting_window, null );
-        settingWindow = new PopupWindow( popupWindowView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true );
-        settingWindow.setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-        settingWindow.setOutsideTouchable( false );
-        TextView         tv         = popupWindowView.findViewById( R.id.textView12 );
-        EditText         settingPwd = popupWindowView.findViewById( R.id.settingPwd );
-        TextView           sure       = popupWindowView.findViewById( R.id.sure );
-        ConstraintLayout setWindowCl       = popupWindowView.findViewById( R.id.setWindowCl );
-        tv.setVisibility( View.GONE );
+        LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupWindowView = inflater.inflate(R.layout.setting_window, null);
+        settingWindow = new PopupWindow(popupWindowView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        settingWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        settingWindow.setOutsideTouchable(false);
+        TextView tv = popupWindowView.findViewById(R.id.textView12);
+        EditText settingPwd = popupWindowView.findViewById(R.id.settingPwd);
+        TextView sure = popupWindowView.findViewById(R.id.sure);
+        ConstraintLayout setWindowCl = popupWindowView.findViewById(R.id.setWindowCl);
+        tv.setVisibility(View.GONE);
 
-        sure.setOnClickListener( v -> {
+        sure.setOnClickListener(v -> {
             String pwd = settingPwd.getText().toString().trim();
-            if (StringUtils.isEmpty( pwd )) {
-                Tools.displayToast( "请输入密码" );
+            if (StringUtils.isEmpty(pwd)) {
+                Tools.displayToast("请输入密码");
             } else {
-                if (org.apache.commons.lang3.StringUtils.contains( GlobalParam.toSettingPwd,pwd)){
+                if (org.apache.commons.lang3.StringUtils.contains(GlobalParam.toSettingPwd, pwd)) {
                     settingWindow.dismiss();
                     setting();
-                }else {
-                    tv.setVisibility( View.VISIBLE );
+                } else {
+                    tv.setVisibility(View.VISIBLE);
                 }
             }
-        } );
-        setWindowCl.setOnClickListener( v -> settingWindow.dismiss() );
+        });
+        setWindowCl.setOnClickListener(v -> settingWindow.dismiss());
 
-
-        settingWindow.showAtLocation( binding.mainCl, Gravity.CENTER, 0, 0 );
+        settingWindow.showAtLocation(binding.mainCl, Gravity.CENTER, 0, 0);
     }
 }

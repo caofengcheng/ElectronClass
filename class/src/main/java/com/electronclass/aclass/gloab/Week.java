@@ -1,7 +1,7 @@
 package com.electronclass.aclass.gloab;
 
 /**
- * 周一到周五
+ * 周一到周日
  */
 public class Week {
     public static final int WEEK1 = 1;

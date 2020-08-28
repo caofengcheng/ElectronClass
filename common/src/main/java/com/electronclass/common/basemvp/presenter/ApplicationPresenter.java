@@ -5,8 +5,10 @@ import android.content.Context;
 import com.electronclass.common.basemvp.contract.ApplicationContract;
 import com.electronclass.common.basemvp.model.ApplicationModel;
 import com.electronclass.common.database.GlobalParam;
+import com.electronclass.common.util.EcardType;
 import com.electronclass.pda.mvp.base.BasePresenter;
 import com.electronclass.pda.mvp.entity.ClassInfo;
+import com.electronclass.pda.mvp.entity.ECardDetail;
 import com.electronclass.pda.mvp.entity.SchoolInfo;
 
 public class ApplicationPresenter extends BasePresenter<ApplicationContract.Model, ApplicationContract.View> implements ApplicationContract.Presenter {
@@ -29,10 +31,20 @@ public class ApplicationPresenter extends BasePresenter<ApplicationContract.Mode
     }
 
     @Override
-    public void onClassAndSchool(ClassInfo classInfo, SchoolInfo schoolInfo, String ecardNo) {
+    public void onClassAndSchool(ECardDetail eCardDetail) {
+        ClassInfo classInfo  = new ClassInfo();
+        classInfo.setClassId(eCardDetail.getClassId());
+        classInfo.setClassName(eCardDetail.getClassName());
+
+        SchoolInfo schoolInfo = new SchoolInfo();
+        schoolInfo.setSchoolId(eCardDetail.getSchoolId());
+        schoolInfo.setName(eCardDetail.getSchoolName());
+
         GlobalParam.setClassInfo( classInfo );
         GlobalParam.setSchoolInfo( schoolInfo );
-        GlobalParam.setEcardNo( ecardNo );
+        GlobalParam.setEcardNo( eCardDetail.getEcardNo() );
+        GlobalParam.setJKIP(eCardDetail.getIp());
+        EcardType.setType(eCardDetail.getType());//设置班牌类型
         mView.onClassAndSchool();
     }
 

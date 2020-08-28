@@ -1,18 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="990dp"
-    android:layout_height="360dp"
-    android:background="@drawable/backgroundback"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="1010dp"
+    android:layout_height="380dp"
+    android:background="@drawable/shape_20"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/msg"
-        android:layout_width="980dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="义可学写格验连增转在导着去要华铁置风究了七万入值带精带位象约集设今老成价题光造除应飞中包少角细始进动局极清四治热而民到各连。"
-        android:textColor="#FFFFFF"
-        android:textSize="50sp"
-        android:maxLines="10"/>
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="689dp"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"/>
+
+    <LinearLayout
+        android:layout_width="321dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_20_right"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="42dp"
+            android:layout_marginRight="22dp"
+            android:textColor="#ffffffff"
+            android:textSize="32sp"
+            tools:text="班级运动会通知" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="19dp"
+            android:textColor="#ffffffff"
+            android:textSize="20sp"
+            tools:text="2020.08.26" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="37dp"
+            android:layout_marginEnd="22dp"
+            android:textColor="#ffffffff"
+            android:textSize="24sp"
+            tools:text="班级通知班级通知班级通知班级通知班级通知班级通知班级通知班级通知班级通知班级通知班级。" />
+    </LinearLayout>
+
+
 </LinearLayout>

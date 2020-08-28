@@ -29,6 +29,7 @@ import com.electronclass.common.util.Tools;
 import com.electronclass.pda.mvp.entity.Duty;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 
@@ -319,9 +320,9 @@ public class UpdateDutyActivity extends BaseActivity<UpdateDutyPresenter> implem
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        logger.info( "onDestroy" );
-//        GlobalParam.setCardType( GlobalParam.MAINACTIVITY );
-//        EventBus.getDefault().unregister(this);//解除注册
+        logger.info( "onDestroy" );
+        GlobalParam.setCardType( GlobalParam.MAINACTIVITY );
+        EventBus.getDefault().unregister(this);//解除注册
     }
 
 

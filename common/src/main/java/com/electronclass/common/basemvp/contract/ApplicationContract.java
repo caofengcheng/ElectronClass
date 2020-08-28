@@ -6,6 +6,7 @@ import com.electronclass.pda.mvp.base.BaseModelInterface;
 import com.electronclass.pda.mvp.base.BasePresenterInterface;
 import com.electronclass.pda.mvp.base.BaseView;
 import com.electronclass.pda.mvp.entity.ClassInfo;
+import com.electronclass.pda.mvp.entity.ECardDetail;
 import com.electronclass.pda.mvp.entity.SchoolInfo;
 
 public interface ApplicationContract {
@@ -22,7 +23,7 @@ public interface ApplicationContract {
 
     interface Presenter extends BasePresenterInterface<View> {
         void getClassAndSchool(Context context);
-        void onClassAndSchool(ClassInfo classMessage, SchoolInfo schoolInfo,String ecardNo);
+        void onClassAndSchool(ECardDetail eCardDetail);
 
         void getCardAttendance(String studentCardNo);
         void onCardAttendance(String msg);

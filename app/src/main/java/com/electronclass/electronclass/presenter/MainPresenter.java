@@ -10,23 +10,23 @@ import java.util.List;
 /**
  * @author caofengcheng on 2019-10-30
  */
-public class MainPresenter extends BasePresenter<MainContract.Model,MainContract.View> implements MainContract.Presenter {
+public class MainPresenter extends BasePresenter<MainContract.Model, MainContract.View> implements MainContract.Presenter {
 
 
     @Override
     protected void initModel() {
         mModel = new MainModel();
-        mModel.setPresenter( this );
+        mModel.setPresenter(this);
     }
 
     @Override
     public void onError(String errorMessage) {
-       mView.onError( errorMessage );
+        mView.onError(errorMessage);
     }
 
     @Override
-    public void getInform(String eCardNo, String userId, String departId, int type, int isAvaliable) {
-        mModel.getInform(eCardNo, userId, departId, type, isAvaliable);
+    public void getInform(String pageNo, String pageSize, int type) {
+        mModel.getInform(pageNo, pageSize, type);
     }
 
     @Override

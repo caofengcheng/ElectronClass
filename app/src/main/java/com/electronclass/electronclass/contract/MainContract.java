@@ -16,15 +16,8 @@ public interface MainContract {
         void setPresenter(MainPresenter mainPresenter);
         /**
          * 获取校园和班级通知
-         * @param eCardNo
-         * @param userId
-         * @param departId
-         * @param type
-         * @param isAvaliable
          */
-        void getInform(String eCardNo, String userId,
-                       String departId, int type,
-                       int isAvaliable);
+        void getInform(String pageNo, String pageSize, int type);
     }
 
     interface View extends BaseView {
@@ -33,9 +26,7 @@ public interface MainContract {
     }
 
     interface Presenter extends BasePresenterInterface<View> {
-        void getInform(String eCardNo, String userId,
-                       String departId, int type,
-                       int isAvaliable);
+        void getInform(String pageNo, String pageSize, int type);
 
         void onInform(List<Inform> inform);
     }

@@ -2,7 +2,6 @@ package com.electronclass.electronclass;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.RemoteException;
 
 import com.android.xhapimanager.XHApiManager;
 import com.electronclass.common.base.BaseApplication;
@@ -18,6 +17,7 @@ import com.electronclass.common.event.SchoolInfo;
 import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.event.TopEvent;
 import com.electronclass.common.util.DateUtil;
+import com.electronclass.common.util.EcardType;
 import com.electronclass.common.util.GlideCacheUtil;
 import com.electronclass.common.util.PowerOnOffManagerUtil;
 import com.electronclass.common.util.ReadThreadUtil;
@@ -39,14 +39,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
+import static com.electronclass.common.util.EcardType.HHD;
+
 
 public class AppApplication extends BaseApplication<ApplicationContract.Presenter> implements ApplicationContract.View, SerialportManager.SerialportListener {
-    protected Logger                 logger = LoggerFactory.getLogger( getClass() );
-    private   TopEvent               topEvent;
-    private   SchoolInfo             schoolInfo;
-    private   Bulb                   bulb;
-    private   ReadThreadUtil         readThreadUtil;
-    private   SwingCardCallback.Stub stub;
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+    private TopEvent topEvent;
+    private SchoolInfo schoolInfo;
+    private Bulb bulb;
+    private ReadThreadUtil readThreadUtil;
+    private SwingCardCallback.Stub stub;
 
     public void setTopEvent(TopEvent topEvent) {
         this.topEvent = topEvent;
@@ -68,18 +70,16 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     public void onCreate() {
         super.onCreate();
 //        LeakCanary.install( this );
-        SharedPreferencesUtil.getInstance( this, "AppApplication" );
+        SharedPreferencesUtil.getInstance(this, "AppApplication");
         eventTime();
-        getBuildConfig();
         initEcardNo();
         stopAlm();
-        initSerialPort();
         setEcardNo();
         getDates();
-        GlideCacheUtil.getInstance().clearImageAllCache( this );
+        GlideCacheUtil.getInstance().clearImageAllCache(this);
         ImagePipeline imagePipeline = Fresco.getImagePipeline();
         imagePipeline.clearCaches();
-        logger.debug( "当前版本号：" + getVersionCode() + "  版本名称：" + getVersionName() );
+        logger.debug("当前版本号：" + getVersionCode() + "  版本名称：" + getVersionName());
     }
 
     @NotNull
@@ -90,32 +90,33 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
 
     @Override
     public void onClassAndSchool() {
-        logger.debug( "发送SettingsEvent" );
-        EventBus.getDefault().postSticky( new SettingsEvent() );
+        logger.debug("发送SettingsEvent");
+        initSerialPort();
+        EventBus.getDefault().postSticky(new SettingsEvent());
         schoolInfo.info();
         topEvent.Event();
     }
 
     @Override
     public void onCardAttendance(String msg) {
-        Tools.displayToast( msg );
-        bulb.b( false );
+        Tools.displayToast(msg);
+        bulb.b(false);
     }
 
     @Override
     public void onError(String errorMessage) {
-        Tools.displayToast( errorMessage );
-        logger.debug( errorMessage );
+        Tools.displayToast(errorMessage);
+        logger.debug(errorMessage);
     }
 
     /**
      * 设置考勤打开时间
      */
     private void eventTime() {
-        if (StringUtils.isEmpty( (SharedPreferencesUtil.getData( GlobalParam.EVENTTIME, "07:50" )).toString() )) {
-            GlobalParam.setEventTime( "07:50" );
+        if (StringUtils.isEmpty((SharedPreferencesUtil.getData(GlobalParam.EVENTTIME, "07:50")).toString())) {
+            GlobalParam.setEventTime("07:50");
         } else {
-            GlobalParam.setEventTime( (SharedPreferencesUtil.getData( GlobalParam.EVENTTIME, "07:50" )).toString() );
+            GlobalParam.setEventTime((SharedPreferencesUtil.getData(GlobalParam.EVENTTIME, "07:50")).toString());
         }
     }
 
@@ -123,9 +124,9 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 设置班牌号
      */
     private void setEcardNo() {
-        if (StringUtils.isEmpty( GlobalParam.getEcardNo() )) {
-            String macAddress = MacAddress.getMacAddress( this );
-            GlobalParam.setEcardNo( StringUtils.isNotEmpty( macAddress ) ? macAddress : MacAddress.getDeviceMacAddrress() );
+        if (StringUtils.isEmpty(GlobalParam.getEcardNo())) {
+            String macAddress = MacAddress.getMacAddress(this);
+            GlobalParam.setEcardNo(StringUtils.isNotEmpty(macAddress) ? macAddress : MacAddress.getDeviceMacAddrress());
         }
     }
 
@@ -134,22 +135,23 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 定时开关机
      */
     private void stopAlm() {
-        if (BuildConfig.GUARD_PACKAGE == GlobalPage.MULAN) {
+        if (EcardType.type == EcardType.ML) {
             XHApiManager xhApiManager = new XHApiManager();
-            xhApiManager.XHSetPowerOffOnTime( DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00", DateUtil.tomorrow() + "-5-00", true );
-            logger.info( "木兰定时开关机已开启--offTime：" + DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00" + "   onTime:" + DateUtil.tomorrow() + "-5-30" );
-        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HENGHONGDA) {
+            xhApiManager.XHSetPowerOffOnTime(DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + "-21-00", DateUtil.tomorrow() + "-5-00", true);
+            logger.info("木兰定时开关机已开启--offTime：" + DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + "-21-00" + "   onTime:" + DateUtil.tomorrow() + "-5-30");
+        } else if (EcardType.type == HHD) {
             PowerOnOffManagerUtil powerOnOffManagerUtil = new PowerOnOffManagerUtil();
-            String[]              startTime             = {"5", "00"};
-            String[]              endTime               = {"21", "00"};
-            int[]                 weekdays              = {1, 1, 1, 1, 1, 1, 1};
-            powerOnOffManagerUtil.setOffOrOn( this, startTime, endTime, weekdays );
-            logger.info( "恒鸿达定时开关机已开启--offTime：" + endTime + "   onTime:" + startTime );
-        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
-            Date dateOffTime = StringUitl.stringToDate(DateUtil.getNowDate( DateUtil.DatePattern.ONLY_DAY ) + "-21-00");
-            Date dateOnTime = StringUitl.stringToDate(DateUtil.tomorrow() + "-5-00");
-            logger.info( "海康定时开关机已开启--dateOnTime：" + dateOnTime + "   dateOnTime:" + dateOnTime );
-            InfoTimeApi.setTimeSwitch (dateOffTime.getTime(),dateOnTime.getTime());
+            String[] startTime = {"5", "00"};
+            String[] endTime = {"21", "00"};
+            int[] weekdays = {1, 1, 1, 1, 1, 1, 1};
+            powerOnOffManagerUtil.setOffOrOn(this, startTime, endTime, weekdays);
+            logger.info("恒鸿达定时开关机已开启--offTime：" + endTime + "   onTime:" + startTime);
+        } else if (EcardType.type == EcardType.HK) {
+            Date dateOffTime = StringUitl.stringToDate(DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + " 21:00:00");
+            Date dateOnTime = StringUitl.stringToDate(DateUtil.tomorrow() + " 5:00:00");
+            logger.info("海康定时开关机已开启--dateOnTime：" + dateOnTime + "   dateOnTime:" + dateOnTime);
+            logger.info("海康定时开关机已开启--String：" + DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + " 21-00-00" + "   dateOnTime:" + DateUtil.tomorrow() + " 5-00-00");
+            InfoTimeApi.setTimeSwitch(dateOffTime.getTime(), dateOnTime.getTime());
         }
     }
 
@@ -164,7 +166,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         PackageManager packageManager = getPackageManager();
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(
-                    getPackageName(), 0 );
+                    getPackageName(), 0);
             return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -182,7 +184,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
         PackageManager packageManager = getPackageManager();
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(
-                    getPackageName(), 0 );
+                    getPackageName(), 0);
             return packageInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -194,10 +196,10 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 初始化班牌号
      */
     private void initEcardNo() {
-        if (StringUtils.isNoneEmpty( MacAddress.getMacAddress( this ) )) {
-            GlobalParam.setEcardNo( MacAddress.getMacAddress( this ) );
+        if (StringUtils.isNoneEmpty(MacAddress.getMacAddress(this))) {
+            GlobalParam.setEcardNo(MacAddress.getMacAddress(this));
         } else {
-            Tools.displayToast( "请检查设备是否有正常MAC地址" );
+            Tools.displayToast("请检查设备是否有正常MAC地址");
         }
 
     }
@@ -206,28 +208,30 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 开启刷卡
      */
     private void initSerialPort() {
-        if (BuildConfig.GUARD_PACKAGE == GlobalPage.MULAN) {
-            logger.debug( "启动木兰刷卡" );
+        if (EcardType.getType() == EcardType.ML) {
+            logger.debug("启动木兰刷卡");
             SerialportManager.getInstance().init();
-            SerialportManager.getInstance().addListener( this );
-        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HENGHONGDA) {
-            logger.debug( "启动恒宏达刷卡" );
+            SerialportManager.getInstance().addListener(this);
+        } else if (EcardType.getType() == EcardType.HHD) {
+            logger.debug("启动恒宏达刷卡");
             readThreadUtil = new ReadThreadUtil();
-            readThreadUtil.startReadThread( (type, cardNum) -> {
+            readThreadUtil.startReadThread((type, cardNum) -> {
                 if (type == 0) {
-                    sendCardNumber( cardNum );
+                    sendCardNumber(cardNum);
                 } else {
-                    Tools.displayToast( "读取出错，不兼容的卡" );
+                    Tools.displayToast("读取出错，不兼容的卡");
                 }
-            } );
-        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
+            });
+        } else if (EcardType.getType() == EcardType.HK) {
+            logger.debug("启动海康刷卡");
             stub = new SwingCardCallback.Stub() {
                 @Override
                 public void getInfo(String s) {
-                    sendCardNumber( s );
+                    String cardNum = StringUtils.substringAfterLast(s, ":");
+                    sendCardNumber(cardNum);
                 }
             };
-            InfoUtilApi.swingCard( stub );
+            InfoUtilApi.swingCard(stub);
         }
     }
 
@@ -235,38 +239,36 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 关闭刷卡
      */
     private void stopCard() {
-        if (BuildConfig.GUARD_PACKAGE == GlobalPage.MULAN) {
-            logger.debug( "关闭木兰刷卡" );
-            SerialportManager.getInstance().removeListener( this );
-        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HENGHONGDA) {
-            logger.debug( "关闭恒宏达刷卡" );
+        if (EcardType.getType() == EcardType.ML) {
+            logger.debug("关闭木兰刷卡");
+            SerialportManager.getInstance().removeListener(this);
+        } else if (EcardType.getType() == EcardType.HHD) {
+            logger.debug("关闭恒宏达刷卡");
             if (readThreadUtil != null)
                 readThreadUtil.stopReadThread();
-        } else if (BuildConfig.GUARD_PACKAGE == GlobalPage.HK) {
+        } else if (EcardType.getType() == EcardType.HK) {
+            logger.debug("关闭海康刷卡");
             if (stub != null) {
-                InfoUtilApi.unregisterSwingCard( stub );
+                InfoUtilApi.unregisterSwingCard(stub);
             }
         }
     }
 
-    private void getBuildConfig() {
-        GlobalPage.pageConfig = BuildConfig.GUARD_PACKAGE;
-    }
 
     @Override
     public void onReceiveData(String cardNo) {
-        sendCardNumber( cardNo );
+        sendCardNumber(cardNo);
     }
 
     private void sendCardNumber(String cardNo) {
-        logger.info( "卡号：" + cardNo );
-        if (GlobalParam.getCardType() == GlobalParam.MAINACTIVITY) {
-            bulb.b( true );
-            mPresenter.getCardAttendance( cardNo );
-        } else if (GlobalParam.getCardType() == GlobalParam.UPDATEACTIVITY) {
-            EventBus.getDefault().postSticky( new CardType( cardNo ) );
-        } else if (GlobalParam.getCardType() == GlobalParam.FOODACTIVITY) {
-            EventBus.getDefault().postSticky( new FoodCard( cardNo ) );
+        logger.info("卡号：" + cardNo);
+        if (GlobalParam.getCardType().equals(GlobalParam.MAINACTIVITY)) {
+            bulb.b(true);
+            mPresenter.getCardAttendance(cardNo);
+        } else if (GlobalParam.getCardType().equals(GlobalParam.UPDATEACTIVITY)) {
+            EventBus.getDefault().postSticky(new CardType(cardNo));
+        } else if (GlobalParam.getCardType().equals(GlobalParam.FOODACTIVITY)) {
+            EventBus.getDefault().postSticky(new FoodCard(cardNo));
         }
     }
 
@@ -282,7 +284,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      */
     public void getDates() {
         if (GlobalParam.getSchoolInfo() == null) {
-            mPresenter.getClassAndSchool( getApplicationContext() );
+            mPresenter.getClassAndSchool(getApplicationContext());
         } else {
             schoolInfo.info();
             topEvent.Event();

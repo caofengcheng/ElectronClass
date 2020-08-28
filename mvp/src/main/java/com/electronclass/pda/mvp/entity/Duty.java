@@ -5,13 +5,13 @@ import java.io.Serializable;
 /**
  * 值日
  */
-public class Duty implements Serializable {
-    String id;
-    String classId;
-    String task;//值日项目
-    String name;//值日人员
-    int week;//星期 0-周日 1-6 周一到周六
-    String eventDate;
+public class Duty {
+    private String id;
+    private String classId;
+    private String task;//值日项目
+    private String name;//值日人员
+    private int week;//星期 0-周日 1-6 周一到周六
+    private String eventDate;
 
     public String getId() {
         return id;

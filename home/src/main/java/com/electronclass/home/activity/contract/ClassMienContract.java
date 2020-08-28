@@ -5,6 +5,7 @@ import com.electronclass.pda.mvp.base.BasePresenterInterface;
 import com.electronclass.pda.mvp.base.BaseView;
 import com.electronclass.pda.mvp.entity.ClassMien;
 import com.electronclass.pda.mvp.entity.ClassMienMessage;
+import com.electronclass.pda.mvp.entity.ClassMienPage;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public interface ClassMienContract {
         void getClassMien(String eCardNo, String userId,
                           String classId,int pageStart,int pageSize);
 
-        void onClassMien(ClassMien classMien);
+        void onClassMien(ClassMienPage classMien);
 
         void onNoData();
     }

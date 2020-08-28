@@ -26,7 +26,7 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
     private float mTextSize  = 16;
     private int   mPadding   = 5;
     private int   textColor  = Color.BLACK;
-    private int   gravity    = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+    private int   gravity    = Gravity.CENTER;
     private int   background = Color.parseColor( "#00000000" );
     private int   maxLines   = 1;
 
@@ -67,7 +67,6 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
     public void setGravity(int gravity) {
         this.gravity = gravity;
     }
-
     /**
      * 横向滚动
      *

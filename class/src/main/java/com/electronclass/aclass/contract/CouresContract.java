@@ -4,6 +4,7 @@ import com.electronclass.pda.mvp.base.BaseModelInterface;
 import com.electronclass.pda.mvp.base.BasePresenterInterface;
 import com.electronclass.pda.mvp.base.BaseView;
 import com.electronclass.pda.mvp.entity.Coures;
+import com.electronclass.pda.mvp.entity.CouresNode;
 
 import java.util.List;
 
@@ -14,12 +15,12 @@ public interface CouresContract {
     }
 
     interface View extends BaseView {
-        void onCoures(List<Coures>coures);
+        void onCoures(List<CouresNode>coures);
     }
 
     interface Presenter extends BasePresenterInterface<View>{
         void getCoures();
-        void onCoures(List<Coures>coures);
+        void onCoures(List<CouresNode>coures);
 
     }
 }

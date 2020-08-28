@@ -6,8 +6,8 @@ import java.util.List;
  * 考勤表
  */
 public class Attendance {
-    AttendanceExt attendanceExt;
-    List<UserAttendanceInfo> userAttendanceInfo;
+    private AttendanceExt attendanceExt;
+    private List<UserAttendanceInfo> userAttendanceInfo;
 
     public AttendanceExt getAttendanceExt() {
         return attendanceExt;

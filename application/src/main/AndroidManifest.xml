@@ -3,7 +3,8 @@
     package="com.electronclass.application">
 
     <application>
-        <activity android:name=".web.WebActivity"></activity>
+        <activity android:name=".monitor.MonitorActivity"></activity>
+        <activity android:name=".web.WebActivity" />
     </application>
 
 </manifest>

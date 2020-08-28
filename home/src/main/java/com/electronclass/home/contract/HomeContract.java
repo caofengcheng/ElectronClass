@@ -5,6 +5,7 @@ import com.electronclass.pda.mvp.base.BasePresenterInterface;
 import com.electronclass.pda.mvp.base.BaseView;
 import com.electronclass.pda.mvp.entity.ClassMien;
 import com.electronclass.pda.mvp.entity.ClassMienMessage;
+import com.electronclass.pda.mvp.entity.ClassMienPage;
 import com.electronclass.pda.mvp.entity.Inform;
 
 import java.util.List;
@@ -15,15 +16,8 @@ public interface HomeContract {
 
         /**
          * 获取校园和班级通知
-         * @param eCardNo
-         * @param userId
-         * @param departId
-         * @param type
-         * @param isAvaliable
          */
-        void getInform(String eCardNo, String userId,
-                       String departId, int type,
-                       int isAvaliable);
+        void getInform(String pageNo, String pageSize, int type);
 
         /**
          * 获取班级风采
@@ -45,15 +39,13 @@ public interface HomeContract {
 
     interface Presenter extends BasePresenterInterface<View> {
 
-        void getInform(String eCardNo, String userId,
-                       String departId, int type,
-                       int isAvaliable);
+        void getInform(String pageNo, String pageSize, int type);
 
         void onInform(List<Inform> inform);
 
         void getClassMien(String eCardNo, String userId,
                           String classId,int pageStart,int pageSize);
 
-        void onClassMien(ClassMien classMien);
+        void onClassMien(ClassMienPage classMien);
     }
 }
