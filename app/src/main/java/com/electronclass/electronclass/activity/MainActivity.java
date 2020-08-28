@@ -302,13 +302,14 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 全局更新
      */
     private void initBugly() {
-        if (EcardType.getType() == EcardType.ML) {
-            Bugly.init(getApplicationContext(), GlobalParam.MULAN_UPDATEID, false);
-        } else if (EcardType.getType() == EcardType.HHD) {
-            Bugly.init(getApplicationContext(), GlobalParam.HENGHONGDA_UPDATEID, false);
-        } else if (EcardType.getType() == EcardType.HK) {
-            Bugly.init(getApplicationContext(), GlobalParam.HK_UPDATEID, false);
-        }
+        Bugly.init(getApplicationContext(), GlobalParam.ECARD_UPDATEID, false);
+//        if (EcardType.getType() == EcardType.ML) {
+//            Bugly.init(getApplicationContext(), GlobalParam.MULAN_UPDATEID, false);
+//        } else if (EcardType.getType() == EcardType.HHD) {
+//            Bugly.init(getApplicationContext(), GlobalParam.HENGHONGDA_UPDATEID, false);
+//        } else if (EcardType.getType() == EcardType.HK) {
+//            Bugly.init(getApplicationContext(), GlobalParam.HK_UPDATEID, false);
+//        }
     }
 
     /**
