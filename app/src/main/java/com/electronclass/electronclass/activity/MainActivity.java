@@ -113,6 +113,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
          * 展示学校信息
          */
         AppApplication.getInstance().setSchoolInfo(() -> {
+
             logger.info("收到SchoolInfo");
             isGetSetting = true;
             Glide.with(MainActivity.this)
@@ -229,7 +230,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         binding.banner.start();
     }
 
-    public class GlideImageLoader implements ImageLoaderInterface<View> {
+    private class GlideImageLoader implements ImageLoaderInterface<View> {
 
         @Override
         public void displayImage(Context context, Object path, View imageView) {
@@ -308,6 +309,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
 //        } else if (EcardType.getType() == EcardType.HHD) {
 //            Bugly.init(getApplicationContext(), GlobalParam.HENGHONGDA_UPDATEID, false);
 //        } else if (EcardType.getType() == EcardType.HK) {
+//            logger.debug("获取更新");
 //            Bugly.init(getApplicationContext(), GlobalParam.HK_UPDATEID, false);
 //        }
     }

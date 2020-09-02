@@ -70,12 +70,11 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     public void onCreate() {
         super.onCreate();
 //        LeakCanary.install( this );
+        getDates();
         SharedPreferencesUtil.getInstance(this, "AppApplication");
         eventTime();
         initEcardNo();
-        stopAlm();
         setEcardNo();
-        getDates();
         GlideCacheUtil.getInstance().clearImageAllCache(this);
         ImagePipeline imagePipeline = Fresco.getImagePipeline();
         imagePipeline.clearCaches();
@@ -92,6 +91,7 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
     public void onClassAndSchool() {
         logger.debug("发送SettingsEvent");
         initSerialPort();
+        stopAlm();
         EventBus.getDefault().postSticky(new SettingsEvent());
         schoolInfo.info();
         topEvent.Event();
@@ -135,18 +135,19 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 定时开关机
      */
     private void stopAlm() {
-        if (EcardType.type == EcardType.ML) {
+        if (EcardType.getType() == EcardType.ML) {
             XHApiManager xhApiManager = new XHApiManager();
             xhApiManager.XHSetPowerOffOnTime(DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + "-21-00", DateUtil.tomorrow() + "-5-00", true);
             logger.info("木兰定时开关机已开启--offTime：" + DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + "-21-00" + "   onTime:" + DateUtil.tomorrow() + "-5-30");
-        } else if (EcardType.type == HHD) {
+        } else if (EcardType.getType() == EcardType.HHD) {
             PowerOnOffManagerUtil powerOnOffManagerUtil = new PowerOnOffManagerUtil();
             String[] startTime = {"5", "00"};
             String[] endTime = {"21", "00"};
             int[] weekdays = {1, 1, 1, 1, 1, 1, 1};
             powerOnOffManagerUtil.setOffOrOn(this, startTime, endTime, weekdays);
             logger.info("恒鸿达定时开关机已开启--offTime：" + endTime + "   onTime:" + startTime);
-        } else if (EcardType.type == EcardType.HK) {
+        } else if (EcardType.getType() == EcardType.HK) {
+            logger.info("海康定时开关机已开启");
             Date dateOffTime = StringUitl.stringToDate(DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + " 21:00:00");
             Date dateOnTime = StringUitl.stringToDate(DateUtil.tomorrow() + " 5:00:00");
             logger.info("海康定时开关机已开启--dateOnTime：" + dateOnTime + "   dateOnTime:" + dateOnTime);

@@ -35,7 +35,7 @@ import java.util.List;
 public class ApplicationFragment extends Fragment {
 
     private FragmentApplicationBinding binding;
-    private List<AppItem> appItems = new ArrayList<>();
+    private List<AppItem>              appItems = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,9 @@ public class ApplicationFragment extends Fragment {
     }
 
     private void init() {
+        if (appItems != null && appItems.size() > 0) {
+            appItems.clear();
+        }
         AppItem appItem1 = new AppItem("智腾食堂", AppModule.FOOD, R.drawable.food);
         appItems.add(appItem1);
 
@@ -60,12 +63,10 @@ public class ApplicationFragment extends Fragment {
         AppItem appItem2 = new AppItem("树莓校园德育", AppModule.dyH5, R.drawable.shumei);
         appItems.add(appItem2);
 
-        if (EcardType.type == EcardType.HK) {
+        if (EcardType.getType() == EcardType.HK) {
             AppItem appItem3 = new AppItem("教室监控", AppModule.VIDEO, R.drawable.class_video);
             appItems.add(appItem3);
         }
-
-
         setAdapter();
     }
 
@@ -117,4 +118,13 @@ public class ApplicationFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        Log.i("onHiddenChanged:", String.valueOf(hidden));
+        if (!hidden){
+            init();
+
+        }
+        super.onHiddenChanged(hidden);
+    }
 }
