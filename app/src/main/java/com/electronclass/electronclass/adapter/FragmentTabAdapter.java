@@ -70,7 +70,7 @@ public class FragmentTabAdapter implements RadioGroup.OnCheckedChangeListener {
      *
      * @param idx
      */
-    public void showTab(int idx) {
+    private void showTab(int idx) {
         for (int i = 0; i < fragments.size(); i++) {
             Fragment fragment = fragments.get(i);
             FragmentTransaction ft = obtainFragmentTransaction(idx);
@@ -109,7 +109,7 @@ public class FragmentTabAdapter implements RadioGroup.OnCheckedChangeListener {
         return currentTab;
     }
 
-    public Fragment getCurrentFragment() {
+    private Fragment getCurrentFragment() {
         return fragments.get(currentTab);
     }
 
@@ -126,8 +126,8 @@ public class FragmentTabAdapter implements RadioGroup.OnCheckedChangeListener {
      * 切换tab额外功能功能接口
      */
     public static class OnRgsExtraCheckedChangedListener {
-        public void OnRgsExtraCheckedChanged(RadioGroup radioGroup,
-                                             int checkedId, int index) {
+        void OnRgsExtraCheckedChanged(RadioGroup radioGroup,
+                                      int checkedId, int index) {
 
         }
     }

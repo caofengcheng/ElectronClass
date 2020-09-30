@@ -16,6 +16,11 @@ public class AppModule {
      * 教室监控
      */
     public static final int VIDEO = 3;
+
+    /**
+     * 微信
+     */
+    public static final int WEIXIN = 4;
     /**
      * 更多
      */

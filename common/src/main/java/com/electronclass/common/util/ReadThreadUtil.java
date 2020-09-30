@@ -8,10 +8,6 @@ import java.io.FileInputStream;
 
 import android_serialport_api.SerialPort;
 
-/**
- * Created by sw on 2018/9/27/027.
- */
-
 //处理刷卡的业务
 public class ReadThreadUtil {
     private final String          TAG = "ReadThreadUtil";
@@ -87,9 +83,6 @@ public class ReadThreadUtil {
                 } else if (AmountUtil.byte2hex( tmp ).length() == 18) {
                     effecNum = AmountUtil.byte2hex( tmp ).substring( 6, AmountUtil.byte2hex( tmp ).length() - 4 );
                 }
-//                else if (AmountUtil.byte2hex(tmp).length() == 20) {  //ID 卡的算法
-//                        effecNum = AmountUtil.byte2hex(tmp).substring(10, AmountUtil.byte2hex(tmp).length() - 4);
-//                }
                 Log.i( TAG, "截取后的数据--->" + effecNum );
                 if (TextUtils.isEmpty( effecNum )) {
                     listener.onRead( 1, "" );

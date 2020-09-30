@@ -6,12 +6,9 @@ import com.electronclass.electronclass.presenter.MainPresenter;
 import com.electronclass.pda.mvp.base.BaseModel;
 import com.electronclass.pda.mvp.base.BaseSingle;
 import com.electronclass.pda.mvp.base.RxComposer;
-import com.electronclass.pda.mvp.entity.Inform;
 import com.electronclass.pda.mvp.entity.InformPage;
 import com.electronclass.pda.mvp.entity.ServiceResponse;
 import com.electronclass.pda.mvp.rest.RestManager;
-
-import java.util.List;
 
 /**
  * @author caofengcheng on 2019-10-30

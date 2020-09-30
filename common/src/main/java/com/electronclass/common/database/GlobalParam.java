@@ -1,6 +1,5 @@
 package com.electronclass.common.database;
 
-import com.blankj.utilcode.util.StringUtils;
 import com.electronclass.pda.mvp.entity.ClassInfo;
 import com.electronclass.pda.mvp.entity.SchoolInfo;
 import com.electronclass.pda.mvp.entity.TeacherInfo;
@@ -73,7 +72,7 @@ public class GlobalParam {
                     "55", "56", "57", "58", "59"};
 
 
-    public static String toSettingPwd = "!@#TZjt123";
+    public static String toSettingPwd = "!@#TZjt123";//进入设置密码
 
     public static String EVENTTIME = "EVENTTIME";
 

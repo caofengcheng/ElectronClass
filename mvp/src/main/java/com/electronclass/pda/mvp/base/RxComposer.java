@@ -6,7 +6,6 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * 页面：
- * @author zhangguihao
  */
 public class RxComposer {
 

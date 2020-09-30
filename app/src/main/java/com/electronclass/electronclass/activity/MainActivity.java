@@ -6,11 +6,13 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,27 +32,21 @@ import com.electronclass.application.ApplicationFragment;
 import com.electronclass.attendance.AttendanceFragment;
 import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
 import com.electronclass.common.base.BaseActivity;
-import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.database.InformType;
 import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.EventRight;
 import com.electronclass.common.event.EventTime;
 import com.electronclass.common.util.DateUtil;
-import com.electronclass.common.util.EcardType;
 import com.electronclass.common.util.Tools;
-import com.electronclass.common.util.VerticalTextView;
 import com.electronclass.electronclass.AppApplication;
-import com.electronclass.electronclass.BuildConfig;
 import com.electronclass.electronclass.R;
 import com.electronclass.electronclass.adapter.FragmentTabAdapter;
 import com.electronclass.electronclass.contract.MainContract;
 import com.electronclass.electronclass.databinding.ActivityNew2MainBinding;
-import com.electronclass.electronclass.databinding.ActivityNewMainBinding;
 import com.electronclass.electronclass.presenter.MainPresenter;
 import com.electronclass.home.HomeFragment;
 import com.electronclass.pda.mvp.entity.Inform;
-import com.electronclass.set.login.LoginFragment;
 import com.tencent.bugly.Bugly;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.loader.ImageLoaderInterface;
@@ -230,6 +226,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
         binding.banner.start();
     }
 
+    private void Event() {
+        if (GlobalParam.getClassInfo() != null) {
+            binding.className.setText(GlobalParam.getClassInfo().getClassName());
+        }
+    }
+
     private class GlideImageLoader implements ImageLoaderInterface<View> {
 
         @Override
@@ -354,11 +356,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter> implement
      * 设置班级名称
      */
     private void setClassName() {
-        AppApplication.getInstance().setTopEvent(() -> {
-            if (GlobalParam.getClassInfo() != null) {
-                binding.className.setText(GlobalParam.getClassInfo().getClassName());
-            }
-        });
+        AppApplication.getInstance().setTopEvent(this::Event);
     }
 
 

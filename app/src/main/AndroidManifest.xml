@@ -39,7 +39,17 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:appComponentFactory,android:name,android:icon">
+        tools:replace="android:appComponentFactory,android:name,android:icon"
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+        <receiver
+            android:name=".broadcase.ShutDownReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.settings.action.REQUEST_POWER_OFF" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".receiver.MyBroadcastReceiver"
             android:enabled="true"
@@ -54,7 +64,9 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.MainActivity" android:launchMode="singleInstance">
+        <activity
+            android:name=".activity.MainActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN"
@@ -65,7 +77,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.HOME" />
-
             </intent-filter>
         </activity>
 
@@ -89,11 +100,10 @@
 
         <meta-data
             android:name="design_width_in_dp"
-            android:value="1920"/>
+            android:value="1920" />
         <meta-data
             android:name="design_height_in_dp"
-            android:value="1080"/>
-
+            android:value="1080" />
     </application>
 
 </manifest>

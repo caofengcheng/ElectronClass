@@ -2,12 +2,11 @@ package com.electronclass.electronclass;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.lamy.nfc.Nfc;
 
-import com.android.xhapimanager.XHApiManager;
 import com.electronclass.common.base.BaseApplication;
 import com.electronclass.common.basemvp.contract.ApplicationContract;
 import com.electronclass.common.basemvp.presenter.ApplicationPresenter;
-import com.electronclass.common.database.GlobalPage;
 import com.electronclass.common.database.GlobalParam;
 import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.Bulb;
@@ -16,19 +15,17 @@ import com.electronclass.common.event.FoodCard;
 import com.electronclass.common.event.SchoolInfo;
 import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.event.TopEvent;
-import com.electronclass.common.util.DateUtil;
+import com.electronclass.common.util.BytesUtil;
 import com.electronclass.common.util.EcardType;
 import com.electronclass.common.util.GlideCacheUtil;
-import com.electronclass.common.util.PowerOnOffManagerUtil;
 import com.electronclass.common.util.ReadThreadUtil;
 import com.electronclass.common.util.SerialportManager;
 import com.electronclass.common.util.SharedPreferencesUtil;
-import com.electronclass.common.util.StringUitl;
 import com.electronclass.common.util.Tools;
+import com.electronclass.electronclass.util.SettingUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipeline;
 import com.hikvision.dmb.SwingCardCallback;
-import com.hikvision.dmb.time.InfoTimeApi;
 import com.hikvision.dmb.util.InfoUtilApi;
 
 import org.apache.commons.lang3.StringUtils;
@@ -37,18 +34,17 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-
-import static com.electronclass.common.util.EcardType.HHD;
+import java.util.Objects;
 
 
 public class AppApplication extends BaseApplication<ApplicationContract.Presenter> implements ApplicationContract.View, SerialportManager.SerialportListener {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
-    private TopEvent topEvent;
-    private SchoolInfo schoolInfo;
-    private Bulb bulb;
-    private ReadThreadUtil readThreadUtil;
-    private SwingCardCallback.Stub stub;
+    protected Logger                 logger = LoggerFactory.getLogger(getClass());
+    private   TopEvent               topEvent;
+    private   SchoolInfo             schoolInfo;
+    private   Bulb                   bulb;
+    private   ReadThreadUtil         readThreadUtil;
+    private   SwingCardCallback.Stub stub;
+    private   Nfc                    mNfc;
 
     public void setTopEvent(TopEvent topEvent) {
         this.topEvent = topEvent;
@@ -135,24 +131,18 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      * 定时开关机
      */
     private void stopAlm() {
+
         if (EcardType.getType() == EcardType.ML) {
-            XHApiManager xhApiManager = new XHApiManager();
-            xhApiManager.XHSetPowerOffOnTime(DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + "-21-00", DateUtil.tomorrow() + "-5-00", true);
-            logger.info("木兰定时开关机已开启--offTime：" + DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + "-21-00" + "   onTime:" + DateUtil.tomorrow() + "-5-30");
+            SettingUtil.getInstance().ML_OFF_ON();
+
         } else if (EcardType.getType() == EcardType.HHD) {
-            PowerOnOffManagerUtil powerOnOffManagerUtil = new PowerOnOffManagerUtil();
-            String[] startTime = {"5", "00"};
-            String[] endTime = {"21", "00"};
-            int[] weekdays = {1, 1, 1, 1, 1, 1, 1};
-            powerOnOffManagerUtil.setOffOrOn(this, startTime, endTime, weekdays);
-            logger.info("恒鸿达定时开关机已开启--offTime：" + endTime + "   onTime:" + startTime);
+            SettingUtil.getInstance().HHD_OFF_ON(this);
+
         } else if (EcardType.getType() == EcardType.HK) {
-            logger.info("海康定时开关机已开启");
-            Date dateOffTime = StringUitl.stringToDate(DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + " 21:00:00");
-            Date dateOnTime = StringUitl.stringToDate(DateUtil.tomorrow() + " 5:00:00");
-            logger.info("海康定时开关机已开启--dateOnTime：" + dateOnTime + "   dateOnTime:" + dateOnTime);
-            logger.info("海康定时开关机已开启--String：" + DateUtil.getNowDate(DateUtil.DatePattern.ONLY_DAY) + " 21-00-00" + "   dateOnTime:" + DateUtil.tomorrow() + " 5-00-00");
-            InfoTimeApi.setTimeSwitch(dateOffTime.getTime(), dateOnTime.getTime());
+            SettingUtil.getInstance().HK_OFF_ON();
+
+        } else if (EcardType.getType() == EcardType.DH) {
+            SettingUtil.getInstance().DH_OFF_ON(this);
         }
     }
 
@@ -178,8 +168,6 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
 
     /**
      * 获取版本名称
-     *
-     * @return
      */
     private String getVersionName() {
         PackageManager packageManager = getPackageManager();
@@ -210,15 +198,14 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
      */
     private void initSerialPort() {
         if (EcardType.getType() == EcardType.ML) {
-            logger.debug("启动木兰刷卡");
-            SerialportManager.getInstance().init();
-            SerialportManager.getInstance().addListener(this);
+            SettingUtil.getInstance().ML_Serialport(this);
         } else if (EcardType.getType() == EcardType.HHD) {
             logger.debug("启动恒宏达刷卡");
             readThreadUtil = new ReadThreadUtil();
             readThreadUtil.startReadThread((type, cardNum) -> {
                 if (type == 0) {
                     sendCardNumber(cardNum);
+                    logger.debug("恒宏达卡号：" + cardNum + "     ----" + cardNum);
                 } else {
                     Tools.displayToast("读取出错，不兼容的卡");
                 }
@@ -233,8 +220,21 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
                 }
             };
             InfoUtilApi.swingCard(stub);
+        } else if (EcardType.getType() == EcardType.DH) {
+            mNfc = Nfc.getNfc(1);
+            mNfc.setDataListener((i, i1, bytes) -> {
+                if (bytes.length > 0) {
+                    String cardNum = Objects.requireNonNull(BytesUtil.byte2hex(bytes)).trim();
+                    long   num     = Long.parseLong(cardNum, 16);
+                    logger.debug("大华卡号：" + num + "");
+                    sendCardNumber(num + "");
+                }
+
+            });
+            mNfc.startResetCard();
         }
     }
+
 
     /**
      * 关闭刷卡
@@ -252,6 +252,9 @@ public class AppApplication extends BaseApplication<ApplicationContract.Presente
             if (stub != null) {
                 InfoUtilApi.unregisterSwingCard(stub);
             }
+        } else if (EcardType.getType() == EcardType.DH) {
+            mNfc.setDataListener(null);
+            mNfc.stopResetCard();
         }
     }
 

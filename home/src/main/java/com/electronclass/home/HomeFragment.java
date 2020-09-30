@@ -1,43 +1,24 @@
 package com.electronclass.home;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ConvertUtils;
-import com.blankj.utilcode.util.JsonUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
 import com.electronclass.common.base.BaseFragment;
 import com.electronclass.common.database.GlobalParam;
@@ -45,7 +26,6 @@ import com.electronclass.common.database.InformType;
 import com.electronclass.common.database.MacAddress;
 import com.electronclass.common.event.SettingsEvent;
 import com.electronclass.common.util.DateUtil;
-import com.electronclass.common.util.GlideCacheUtil;
 import com.electronclass.common.util.Tools;
 import com.electronclass.home.activity.ImageActivity;
 import com.electronclass.home.activity.VideoActivity;
@@ -56,38 +36,22 @@ import com.electronclass.home.databinding.FragmentNewHomeBinding;
 import com.electronclass.home.presenter.HomePresenter;
 import com.electronclass.pda.mvp.entity.ClassMienMessage;
 import com.electronclass.pda.mvp.entity.Inform;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.gson.Gson;
 import com.youth.banner.BannerConfig;
-import com.youth.banner.loader.ImageLoader;
 import com.youth.banner.loader.ImageLoaderInterface;
-import com.zhouwei.mzbanner.holder.MZHolderCreator;
-import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.observers.ResourceObserver;
 
 
 /**
@@ -101,8 +65,9 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     private        int                    firstType    = 1;
     private        String                 firstUrl;
     private        RequestOptions         options;
+    private        String[]               picUrlAll;//获取到的所有班级风采的图片
 
-    private CommonRecyclerViewAdapter<ClassMienMessage> commonClassMienAdapter;
+    private CommonRecyclerViewAdapter<String> commonClassMienAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -187,30 +152,35 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
 
     }
 
+    /**
+     * 班级风采数据
+     *
+     * @param classMienMessages
+     */
     @Override
     public void onClassMien(List<ClassMienMessage> classMienMessages) {
         if (classMienMessages != null && classMienMessages.size() > 0) {
+            String[] picUrlAll = classMienMessages.get(0).getPicUrl().split(",");
+            String[] picUrl    = new String[9];
+            if (picUrlAll.length > 9) {
+                System.arraycopy(picUrlAll, 0, picUrl, 0, 9);
+            }else {
+                System.arraycopy(picUrlAll, 0, picUrl, 0, picUrlAll.length);
+            }
+
             RoundedCorners roundedCorners = new RoundedCorners(10);
             //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
             RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
             Glide.with(HomeFragment.this)
-                 .load(GlobalParam.pUrl + classMienMessages
-                         .get(0).getPicUrl())
+                 .load(GlobalParam.pUrl + picUrl[0])
                  .apply(options)
                  .into(binding.firstPicture);
 //            firstType = classMienMessages.get(0).getType();
-            firstUrl = classMienMessages.get(0).getPicUrl();
-            if (classMienMessages.size() > 1) {
-                List<ClassMienMessage> classMiens = new ArrayList<>();
-                for (int i = 0; i < classMienMessages.size(); i++) {
-                    if (i == 0) {
-                        continue;
-                    }
-                    classMiens.add(classMienMessages.get(i));
-                }
-                commonClassMienAdapter.setData(classMiens);
-                commonClassMienAdapter.notifyDataSetChanged();
-            }
+            firstUrl = picUrl[0];
+            List<String> classMiens = new ArrayList<>(Arrays.asList(picUrl).subList(1, picUrl.length));
+            commonClassMienAdapter.setData(classMiens);
+            commonClassMienAdapter.notifyDataSetChanged();
+
         }
 
     }
@@ -226,14 +196,20 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
                 startActivity(intent);
             }
         });
+        /**
+         * 班级风采第一张大图
+         */
         binding.firstPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (firstType == 1) {
+//                if (firstType == 1) {
+                if (!StringUtils.isEmpty(firstUrl)) {
+                    logger.debug("图片地址：" + firstUrl);
                     showImage(GlobalParam.pUrl + firstUrl);
-                } else {
-                    showVoide(GlobalParam.pUrl + firstUrl);
                 }
+//                } else {
+//                    showVoide(GlobalParam.pUrl + firstUrl);
+//                }
             }
         });
     }
@@ -319,22 +295,25 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     private void setCommonClassMienAdapter() {
-        commonClassMienAdapter = new CommonRecyclerViewAdapter<ClassMienMessage>(R.layout.class_mien) {
+        commonClassMienAdapter = new CommonRecyclerViewAdapter<String>(R.layout.class_mien) {
             @Override
-            public void convert(com.electronclass.common.base.BaseViewHolder baseViewHolder, final ClassMienMessage item) {
+            public void convert(com.electronclass.common.base.BaseViewHolder baseViewHolder, final String item) {
                 RoundedCorners roundedCorners = new RoundedCorners(10);
                 //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
                 RequestOptions options   = RequestOptions.bitmapTransform(roundedCorners);
                 ImageView      imageView = (ImageView) baseViewHolder.getView(R.id.image);
                 Glide.with(getActivity())
-                     .load(GlobalParam.pUrl + item.getPicUrl())
+                     .load(GlobalParam.pUrl + item)
                      .apply(options)
                      .into(imageView);
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 //                        if (item.getType() == 1) {
-                        showImage(GlobalParam.pUrl + item.getPicUrl());
+                        if (StringUtils.isNoneEmpty(item)) {
+                            logger.debug("图片地址：" + item);
+                            showImage(GlobalParam.pUrl + item);
+                        }
 //                        } else {
 //                            showVoide(GlobalParam.pUrl + item.getPicUrl());
 //                        }
@@ -437,7 +416,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements HomeCon
     }
 
     private void initPicUtil() {
-         options = new RequestOptions()
+        options = new RequestOptions()
                 .centerCrop()
                 .priority(Priority.HIGH)//优先级
                 .diskCacheStrategy(DiskCacheStrategy.NONE)//缓存策略

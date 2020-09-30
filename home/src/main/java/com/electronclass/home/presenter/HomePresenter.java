@@ -3,7 +3,6 @@ package com.electronclass.home.presenter;
 import com.electronclass.home.contract.HomeContract;
 import com.electronclass.home.model.HomeModel;
 import com.electronclass.pda.mvp.base.BasePresenter;
-import com.electronclass.pda.mvp.entity.ClassMien;
 import com.electronclass.pda.mvp.entity.ClassMienPage;
 import com.electronclass.pda.mvp.entity.Inform;
 
