@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background1">
+
+    <ImageView
+        android:id="@+id/schoolLogo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="34dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/schoolName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:hint="@string/school_name"
+        android:textColor="#fffefefe"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="@+id/schoolLogo"
+        app:layout_constraintStart_toEndOf="@+id/schoolLogo"
+        app:layout_constraintTop_toTopOf="@+id/schoolLogo" />
+
+    <TextView
+        android:id="@+id/className"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:hint="初三（3）班"
+        android:textColor="#fffefefe"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="@+id/schoolName"
+        app:layout_constraintStart_toEndOf="@+id/schoolName" />
+
+    <TextView
+        android:id="@+id/ecardNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
+        android:layout_marginEnd="103dp"
+        android:hint="0000000000"
+        android:textColor="#FEFEFE"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设备ID: "
+        android:textColor="#FEFEFE"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ecardNo"
+        app:layout_constraintEnd_toStartOf="@+id/ecardNo"
+        app:layout_constraintTop_toTopOf="@+id/ecardNo" />
+
+    <ImageView
+        android:id="@+id/id_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="17dp"
+        android:background="@drawable/id_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/text"
+        app:layout_constraintEnd_toStartOf="@+id/text"
+        app:layout_constraintTop_toTopOf="@+id/text" />
+
+    <TextView
+        android:id="@+id/attendanceTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="45dp"
+        android:hint="07:00"
+        android:textColor="#FEFEFE"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/id_icon"
+        app:layout_constraintEnd_toStartOf="@+id/id_icon"
+        app:layout_constraintTop_toTopOf="@+id/id_icon" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="考勤时间: "
+        android:textColor="#FEFEFE"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/attendanceTime"
+        app:layout_constraintEnd_toStartOf="@+id/attendanceTime"
+        app:layout_constraintTop_toTopOf="@+id/attendanceTime" />
+
+    <ImageView
+        android:id="@+id/attendance_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="17dp"
+        android:background="@drawable/id_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/text1"
+        app:layout_constraintEnd_toStartOf="@+id/text1"
+        app:layout_constraintTop_toTopOf="@+id/text1" />
+
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="45dp"
+        android:hint="18:00:00"
+        android:textColor="#FEFEFE"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/attendance_icon"
+        app:layout_constraintEnd_toStartOf="@+id/attendance_icon"
+        app:layout_constraintTop_toTopOf="@+id/attendance_icon" />
+
+    <TextView
+        android:id="@+id/dayTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="周一: "
+        android:textColor="#FEFEFE"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTime"
+        app:layout_constraintEnd_toStartOf="@+id/tvTime"
+        app:layout_constraintTop_toTopOf="@+id/tvTime" />
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="17dp"
+        android:background="@drawable/time_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/dayTv"
+        app:layout_constraintEnd_toStartOf="@+id/dayTv"
+        app:layout_constraintTop_toTopOf="@+id/dayTv" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="63dp"
+        app:layout_constraintBottom_toTopOf="@+id/tableRg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/attendance_icon" />
+
+    <RadioGroup
+        android:id="@+id/tableRg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="53dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:layout_width="116dp"
+            android:layout_height="116dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/home_table_3"
+            android:button="@null"
+            android:checked="true" />
+
+        <RadioButton
+            android:layout_width="116dp"
+            android:layout_height="116dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/class_table_3"
+            android:button="@null" />
+
+        <RadioButton
+            android:layout_width="116dp"
+            android:layout_height="116dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/hygiene_table_3"
+            android:button="@null" />
+
+        <RadioButton
+            android:layout_width="116dp"
+            android:layout_height="116dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/excellent_table_3"
+            android:button="@null" />
+
+        <RadioButton
+            android:layout_width="116dp"
+            android:layout_height="116dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/honor_table_3"
+            android:button="@null" />
+
+        <RadioButton
+            android:layout_width="116dp"
+            android:layout_height="116dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/attendance_table_3"
+            android:button="@null" />
+
+        <RadioButton
+            android:layout_width="116dp"
+            android:layout_height="116dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/modular_table_3"
+            android:button="@null" />
+    </RadioGroup>
+
+
+</android.support.constraint.ConstraintLayout>

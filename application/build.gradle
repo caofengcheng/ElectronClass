@@ -10,7 +10,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi-v7a','x86'
+        }
     }
 
     buildTypes {
@@ -28,7 +31,16 @@ android {
     dataBinding {
         enabled = true
     }
+
 }
+
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -40,9 +52,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
-    //播放流媒体
-    implementation 'com.github.yinhaide:HDMediaPlayer:0.1.2'
+    //vlc视频监控媒体流展示
+    implementation(name: 'libvlc-all-3.3.0-eap17', ext: 'aar')
     implementation project(':common')
     implementation project(':mvp')
+
 }

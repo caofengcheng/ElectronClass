@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/school_info_iv"
+        android:layout_width="856dp"
+        android:layout_height="493dp"
+        android:layout_marginStart="82dp"
+        android:scaleType="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
+        android:layout_width="856dp"
+        android:layout_height="209dp"
+        android:layout_marginTop="24dp"
+        android:scrollIndicators="left"
+        app:layout_constraintStart_toStartOf="@+id/school_info_iv"
+        app:layout_constraintTop_toBottomOf="@+id/school_info_iv" />
+
+</android.support.constraint.ConstraintLayout>

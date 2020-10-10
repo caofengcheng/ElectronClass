@@ -8,8 +8,8 @@ android {
         }
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 22
-        versionName "2.0.0.16"
+        versionCode 23
+        versionName "2.0.0.17"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         multiDexKeepProguard file('multiDexKeep.pro')
@@ -131,7 +131,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar',"*.aar"], dir: 'libs')
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
     testImplementation 'junit:junit:4.12'
@@ -149,6 +149,8 @@ dependencies {
     api 'me.jessyan:autosize:1.1.2'//今日头条屏幕适配
     api 'com.blankj:utilcode:1.25.2'
     implementation'com.superluo:textbannerview:1.0.4'//文字图片轮播
+
+
     implementation project(':common')
     implementation project(':mvp')
     implementation project(':home')

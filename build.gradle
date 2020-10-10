@@ -25,8 +25,16 @@ allprojects {
             url "https://oss.sonatype.org/content/repositories/snapshots"
         }
         maven { url "https://jitpack.io" }
+        maven {url 'https://dl.bintray.com/jetbrains/anko'}
         google()
         jcenter()
+
+        flatDir {
+            // 由于其他module中引用了 xx module 库的 aar，在多 module 的情况下，
+            // 其他的module编译会报错，所以需要在所有工程的repositories
+            // 下把 xx module 中的libs目录添加到依赖关系中
+            dirs project(':application').file('libs')
+        }
         
     }
 }

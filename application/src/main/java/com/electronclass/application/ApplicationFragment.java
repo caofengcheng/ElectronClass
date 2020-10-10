@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.electronclass.application.databinding.FragmentApplicationBinding;
+import com.electronclass.application.monitor.MonitorActivity;
 import com.electronclass.application.web.WebActivity;
 import com.electronclass.common.adapter.CommonRecyclerViewAdapter;
 import com.electronclass.common.base.BaseViewHolder;
@@ -125,10 +126,11 @@ public class ApplicationFragment extends Fragment {
                     Toast.makeText(getActivity(), "该设备未绑定监控", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Intent intent1 = new Intent(getActivity(), MonitorActivity.class);
                 String ip = GlobalParam.getJKIP();
                 Log.i("监控ip:", ip);
-                intent.putExtra(GlobalParam.APPURL, ip);
-                startActivity(intent);
+                intent1.putExtra(GlobalParam.APPURL, ip);
+                startActivity(intent1);
                 break;
             case AppModule.WEIXIN:
                 String uri="weixin://";
